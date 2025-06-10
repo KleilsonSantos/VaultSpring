@@ -1,0 +1,23 @@
+# Define end-of-line (EOL) normalization for specific files
+
+## 🟢 Maven Wrapper Script
+/mvnw text eol=lf
+
+## 🔹 Windows Batch Scripts
+*.cmd text eol=crlf
+
+## 🟡 Shell Scripts
+*.sh text eol=lf
+
+## 🔵 Java Source Files
+*.java text eol=lf
+
+## 🔴 Configuration and Properties Files
+*.yml text eol=lf
+*.yaml text eol=lf
+*.xml text eol=lf
+*.properties text eol=lf
+
+## 🟠 Markdown and Text Files
+*.md text eol=lf
+*.txt text eol=lf

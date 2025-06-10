@@ -1,0 +1,11 @@
+server:
+  port: 8080  # Defines the port where the application will run
+
+spring:
+  application:
+    name: vaultspring  # Application name for Spring context
+
+endpoints:
+  web:
+    exposure:
+      include: "*"  # Exposes all actuator endpoints
