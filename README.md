@@ -1,6 +1,20 @@
 # 🚀 VaultSpring 
 
+![Java](https://img.shields.io/badge/Java-17-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5-%236DB33F.svg?style=for-the-badge&logo=spring-boot&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-%232496ED.svg?style=for-the-badge&logo=docker&logoColor=white)
+![Vault](https://img.shields.io/badge/Vault-%23175DDD.svg?style=for-the-badge&logo=vault&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%23336791.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![MapStruct](https://img.shields.io/badge/MapStruct-%23FF6F00.svg?style=for-the-badge&logo=java&logoColor=white)
+![Lombok](https://img.shields.io/badge/Lombok-%23E9573F.svg?style=for-the-badge&logo=lombok&logoColor=white)
+![Micrometer](https://img.shields.io/badge/Micrometer-%23007ACC.svg?style=for-the-badge&logo=prometheus&logoColor=white)
+![Prometheus](https://img.shields.io/badge/Prometheus-%23E6522C.svg?style=for-the-badge&logo=prometheus&logoColor=white)
+
 **Gerenciamento Seguro de Segredos para Aplicações Java com Spring Boot e Docker Vault**
+
+  > ⚠️ **Este projeto está 🚀 _(Em Desenvolvimento 🚧)_**
+  >
+  > Algumas funcionalidades podem estar incompletas ou sujeitas a alterações. Contribuições são bem-vindas! 🛠️
 
 ## 📌 Sobre o Projeto
 VaultSpring é uma aplicação **Spring Boot** projetada para garantir o **gerenciamento seguro de segredos** em um ambiente moderno e escalável. Desenvolvido em **Java**, ele se integra perfeitamente ao **Docker Vault**, permitindo o armazenamento e recuperação protegida de **senhas, chaves de API e dados confidenciais**.
@@ -22,19 +36,27 @@ Antes de começar, certifique-se de ter instalado:
 - **Docker e Docker Compose**
 - **Maven**
 
-🚀 Funcionalidades
+## 🚀 Funcionalidades
 
-- [x] Autenticação Segura com Vault
-- [x] Armazenamento de Senhas e Chaves de API
-- [x] Integração com Banco de Dados PostgreSQL
-- [x] Monitoramento com Micrometer e Prometheus
-- [x] Arquitetura Modular e Extensível
+- ✅ Autenticação Segura com Vault
+- ✅ Armazenamento de Senhas e Chaves de API
+- ✅ Integração com Banco de Dados PostgreSQL
+- ✅ Monitoramento com Micrometer e Prometheus
+- ✅ Arquitetura Modular e Extensível
 
-##📄 Licença
+## 📄 Licença
 
 Este projeto está sob a licença Apache 2.0. Veja mais detalhes
 
 > 💡 **Nota:** Este projeto está em constante desenvolvimento. Algumas funcionalidades podem estar incompletas ou sujeitas a alterações. Contribuições são sempre bem-vindas! 🛠️
+
+## ✅ **O que já foi concluído**
+
+- ✅ Estrutura modular do projeto para fácil manutenção**
+- ✅ Aplicação de boas práticas com Lombok**
+- ✅ Documentação inicial e instruções de execução**
+
+> ⚡ Essas entregas garantem uma base sólida para o gerenciamento seguro de segredos em aplicações Java modernas.
 
 ## 🌍 **Junte-se a nós**
 
