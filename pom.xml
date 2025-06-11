@@ -1,62 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- Maven Project Model Version -->
 	<modelVersion>4.0.0</modelVersion>
+
+	<!-- Parent Configuration: Spring Boot Starter -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.0</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>3.4.5</version>
+		<relativePath/> <!-- Lookup parent from repository -->
 	</parent>
+
+	<!-- Project Metadata -->
 	<groupId>com.vaultspring</groupId>
 	<artifactId>vaultspring</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>vaultspring</name>
-	<description>Demo project for Spring Boot - Project Vault Spring</description>
-	<url/>
+	<name>VaultSpring</name>
+	<description>Spring Boot project for Vault-based secure secret management</description>
+	<url>https://github.com/KleilsonSantos/vaultspring</url>
+
+	<!-- Licensing Information -->
 	<licenses>
-		<license/>
+		<license>
+			<name>Apache License 2.0</name>
+			<url>https://www.apache.org/licenses/LICENSE-2.0</url>
+			<distribution>repo</distribution>
+		</license>
 	</licenses>
+
+	<!-- Developer Information -->
 	<developers>
-		<developer/>
+		<developer>
+			<id>kleilson</id>
+			<name>Kleilson Santos</name>
+			<email>kleilson@email.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
 	</developers>
+
+	<!-- Source Control Management -->
 	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
+		<url>https://github.com/KleilsonSantos/vaultspring</url>
+		<connection>scm:git:https://github.com/KleilsonSantos/vaultspring.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/KleilsonSantos/vaultspring.git</developerConnection>
+		<tag>HEAD</tag>
 	</scm>
+
+	<!-- Project Properties -->
 	<properties>
 		<java.version>17</java.version>
-		<spring-cloud.version>2025.0.0</spring-cloud.version>
+		<spring-cloud.version>2024.0.1</spring-cloud.version>
 	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-vault-config</artifactId>
-		</dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+	<!-- Dependency Management for Spring Cloud BOM -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -69,20 +70,75 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<!-- Project Dependencies -->
+	<dependencies>
+		<!-- Spring Boot Core Dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
+		<!-- Infrastructure and Security -->
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-vault-config</artifactId>
+		</dependency>
+
+		<!-- Monitoring and Development Tools -->
+		<dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Utility Libraries -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Testing Dependencies -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<!-- Build Configuration -->
 	<build>
 		<plugins>
+
+			<!-- Java Compiler Plugin -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
 				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+							<version>1.18.30</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
+
+			<!-- Spring Boot Maven Plugin -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
@@ -95,7 +151,83 @@
 					</excludes>
 				</configuration>
 			</plugin>
+
+			<!-- JAR Plugin Configuration -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>3.2.2</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Main-Class>com.vaultspring.VaultSpringApplication</Main-Class>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
 
+	<!-- Environment Profiles -->
+	<profiles>
+
+		<!-- Development profile -->
+		<profile>
+			<id>dev</id>
+			<properties>
+				<spring.profiles.active>dev</spring.profiles.active>
+			</properties>
+		</profile>
+
+		<!-- Production profile -->
+		<profile>
+			<id>prod</id>
+			<properties>
+				<spring.profiles.active>prod</spring.profiles.active>
+			</properties>
+		</profile>
+
+		<!-- Security analysis with OWASP Dependency-Check -->
+		<!-- This profile must be manually activated (e.g., mvn verify -Pdependency-check) -->
+		<profile>
+			<id>dependency-check</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.owasp</groupId>
+						<artifactId>dependency-check-maven</artifactId>
+						<version>12.1.0</version>
+						<executions>
+							<execution>
+								<id>check-vulns</id>
+								<goals>
+									<goal>check</goal>
+								</goals>
+								<phase>verify</phase>
+							</execution>
+						</executions>
+						<configuration>
+							<format>ALL</format>
+							<outputDirectory>${project.build.directory}/dependency-check-report</outputDirectory>
+							<failBuildOnCVSS>7</failBuildOnCVSS>
+							<suppressionFile>${basedir}/dependency-check-suppressions.xml</suppressionFile>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+	</profiles>
+
+	<!-- Repository Configuration -->
+	<repositories>
+		<repository>
+			<id>spring-libs-milestone</id>
+			<url>https://repo.spring.io/libs-milestone</url>
+		</repository>
+	</repositories>
 </project>
