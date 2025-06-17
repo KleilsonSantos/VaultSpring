@@ -53,3 +53,17 @@ build/
 target/
 !**/src/main/**/target/
 !**/src/test/**/target/
+
+### Backup Files and Archives
+backup
+
+### 🔹 Environment Variables
+.env
+.env.*
+.secrets
+.secrets.*
+.secrets/
+
+### 🔹 Vault
+.vault_pass
+vault/

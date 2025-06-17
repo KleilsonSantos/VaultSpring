@@ -1,11 +1,38 @@
 server:
-  port: 8080  # Defines the port where the application will run
+  port: 8080
 
 spring:
+  security:
+    user:
+      name: user
+      password: senhaSuperSegura123
+      roles: USER
   application:
-    name: vaultspring  # Application name for Spring context
-
-endpoints:
+    name: vaultspring
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+    time-zone: America/Bahia
   web:
-    exposure:
-      include: "*"  # Exposes all actuator endpoints
+    resources:
+      add-mappings: false
+  datasource:
+    url: jdbc:postgresql://localhost:5432/users_db
+    username: admin
+    password: adminpass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
+      validation-timeout: 3000
+      max-lifetime: 1800000
+      keepaliveTime: 60000
+      idle-timeout: 10000
+      leak-detection-threshold: 15000
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: create-drop
+    defer-datasource-initialization: true
+    show-sql: true
