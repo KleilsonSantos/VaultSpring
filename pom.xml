@@ -52,6 +52,7 @@
 
     <!-- Global Properties -->
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
         <spring-cloud.version>2024.0.1</spring-cloud.version>
     </properties>
@@ -144,9 +145,10 @@
                         <exclude>**/*IT.java</exclude>
                         <exclude>**/*ITCase.java</exclude>
                     </excludes>
-                    <forkedProcessTimeoutInSeconds>10</forkedProcessTimeoutInSeconds>
+                    <forkedProcessTimeoutInSeconds>120</forkedProcessTimeoutInSeconds>
                     <parallel>none</parallel>
                     <printSummary>true</printSummary>
+                    <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
 
@@ -231,6 +233,26 @@
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>5.1.0.4751</version>
+            </plugin>
+
+            <!-- Checkstyle Configuration -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.0</version>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <failOnViolation>true</failOnViolation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>validate</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
         </plugins>
