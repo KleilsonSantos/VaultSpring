@@ -87,6 +87,10 @@ jwt-verify:
 # 🧱 Build & Run
 # =====================
 build:
+	@echo "📦 Building project..."
+	$(MVN) clean package -DskipTests
+
+build-clean-install:
 	@echo "📦 Building project with unit tests..."
 	$(MVN) clean install
 
