@@ -3,8 +3,7 @@ services:
     name: vaultspring
     env: docker
     dockerfilePath: Dockerfile
-    buildCommand: ./mvnw clean package -DskipTests
-    startCommand: java -jar target/vaultspring-0.0.12-SNAPSHOT.jar
+    startCommand: java -jar app.jar
     envVars:
       - key: SPRING_PROFILES_ACTIVE
         value: prod

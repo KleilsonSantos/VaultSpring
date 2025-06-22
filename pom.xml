@@ -16,7 +16,7 @@
     <!-- Project Coordinates -->
     <groupId>com.vaultspring</groupId>
     <artifactId>vaultspring</artifactId>
-    <version>0.0.14-SNAPSHOT</version>
+    <version>0.0.15-SNAPSHOT</version>
     <name>VaultSpring</name>
     <description>Spring Boot project for Vault-based secure secret management</description>
     <url>https://github.com/KleilsonSantos/vaultspring</url>
@@ -195,7 +195,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>com.vaultspring.VaultSpringApplicationTest</Main-Class>
+                            <Main-Class>com.vaultspring.VaultSpringApplication</Main-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>
