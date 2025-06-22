@@ -1,11 +1,10 @@
 services:
   - type: web
-    name: vaultspring-backend
+    name: vaultspring
     env: docker
-    plan: free
-    dockerfilePath: ./Dockerfile
-    autoDeploy: true
-    healthCheckPath: /
+    dockerfilePath: Dockerfile
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/vaultspring-0.0.12-SNAPSHOT.jar
     envVars:
-      - key: JAVA_OPTS
-        value: "-Xms512m -Xmx1g"
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
