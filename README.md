@@ -1,3 +1,5 @@
+  
+
 <h1 align="center">
   <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHN0cWFwZGQ0NWxtM29nOTc2OGtkaHRpamo1anB1MDhxdWp4YXNoNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zxnBe1tqyFRGPhD4oe/giphy.gif" width="100"><p style="color: aquamarine">VaultSpring</p>
 </h1>
@@ -6,15 +8,41 @@
   <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1500&color=22D3EE&center=true&vCenter=true&width=600&lines=Gerenciamento+Seguro+de+Segredos;Para+Aplicacoes+Java;com+Spring+Boot+|+Docker+|+Vault" alt="Animation 2" />
 </h3>
 
-![Java](https://img.shields.io/badge/Java-17-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4.5-%236DB33F.svg?style=for-the-badge&logo=spring-boot&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-%232496ED.svg?style=for-the-badge&logo=docker&logoColor=white)
-![Vault](https://img.shields.io/badge/Vault-%23175DDD.svg?style=for-the-badge&logo=vault&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-%23336791.svg?style=for-the-badge&logo=postgresql&logoColor=white)
-![MapStruct](https://img.shields.io/badge/MapStruct-%23FF6F00.svg?style=for-the-badge&logo=java&logoColor=white)
-![Lombok](https://img.shields.io/badge/Lombok-%23E9573F.svg?style=for-the-badge&logo=lombok&logoColor=white)
-![Micrometer](https://img.shields.io/badge/Micrometer-%23007ACC.svg?style=for-the-badge&logo=prometheus&logoColor=white)
-![Prometheus](https://img.shields.io/badge/Prometheus-%23E6522C.svg?style=for-the-badge&logo=prometheus&logoColor=white)
+<p>
+  <!-- Status dinâmico de build e cobertura -->
+  <img src="https://github.com/KleilsonSantos/VaultSpring/actions/workflows/maven.yml/badge.svg?branch=main&style=for-the-badge" alt="Build Status"/>
+  <img src="https://codecov.io/gh/KleilsonSantos/VaultSpring/branch/main/graph/badge.svg?style=for-the-badge" alt="Cobertura de Testes"/>
+
+  <!-- Versão de tecnologia -->
+  <img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.4.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot"/>
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
+  <img src="https://img.shields.io/badge/Vault-175DDD?style=for-the-badge&logo=vault&logoColor=white" alt="Vault"/>
+  <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
+  <img src="https://img.shields.io/badge/MapStruct-FF6F00?style=for-the-badge&logo=java&logoColor=white" alt="MapStruct"/>
+  <img src="https://img.shields.io/badge/Lombok-E9573F?style=for-the-badge&logo=lombok&logoColor=white" alt="Lombok"/>
+
+  <!-- Observabilidade e testes -->
+  <img src="https://img.shields.io/badge/Micrometer-007ACC?style=for-the-badge&logo=prometheus&logoColor=white" alt="Micrometer"/>
+  <img src="https://img.shields.io/badge/Prometheus-E6522C?style=for-the-badge&logo=prometheus&logoColor=white" alt="Prometheus"/>
+  <img src="https://img.shields.io/badge/JUnit5-25A162?style=for-the-badge&logo=junit5&logoColor=white" alt="JUnit5"/>
+  <img src="https://img.shields.io/badge/Mockito-8A2BE2?style=for-the-badge&logo=mockito&logoColor=white" alt="Mockito"/>
+
+  <!-- Git e automações -->
+  <img src="https://img.shields.io/badge/GitHub%20Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white" alt="GitHub Actions"/>
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"/>
+  <img src="https://img.shields.io/badge/Git-F05033?style=for-the-badge&logo=git&logoColor=white" alt="Git"/>
+
+  <!-- Licença, status e contribuição -->
+  <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge" alt="Apache License"/>
+  <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange.svg?style=for-the-badge" alt="Status"/>
+  <img src="https://img.shields.io/badge/Contribuições-Bem%20vindas-brightgreen.svg?style=for-the-badge" alt="Contributions Welcome"/>
+</p>
+
+
+
+
+## 📝 Descrição
 
 **Gerenciamento Seguro de Segredos para Aplicações Java com Spring Boot e Docker Vault**
 
@@ -67,7 +95,8 @@ O projeto está estruturado em múltiplos módulos e pacotes, cada um com respon
   previsibilidade.
 
 > 💡 **Resumo:** O VaultSpring já conta com uma base arquitetural sólida, cobrindo desde a configuração centralizada até
-> a padronização de respostas e integração segura com serviços críticos, tornando-se uma solução moderna e confiável para
+> a padronização de respostas e integração segura com serviços críticos, tornando-se uma solução moderna e confiável
+> para
 > o gerenciamento de segredos em aplicações Java.
 
 ## 🔥 Tecnologias Utilizadas
@@ -175,3 +204,5 @@ Desenvolvido por **Kleilson Santos**.
 - 💼 [LinkedIn](https://www.linkedin.com/in/kleilson-dev-full-stack) - KleilsonSantos
 
 <p align="center">⚡ Construa com segurança, teste com propósito, automatize com clareza.<br>Kleilson Santos 🚀</p>
+
+[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com?user=KleilsonSantos&theme=dracula)](https://git.io/streak-stats)

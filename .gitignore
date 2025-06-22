@@ -45,9 +45,6 @@ build/
 ### 🟠 VS Code
 .vscode/
 
-## 🔹 Maven Wrapper
-.mvn/wrapper/
-
 ## 🔹 Temporary Files and J2ME
 .mtj.tmp/
 target/
