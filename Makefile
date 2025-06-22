@@ -1,43 +1,91 @@
-# Environment variables
+# =====================
+# 🌍 Environment Variables
+# =====================
+PROFILE_DEP_CHECK=-Pdependency-check -Dnvd.api.key=$$NVD_API_KEY
 
-PROFILE_DEP_CHECK=-Pdependency-check
+SONAR_URL=http://localhost:9000
+SONAR_TOKEN?=$(shell echo $$SONAR_TOKEN)
 
-# === Maven Commands ===
+# =====================
+# ⚙️ Maven Commands
+# =====================
 MVN=mvn
 MVN_UNIT=$(MVN) clean test
 MVN_VERIFY_IT=$(MVN) verify -Pintegration-tests
 MVN_FULL_BUILD=$(MVN) clean verify -Pintegration-tests install
 MVN_CLEAN_TEST_JACOCO=$(MVN) clean test jacoco:report
 
-# === Sonar Analysis Commands ===
-SONAR_URL=http://localhost:9000
-SONAR_TOKEN?=$(shell echo $$SONAR_TOKEN)
+# =====================
+# 🔐 Sonar Analysis
+# =====================
 SONAR_SCAN_CMD=$(MVN) sonar:sonar \
   -Dsonar.projectKey=vaultspring \
   -Dsonar.host.url=$(SONAR_URL) \
   -Dsonar.token=$(SONAR_TOKEN) \
   -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
-# === Security Scanning ===
+sonar:
+	@echo "📊 Running Sonar analysis..."
+	$(SONAR_SCAN_CMD)
+
+# =====================
+# 🔍 OWASP Dependency-Check
+# =====================
 check-sec:
 	@echo "🔍 Running OWASP Dependency-Check..."
-	$(MVN) verify -Pdependency-check
+	$(MVN) verify $(PROFILE_DEP_CHECK)
+
+dependency-check:
+	docker run --rm \
+		-e NVD_API_KEY=$(NVD_API_KEY) \
+		-v $(CURDIR):/src \
+		-v $(CURDIR)/dependency-check-data:/usr/share/dependency-check/data \
+		owasp/dependency-check \
+		--project "Meu Projeto" \
+		--scan /src \
+		--format "HTML"
+
 
 check-sec-dev:
 	@echo "🔍 Running OWASP Dependency-Check for Dev..."
-	$(MVN) verify -Pdependency-check -Pdev
+	$(MVN) verify $(PROFILE_DEP_CHECK) -Pdev
 
 check-sec-prod:
 	@echo "🔍 Running OWASP Dependency-Check for Prod..."
-	$(MVN) verify -Pdependency-check -Pprod
+	$(MVN) verify $(PROFILE_DEP_CHECK) -Pprod
 
 report-sec:
 	@echo "📂 Opening security report..."
 	xdg-open target/dependency-check-report/dependency-check-report.html || open target/dependency-check-report/dependency-check-report.html
 
-.PHONY: check-sec check-sec-dev check-sec-prod report-sec
+# =====================
+# 🧪 Testes de Segurança Ofensiva
+# =====================
+sql-injection-test:
+	@echo "🐍 Testando SQL Injection com sqlmap..."
+	sqlmap -u "http://localhost:8080/api/v1/users/1" --risk=3 --level=5 --batch
 
-# === Build Commands ===
+xss-test:
+	@echo "💀 Testando XSS com curl..."
+	curl -X POST http://localhost:8080/api/v1/comments \
+	 -H "Content-Type: application/json" \
+	 -d "{\"comment\": \"<script>alert('xss')</script>\"}"
+
+ddos-test:
+	@echo "🌪️ Testando DDoS com ab (ApacheBench)..."
+	ab -n 10000 -c 500 http://localhost:8080/actuator/health
+
+zap-scan:
+	@echo "🕷️ Executando ZAP Scan..."
+	zap-baseline.py -t http://localhost:8080 -r zap-report.html
+
+jwt-verify:
+	@echo "🔐 Verificando JWT..."
+	curl -H "Authorization: Bearer $$(cat jwt.txt)" http://localhost:8080/api/v1/users/1
+
+# =====================
+# 🧱 Build & Run
+# =====================
 build:
 	@echo "📦 Building project with unit tests..."
 	$(MVN) clean install
@@ -50,7 +98,9 @@ run:
 	@echo "🚀 Running application..."
 	$(MVN) spring-boot:run
 
-# === Clean Commands ===
+# =====================
+# 🧹 Clean Commands
+# =====================
 clean:
 	@echo "🧹 Cleaning project..."
 	$(MVN) clean
@@ -59,7 +109,9 @@ clean-test-jacoco:
 	@echo "🧹 Cleaning project and running unit tests..."
 	$(MVN_CLEAN_TEST_JACOCO)
 
-# === Test Commands ===
+# =====================
+# 🧪 Test Commands
+# =====================
 test-unit:
 	@echo "🧪 Running unit tests only (Surefire)..."
 	$(MVN_UNIT)
@@ -72,12 +124,28 @@ test-all:
 	@echo "🧪 Running unit and integration tests..."
 	$(MVN_FULL_BUILD)
 
-# === Code Quality ===
+# =====================
+# 📈 Code Quality
+# =====================
 coverage:
 	@echo "📈 Generating JaCoCo coverage report..."
 	$(MVN) clean verify jacoco:report
 
-# === Verification ===
+# =====================
+# 📦 Maven Wrapper
+# =====================
+wrapper:
+	@echo "🔧 Gerando Maven Wrapper (mvnw)..."
+	$(MVN) -N io.takari:maven:wrapper
+
+# =====================
+# ✅ Verification
+# =====================
 verify:
 	@echo "🔍 Verifying project..."
 	$(MVN) verify
+
+.PHONY: sonar check-sec check-sec-dev check-sec-prod report-sec \
+        sql-injection-test xss-test ddos-test zap-scan jwt-verify \
+        build package run clean clean-test-jacoco test-unit test-it test-all \
+        coverage verify

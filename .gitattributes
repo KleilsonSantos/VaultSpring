@@ -3,12 +3,6 @@
 ## 🟢 Maven Wrapper Script
 /mvnw text eol=lf
 
-## 🔹 Windows Batch Scripts
-*.cmd text eol=crlf
-
-## 🟡 Shell Scripts
-*.sh text eol=lf
-
 ## 🔵 Java Source Files
 *.java text eol=lf
 
@@ -21,3 +15,10 @@
 ## 🟠 Markdown and Text Files
 *.md text eol=lf
 *.txt text eol=lf
+
+## 🟣 Unix Shell Scripts
+*.sh text eol=lf
+
+## 🟤 Windows Batch Scripts
+*.cmd text eol=crlf
+*.bat text eol=crlf
