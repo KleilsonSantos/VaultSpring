@@ -107,7 +107,7 @@ flyway-migrate-prod:
 # =====================
 build:
 	@echo "📦 Building project..."
-	$(MVN) clean package -DskipTests
+	$(MVN) clean package
 
 build-clean-install:
 	@echo "📦 Building project with unit tests..."
@@ -115,7 +115,7 @@ build-clean-install:
 
 package:
 	@echo "📦 Packaging project..."
-	$(MVN) clean package
+	$(MVN) clean package -DskipTests
 
 run:
 	@echo "🚀 Running application..."
