@@ -84,11 +84,30 @@ jwt-verify:
 	curl -H "Authorization: Bearer $$(cat jwt.txt)" http://localhost:8080/api/v1/users/1
 
 # =====================
+# 🐦 Flyway Database Migration
+# =====================
+flyway-clean-dev:
+	@echo "🧹 Limpando banco de dados com Flyway (dev)..."
+	$(MVN) flyway:clean -Pflyway-dev
+
+flyway-info-prod:
+	@echo "ℹ️  Exibindo informações do Flyway (prod)..."
+	$(MVN) flyway:info -Pflyway-prod
+
+flyway-repair-prod:
+	@echo "🛠️  Reparando metadados do Flyway (prod)..."
+	$(MVN) flyway:repair -Pflyway-prod
+
+flyway-migrate-prod:
+	@echo "🚀 Executando migrações Flyway (prod)..."
+	$(MVN) flyway:migrate -Pflyway-prod
+
+# =====================
 # 🧱 Build & Run
 # =====================
 build:
 	@echo "📦 Building project..."
-	$(MVN) clean package -DskipTests
+	$(MVN) clean package
 
 build-clean-install:
 	@echo "📦 Building project with unit tests..."
@@ -96,11 +115,19 @@ build-clean-install:
 
 package:
 	@echo "📦 Packaging project..."
-	$(MVN) clean package
+	$(MVN) clean package -DskipTests
 
 run:
 	@echo "🚀 Running application..."
 	$(MVN) spring-boot:run
+
+run-dev:
+	@echo "🚀 Running application in development mode..."
+	$(MVN) spring-boot:run spring-boot:run -Dspring.profiles.active=dev
+
+run-prod:
+	@echo "🚀 Running application in production mode..."
+	mvn spring-boot:run -Dspring.profiles.active=prod
 
 # =====================
 # 🧹 Clean Commands
@@ -152,4 +179,4 @@ verify:
 .PHONY: sonar check-sec check-sec-dev check-sec-prod report-sec \
         sql-injection-test xss-test ddos-test zap-scan jwt-verify \
         build package run clean clean-test-jacoco test-unit test-it test-all \
-        coverage verify
+        coverage verify flyway-info flyway-clean flyway-repair flyway-migrate

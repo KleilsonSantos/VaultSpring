@@ -1,0 +1,5 @@
+INSERT INTO users (user_name, user_email, user_password, user_created_at, user_updated_at) VALUES ('John Doe', 'john@example.com', '$2a$10$ZSEWzyqZhRjxU6eRyTMTcOMCU8nnp7b4HR3V3qbtEdh6Trzj9K6du',NOW(), NOW());
+INSERT INTO users (user_name, user_email, user_password, user_created_at, user_updated_at) VALUES ('Jane Doe', 'jane@example.com', '$2a$10$ZSEWzyqZhRjxU6eRyTMTcOMCU8nnp7b4HR3V3qbtEdh6Trzj9K6du',NOW(), NOW());
+INSERT INTO users (user_name, user_email, user_password, user_created_at, user_updated_at) VALUES ('Bob Smith', 'bob@example.com', '$2a$10$ZSEWzyqZhRjxU6eRyTMTcOMCU8nnp7b4HR3V3qbtEdh6Trzj9K6du',NOW(), NOW());
+INSERT INTO users (user_name, user_email, user_password, user_created_at, user_updated_at) VALUES ('Alice Johnson', 'alice@example.com', '$2a$10$ZSEWzyqZhRjxU6eRyTMTcOMCU8nnp7b4HR3V3qbtEdh6Trzj9K6du',NOW(), NOW());
+INSERT INTO users (user_name, user_email, user_password, user_created_at, user_updated_at) VALUES ('Mike Brown', 'mike@example.com', '$2a$10$ZSEWzyqZhRjxU6eRyTMTcOMCU8nnp7b4HR3V3qbtEdh6Trzj9K6du',NOW(), NOW());

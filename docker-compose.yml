@@ -1,0 +1,125 @@
+# 🌐 NETWORKS CONFIGURATION
+networks:
+  vault-spring-shared-net:
+    name: vault-spring-shared-net
+    driver: bridge
+
+# 🗄️ DATABASE SERVICES
+services:
+  # =======================
+  # 🐘 POSTGRESQL ECOSYSTEM
+  # =======================
+  postgres:
+    image: postgres:15
+    container_name: vault-spring-postgres
+    env_file: .env
+    restart: always
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - vault-spring-postgres_data:/var/lib/postgresql/data
+    networks:
+      - vault-spring-shared-net
+
+  # ======================
+  # 🖥️ PGADMIN ECOSYSTEM
+  # =======================
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: vault-spring-pgadmin
+    env_file: .env
+    restart: always
+    ports:
+      - '8088:80'
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    volumes:
+      - vault-spring-pgadmin-data:/var/lib/pgadmin
+    networks:
+      - vault-spring-shared-net
+
+  # ======================
+  # 🗄️ POSTGRESQL EXPORTER
+  # ======================
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    container_name: vault-spring-postgres-exporter
+    env_file: .env
+    restart: always
+    environment:
+      DATA_SOURCE_NAME: 'postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}?sslmode=disable'
+    ports:
+      - '9187:9187'
+    depends_on:
+      - postgres
+    networks:
+      - vault-spring-shared-net
+
+  # ======================
+  # 📊 VAULT
+  # ======================
+  vault:
+    image: hashicorp/vault:latest
+    container_name: vault-spring-vault
+    env_file: .env
+    ports:
+      - "8200:8200"
+    environment:
+      VAULT_ADDR: ${VAULT_ADDR}
+      VAULT_API_ADDR: ${VAULT_API_ADDR}
+      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
+    volumes:
+      - ./vault/config:/vault/config
+      - ./vault/data:/vault/data
+    command: "vault server -config=/vault/config/vault.hcl"
+    restart: always
+    networks:
+      - vault-spring-shared-net
+
+  portainer:
+    image: portainer/portainer-ce
+    container_name: vault-spring-portainer
+    env_file: .env
+    restart: always
+    ports:
+      - '9001:9000'
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - vault-spring-portainer_data:/data
+    networks:
+      - vault-spring-shared-net
+
+  app:
+      build: .
+      ports:
+        - "8080:8080"
+      container_name: vault-spring-app
+      environment:
+        DB_URL: ${DB_URL}
+        DB_USER: ${DB_USER}
+        DB_PASS: ${DB_PASS}
+        SPRING_PROFILES_ACTIVE: prod
+      depends_on:
+        - postgres
+      networks:
+        - vault-spring-shared-net
+
+volumes:
+  vault-spring-postgres_data:
+    name: vault-spring-postgres_data
+  vault-spring-pgadmin-data:
+    name: vault-spring-pgadmin-data
+  vault-spring-portainer_data:
+    name: vault-spring-portainer_data

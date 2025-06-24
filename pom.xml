@@ -16,7 +16,7 @@
     <!-- Project Coordinates -->
     <groupId>com.vaultspring</groupId>
     <artifactId>vaultspring</artifactId>
-    <version>0.0.12-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>VaultSpring</name>
     <description>Spring Boot project for Vault-based secure secret management</description>
     <url>https://github.com/KleilsonSantos/vaultspring</url>
@@ -129,10 +129,19 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- Flyway for Database Migrations -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.22.0</version>
+        </dependency>
+
     </dependencies>
 
     <!-- Build Plugins -->
     <build>
+        <finalName>app</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -195,7 +204,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>com.vaultspring.VaultSpringApplicationTest</Main-Class>
+                            <Main-Class>com.vaultspring.VaultSpringApplication</Main-Class>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -275,6 +284,27 @@
             <properties>
                 <spring.profiles.active>prod</spring.profiles.active>
             </properties>
+        </profile>
+
+        <!-- Flyway for Database Migrations in Production -->
+        <profile>
+            <id>flyway-prod</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-maven-plugin</artifactId>
+                        <version>9.22.3</version>
+                        <configuration>
+                            <url>${flyway.url}</url>
+                            <user>${flyway.user}</user>
+                            <password>${flyway.password}</password>
+                            <driver>${flyway.driver}</driver>
+                            <cleanDisabled>true</cleanDisabled>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- Explicit activation for integration tests -->

@@ -1,15 +1,33 @@
-# Usando imagem leve do Java 17
-FROM eclipse-temurin:17-jdk
-
-# Define diretório de trabalho
+# Etapa 1: Build com Maven
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
 
-# Copia o JAR gerado pelo Maven
-COPY target/*.jar app.jar
+# Copia somente os arquivos necessários para baixar dependências
+COPY pom.xml .
+COPY checkstyle.xml .
+RUN mvn dependency:go-offline
 
-# Define porta de escuta (Render usa isso)
-ENV PORT=8080
+# Copia o código fonte
+COPY src ./src
+
+# Compila a aplicação
+RUN mvn clean package -DskipTests
+
+# Etapa 2: Imagem final com apenas o JAR gerado
+FROM eclipse-temurin:17-jre
+
+ARG USER_ID="1001"
+ARG GROUP_ID="1001"
+RUN groupadd --gid $GROUP_ID appuser && \
+    useradd --uid $USER_ID --gid $GROUP_ID -m appuser
+
+WORKDIR /app
+COPY --from=builder /app/target/vaultspring-0.1.0.jar app.jar
+
+
+RUN chown -R appuser:appuser /app
+USER appuser
+
 EXPOSE 8080
-
-# Executa a aplicação
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENV SPRING_PROFILES_ACTIVE=prod
+ENTRYPOINT ["java", "-Dspring.profiles.active=${SPRING_PROFILES_ACTIVE}", "-jar", "app.jar"]

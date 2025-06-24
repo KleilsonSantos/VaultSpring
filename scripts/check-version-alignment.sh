@@ -1,10 +1,17 @@
 #!/bin/bash
 
+# Get the root directory of the Git project 📂
 PROJECT_ROOT=$(git rev-parse --show-toplevel)
 POM_FILE="$PROJECT_ROOT/pom.xml"
 
-# Extrair a versão atual do pom.xml (sem SNAPSHOT, sem v)
-POM_VERSION=$(awk '
+# Skip the pre-commit hook if the flag is set (useful for emergencies or CI) 🚫
+if [ "$SKIP_PRECOMMIT" = "true" ]; then
+  echo "Pre-commit hook skipped."
+  exit 0
+fi
+
+# Extract the current version from pom.xml 📄
+CURRENT_VERSION=$(awk '
   /<parent>/ { in_parent=1 }
   /<\/parent>/ { in_parent=0 }
   /<version>/ && !in_parent {
@@ -13,10 +20,10 @@ POM_VERSION=$(awk '
     print $0;
     exit;
   }
-' "$POM_FILE" | sed -E 's/^v?//; s/-.*//')
+' "$POM_FILE")
 
-# Extrair a versão do pom.xml do último commit
-GIT_COMMIT_VERSION=$(git show HEAD:pom.xml 2>/dev/null | awk '
+# Extract the version from the last commit (including if it was a SNAPSHOT) ⏪
+LAST_COMMIT_VERSION=$(git show HEAD:pom.xml 2>/dev/null | awk '
   /<parent>/ { in_parent=1 }
   /<\/parent>/ { in_parent=0 }
   /<version>/ && !in_parent {
@@ -25,15 +32,21 @@ GIT_COMMIT_VERSION=$(git show HEAD:pom.xml 2>/dev/null | awk '
     print $0;
     exit;
   }
-' | sed -E 's/^v?//; s/-.*//')
+')
 
-echo "📦 Versão no pom.xml: $POM_VERSION"
-echo "📦 Versão no último commit: $GIT_COMMIT_VERSION"
+# Remove the -SNAPSHOT suffix for semantic comparison 🔍
+CURRENT_VERSION_CLEAN=$(echo "$CURRENT_VERSION" | sed -E 's/-SNAPSHOT//')
+LAST_COMMIT_VERSION_CLEAN=$(echo "$LAST_COMMIT_VERSION" | sed -E 's/-SNAPSHOT//')
 
-if [ "$POM_VERSION" = "$GIT_COMMIT_VERSION" ]; then
-  echo "❌ A versão no pom.xml não foi alterada em relação ao último commit!"
-  echo "💡 Atualize a versão antes de fazer commit."
+# Show versions to help with debugging 🛠️
+echo "📦 Version in pom.xml: $CURRENT_VERSION"
+echo "📦 Version in last commit: $LAST_COMMIT_VERSION"
+
+# Block the commit if the version wasn't changed ❌
+if [ "$CURRENT_VERSION_CLEAN" = "$LAST_COMMIT_VERSION_CLEAN" ] && [ "$CURRENT_VERSION" = "$LAST_COMMIT_VERSION" ]; then
+  echo "❌ The version in pom.xml has not been updated since the last commit!"
+  echo "💡 Please update the version before committing."
   exit 1
 else
-  echo "✅ Versão alterada detectada. Tudo certo para o commit!"
+  echo "✅ Version change detected. You're good to go!"
 fi
