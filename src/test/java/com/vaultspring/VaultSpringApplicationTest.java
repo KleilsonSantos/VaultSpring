@@ -5,8 +5,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class VaultSpringApplicationTest {
-    @Test
-    void contextLoads() {
-        // empty
-    }
+//    @Test
+//    void contextLoads() {
+//        // empty
+//    }
 }

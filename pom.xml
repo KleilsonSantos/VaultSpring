@@ -16,7 +16,7 @@
     <!-- Project Coordinates -->
     <groupId>com.vaultspring</groupId>
     <artifactId>vaultspring</artifactId>
-    <version>0.0.14-SNAPSHOT</version>
+    <version>0.1.0</version>
     <name>VaultSpring</name>
     <description>Spring Boot project for Vault-based secure secret management</description>
     <url>https://github.com/KleilsonSantos/vaultspring</url>
@@ -127,6 +127,13 @@
             <artifactId>annotations</artifactId>
             <version>26.0.2</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- Flyway for Database Migrations -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+            <version>9.22.0</version>
         </dependency>
 
     </dependencies>
@@ -275,6 +282,46 @@
             <properties>
                 <spring.profiles.active>prod</spring.profiles.active>
             </properties>
+        </profile>
+
+        <!-- Flyway for Database Migrations in Production -->
+        <profile>
+            <id>flyway-prod</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-maven-plugin</artifactId>
+                        <version>9.22.3</version>
+                        <configuration>
+                            <url>$FLYWAY_URL</url>
+                            <user>$FLYWAY_USER</user>
+                            <password>$FLYWAY_PASSWORD</password>
+                            <cleanDisabled>true</cleanDisabled>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Flyway for Database Migrations in Development -->
+        <profile>
+            <id>flyway-dev</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.flywaydb</groupId>
+                        <artifactId>flyway-maven-plugin</artifactId>
+                        <version>9.22.3</version>
+                        <configuration>
+                            <url>$FLYWAY_URL</url>
+                            <user>$FLYWAY_USER</user>
+                            <password>$FLYWAY_PASSWORD</password>
+                            <cleanDisabled>false</cleanDisabled>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
 
         <!-- Explicit activation for integration tests -->
