@@ -1,9 +1,0 @@
-services:
-  - type: web
-    name: vaultspring
-    env: docker
-    dockerfilePath: Dockerfile
-    startCommand: java -jar app.jar
-    envVars:
-      - key: SPRING_PROFILES_ACTIVE
-        value: prod

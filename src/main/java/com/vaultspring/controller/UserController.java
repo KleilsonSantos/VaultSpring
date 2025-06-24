@@ -2,10 +2,9 @@ package com.vaultspring.controller;
 
 import com.vaultspring.entity.User;
 import com.vaultspring.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -40,6 +39,19 @@ public final class UserController {
     @GetMapping("/users")
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok(userRepository.findAll());
+    }
+
+    /**
+     * Creates a new user.
+     * @param user
+     * @return the created user wrapped in a ResponseEntity
+     */
+    @PostMapping("/users")
+    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(userRepository.save(user));
     }
 }
 

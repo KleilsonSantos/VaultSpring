@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: vaultspring
+    env: docker
+    dockerfilePath: Dockerfile
+    startCommand: java -jar app.jar
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: DB_URL
+        value: jdbc:postgresql://<HOST>:5432/<DATABASE>
+      - key: DB_USER
+        value: admin
+      - key: DB_PASS
+        value: adminpass
+      - key: SECURITY_USER_NAME
+        value: admin
+      - key: SECURITY_USER_PASSWORD
+        value: adminpass
+      - key: SECURITY_USER_ROLES
+        value: USER
+
