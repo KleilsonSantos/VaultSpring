@@ -3,10 +3,19 @@ server:
 
 spring:
   datasource:
-    url: ${POSTGRES_URL}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    driver-class-name: ${POSTGRES_DRIVER}
+    url: jdbc:postgresql://localhost:5432/users_db
+    username: admin
+    password: adminpass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 30000
+      validation-timeout: 3000
+      max-lifetime: 1800000
+      keepaliveTime: 60000
+      idle-timeout: 10000
+      leak-detection-threshold: 15000
   flyway:
     enabled: true
     baseline-on-migrate: true
