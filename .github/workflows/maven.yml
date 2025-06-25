@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [ "main" ]
 
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -87,12 +92,12 @@ jobs:
       # #     name: jacoco-report
       # #     path: target/site/jacoco/
 
-      # # # Step Submit dependency graph
-      # # - name: 📊 Submit dependency graph
-      # #   if: ${{ !env.ACT && env.GITHUB_TOKEN != '' }}
-      # #   uses: advanced-security/maven-dependency-submission-action@v4
-      # #   env:
-      # #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Step Submit dependency graph
+      - name: 📊 Submit dependency graph
+        if: ${{ !env.ACT && env.GITHUB_TOKEN != '' }}
+        uses: advanced-security/maven-dependency-submission-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # # # Step Run Sonar Scanner — runs both on GitHub Actions and local act
       # # - name: 🔍 Run Sonar Scanner (GitHub Actions)
