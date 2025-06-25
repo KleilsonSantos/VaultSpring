@@ -76,21 +76,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step Run Sonar Scanner — runs both on GitHub Actions and local act
-      - name: 🔍 Run Sonar Scanner (GitHub Actions)
-        if: success() && !env.ACT
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: |
-          echo "Running Sonar analysis..."
-          mvn sonar:sonar \
-            -Dsonar.projectKey=VaultSpring \
-            -Dsonar.organization=kleilsonsantos \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.token=$SONAR_TOKEN \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
-
       # Step Run Sonar Scanner — runs both on local act
       - name: 🔍 Run Sonar Scanner (ACT local)
         if: success() && env.ACT
