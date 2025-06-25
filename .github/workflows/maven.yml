@@ -65,10 +65,10 @@ jobs:
 
       # Step Submit dependency graph
       - name: 📊 Submit dependency graph
-        if: ${{ !env.ACT }}
+        if: ${{ !env.ACT && env.GITHUB_TOKEN != '' }}
+        uses: advanced-security/maven-dependency-submission-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        uses: advanced-security/maven-dependency-submission-action@v4
 
       # Step Run Sonar Scanner — runs both on GitHub Actions and local act
       - name: 🔍 Run Sonar Scanner (GitHub Actions)
