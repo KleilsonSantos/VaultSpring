@@ -1,18 +1,20 @@
-  
+<div align="center">
 
-<h1 align="center">
-  <img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExcHN0cWFwZGQ0NWxtM29nOTc2OGtkaHRpamo1anB1MDhxdWp4YXNoNSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zxnBe1tqyFRGPhD4oe/giphy.gif" width="100"><p style="color: aquamarine">VaultSpring</p>
-</h1>
+<p align="center">
+  <img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*XvXF_f1HdUPshLKVHbFrXw.gif" alt="VaultSpring Animation" width="600"/>
 
 <h3 align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1500&color=22D3EE&center=true&vCenter=true&width=600&lines=Gerenciamento+Seguro+de+Segredos;Para+Aplicacoes+Java;com+Spring+Boot+|+Docker+|+Vault" alt="Animation 2" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1500&color=2ECC71
+&center=true&vCenter=true&width=600&lines=Gerenciamento+Seguro+de+Segredos;Para+Aplicacoes+Java;com+Spring+Boot+|+Docker+|+Vault" alt="Animation 2" />
 </h3>
 
-<p>
-  <!-- Status dinâmico de build e cobertura -->
-  <img src="https://github.com/KleilsonSantos/VaultSpring/actions/workflows/maven.yml/badge.svg?branch=main&style=for-the-badge" alt="Build Status"/>
-  <img src="https://codecov.io/gh/KleilsonSantos/VaultSpring/branch/main/graph/badge.svg?style=for-the-badge" alt="Cobertura de Testes"/>
+#### <strong>🔐 VaultSpring - Segurança, Observabilidade e Arquitetura Moderna ☕️</strong><br>
+#### ⚙️ Solução segura para gerenciamento de segredos com integração a Vault, CI/CD, testes e práticas DevSecOps.<br>
+#### ✅ Ideal para aplicações Java modernas com foco em segurança, escalabilidade e automação.
 
+</div>
+
+<div align="center">
   <!-- Versão de tecnologia -->
   <img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
   <img src="https://img.shields.io/badge/Spring%20Boot-3.4.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot"/>
@@ -37,20 +39,28 @@
   <img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge" alt="Apache License"/>
   <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-orange.svg?style=for-the-badge" alt="Status"/>
   <img src="https://img.shields.io/badge/Contribuições-Bem%20vindas-brightgreen.svg?style=for-the-badge" alt="Contributions Welcome"/>
-</p>
+</div>
 
+<br>
 
+<div align="center">
+<!-- Status dinâmico de build e cobertura -->
+  <img src="https://github.com/KleilsonSantos/VaultSpring/actions/workflows/maven.yml/badge.svg?branch=main&style=for-the-badge" alt="Build Status"/>
+  <img src="https://codecov.io/gh/KleilsonSantos/VaultSpring/branch/main/graph/badge.svg?style=for-the-badge" alt="Cobertura de Testes"/>
+</div>
 
+<div align="center">
+
+>#### ⚠️ **Este projeto está 🚀 _(Em Constante Desenvolvimento 🚧)_**
+> Algumas funcionalidades podem estar incompletas ou sujeitas a alterações. Contribuições são bem-vindas! 🛠️
+
+</div>
 
 ## 📝 Descrição
 
 **Gerenciamento Seguro de Segredos para Aplicações Java com Spring Boot e Docker Vault**
 
-> ⚠️ **Este projeto está 🚀 _(Em Desenvolvimento 🚧)_**
->
-> Algumas funcionalidades podem estar incompletas ou sujeitas a alterações. Contribuições são bem-vindas! 🛠️
-
-## 📌 Sobre o Projeto
+## 👀 Visão geral do projeto
 
 VaultSpring é uma aplicação **Spring Boot** desenvolvida para proporcionar **gestão segura de segredos** em ambientes
 modernos, escaláveis e de alta confiabilidade. O projeto adota uma arquitetura modular e robusta, garantindo fácil
@@ -114,63 +124,25 @@ O projeto está estruturado em múltiplos módulos e pacotes, cada um com respon
 - **OWASP Dependency-Check**
 - **Maven**
 
-## ⚙️ Como Executar o Projeto
+## 📘 Guia Rápido e Avançado
 
-### 🔹 **Pré-requisitos**
-
-Antes de começar, certifique-se de ter instalado:
-
-- **Java 17**
-- **Docker e Docker Compose**
-- **Maven**
-
-## 🚀 Funcionalidades
-
-- ✅ Integração com banco de dados PostgreSQL
-- ✅ Arquitetura modular e extensível
-- ✅ Estrutura modular do projeto para fácil manutenção
-- ✅ Aplicação de boas práticas com Lombok
-- ✅ Documentação inicial e instruções de execução
-
-## 📌 **Como Executar o Projeto (Passo a Passo)**
-
-### **Clone o repositório**
-
- ```
-git clone https://github.com/KleilsonSantos/vaultspring.git
-cd vaultspring
- ```
-
-### 💡 Dica: Para executar o projeto
-
-```
-mvn clean install
-```
-
-### Execute o seguinte comando:
-
-```
-mvn spring-boot:run
-```
-
-## 📌 Acesse a aplicação
-
-- A API estará disponível em: http://localhost:8080
-- Utilize ferramentas como Postman ou curl para interagir com os endpoints.
-
-## 📄 Licença
-
-Este projeto está sob a licença Apache 2.0. Veja mais detalhes
-
-> 💡 **Nota:** Este projeto está em constante desenvolvimento. Algumas funcionalidades podem estar incompletas ou
-> sujeitas a alterações. Contribuições são sempre bem-vindas! 🛠️
+Para instruções detalhadas de uso local, testes, cobertura, e troubleshooting:  
+➡️ Acesse o arquivo [`HELP.md`](./HELP.md)
 
 ## ✅ **O que já foi concluído**
 
-- ✅ Estrutura modular do projeto para fácil manutenção
-- ✅ Aplicação de boas práticas com Lombok
-- ✅ Documentação inicial e instruções de execução
-- ✅ Integração com banco de dados PostgreSQL
+- ✅ Estrutura modular do projeto para fácil manutenção e extensibilidade
+- ✅ Aplicação de boas práticas com Lombok e MapStruct
+- ✅ Documentação inicial (`README.md` e `HELP.md`) e instruções de execução local
+- ✅ Integração completa com banco de dados PostgreSQL
+- ✅ Separação de arquivos de configuração para produção e desenvolvimento (`application-prod.yml` e `application-dev.yml`)
+- ✅ Integração do Flyway para versionamento de banco de dados com perfis Maven dedicados (`flyway-dev` e `flyway-prod`)
+- ✅ Novo endpoint de criação de usuário no `UserController`
+- ✅ Dockerfile otimizado com suporte a múltiplos estágios e variáveis de ambiente para perfis
+- ✅ Pipeline CI/CD com GitHub Actions: build, testes automatizados, análise com SonarCloud, Checkstyle e cobertura com JaCoCo
+- ✅ Suporte a execução e build via Docker e Docker Compose
+- ✅ Cobertura de testes automatizada com JUnit 5, Mockito e JaCoCo
+- ✅ Integração com HashiCorp Vault para gerenciamento seguro de segredos
 
 > ⚡ Essas entregas garantem uma base sólida para o gerenciamento seguro de segredos em aplicações Java modernas.
 
@@ -188,6 +160,13 @@ desenvolvedor experiente ou iniciante, há várias formas de ajudar:
 - 🛠️ **Contribua com código:** Envie pull requests com novas funcionalidades ou correções.
 - ⭐ **Dê uma estrela no GitHub:** Isso ajuda o projeto a alcançar mais desenvolvedores.
 
+## 📄 Licença
+
+Este projeto está sob a licença Apache 2.0. Veja mais detalhes
+
+> 💡 **Nota:** Este projeto está em constante desenvolvimento. Algumas funcionalidades podem estar incompletas ou
+> sujeitas a alterações. Contribuições são sempre bem-vindas! 🛠️
+
 ## 🙏 **Agradecimentos**
 
 Agradecemos por utilizar este projeto! Caso tenha sugestões, melhorias ou encontre algum problema, sinta-se à vontade
@@ -204,5 +183,3 @@ Desenvolvido por **Kleilson Santos**.
 - 💼 [LinkedIn](https://www.linkedin.com/in/kleilson-dev-full-stack) - KleilsonSantos
 
 <p align="center">⚡ Construa com segurança, teste com propósito, automatize com clareza.<br>Kleilson Santos 🚀</p>
-
-[![GitHub Streak](https://github-readme-streak-stats.herokuapp.com?user=KleilsonSantos&theme=dracula)](https://git.io/streak-stats)
