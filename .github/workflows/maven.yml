@@ -98,19 +98,35 @@ jobs:
       #   uses: advanced-security/maven-dependency-submission-action@v4
       #   env:
       #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+      - name: 🕵️‍♂️ Verificando estrutura de pastas
+        run: |
+          echo "PWD = $(pwd)"
+          echo "Arquivos disponíveis:"
+          ls -la
 
       - name: 📊 Submit dependency graph
         if: ${{ !env.ACT }}
         run: |
-          echo "📁 Diretório atual antes do cd:"
+          echo "📁 Diretório atual:"
           pwd
           echo "📄 Listando arquivos:"
           ls -la
-          cd ./ # ou use ./VaultSpring se for subpasta
+          cd $GITHUB_WORKSPACE
           mvn com.github.ferstl:depgraph-maven-plugin:4.0.3:reactor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # - name: 📊 Submit dependency graph
+      #   if: ${{ !env.ACT }}
+      #   run: |
+      #     echo "📁 Diretório atual antes do cd:"
+      #     pwd
+      #     echo "📄 Listando arquivos:"
+      #     ls -la
+      #     cd ./ # ou use ./VaultSpring se for subpasta
+      #     mvn com.github.ferstl:depgraph-maven-plugin:4.0.3:reactor
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
       # # # Step Run Sonar Scanner — runs both on GitHub Actions and local act
