@@ -93,11 +93,25 @@ jobs:
       # #     path: target/site/jacoco/
 
       # Step Submit dependency graph
+      # - name: 📊 Submit dependency graph
+      #   if: ${{ !env.ACT && env.GITHUB_TOKEN != '' }}
+      #   uses: advanced-security/maven-dependency-submission-action@v4
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
       - name: 📊 Submit dependency graph
-        if: ${{ !env.ACT && env.GITHUB_TOKEN != '' }}
-        uses: advanced-security/maven-dependency-submission-action@v4
+        if: ${{ !env.ACT }}
+        run: |
+          echo "📁 Diretório atual antes do cd:"
+          pwd
+          echo "📄 Listando arquivos:"
+          ls -la
+          cd ./ # ou use ./VaultSpring se for subpasta
+          mvn com.github.ferstl:depgraph-maven-plugin:4.0.3:reactor
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 
       # # # Step Run Sonar Scanner — runs both on GitHub Actions and local act
       # # - name: 🔍 Run Sonar Scanner (GitHub Actions)
