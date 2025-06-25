@@ -2,7 +2,12 @@
 
 Todas as alterações importantes neste projeto serão documentadas aqui.
 
----
+## [0.0.15] - 2025-06-22
+
+### ♻️ Changed
+- Atualização do `.dockerignore` para evitar arquivos sensíveis no build
+- Ajuste no `.render.yaml` para usar corretamente o `app.jar` como ponto de entrada
+- Otimização do `Dockerfile` com multistage build para produção
 
 ## [0.1.0] - 2025-06-24
 
@@ -15,11 +20,9 @@ Todas as alterações importantes neste projeto serão documentadas aqui.
 - `Dockerfile` atualizado para aceitar perfis via variável de ambiente `SPRING_PROFILES_ACTIVE` e utilizar build multi-stage
 - Atualização do `pom.xml` com perfis Maven dedicados ao Flyway para ambientes distintos (`dev` e `prod`)
 
----
+## [0.1.1-SNAPSHOT] - 2025-06-25
 
-## [0.0.15] - 2025-06-22
-
-### ♻️ Changed
-- Atualização do `.dockerignore` para evitar arquivos sensíveis no build
-- Ajuste no `.render.yaml` para usar corretamente o `app.jar` como ponto de entrada
-- Otimização do `Dockerfile` com multistage build para produção
+### 🔧 Chore
+- Atualiza `act-dev.sh` para incluir suporte ao `GITHUB_TOKEN`
+- Adiciona script `wait-for-db.sh` para aguardar readiness do PostgreSQL antes da inicialização da aplicação
+- Atualiza scripts do GitHub Actions para refletir as mudanças de ambiente
