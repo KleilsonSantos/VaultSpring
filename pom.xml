@@ -140,6 +140,8 @@
 
     <!-- Build Plugins -->
     <build>
+        <finalName>app</finalName>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -294,30 +296,11 @@
                         <artifactId>flyway-maven-plugin</artifactId>
                         <version>9.22.3</version>
                         <configuration>
-                            <url>$FLYWAY_URL</url>
-                            <user>$FLYWAY_USER</user>
-                            <password>$FLYWAY_PASSWORD</password>
+                            <url>${flyway.url}</url>
+                            <user>${flyway.user}</user>
+                            <password>${flyway.password}</password>
+                            <driver>${flyway.driver}</driver>
                             <cleanDisabled>true</cleanDisabled>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-
-        <!-- Flyway for Database Migrations in Development -->
-        <profile>
-            <id>flyway-dev</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.flywaydb</groupId>
-                        <artifactId>flyway-maven-plugin</artifactId>
-                        <version>9.22.3</version>
-                        <configuration>
-                            <url>$FLYWAY_URL</url>
-                            <user>$FLYWAY_USER</user>
-                            <password>$FLYWAY_PASSWORD</password>
-                            <cleanDisabled>false</cleanDisabled>
                         </configuration>
                     </plugin>
                 </plugins>

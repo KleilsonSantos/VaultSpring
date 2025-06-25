@@ -17,12 +17,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  jakarta:
-    persistence:
-      jdbc:
-        url: ${POSTGRES_URL}
-        user: ${POSTGRES_USER}
-        password: ${POSTGRES_PASSWORD}
 logging:
   level:
     root: INFO
