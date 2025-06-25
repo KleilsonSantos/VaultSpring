@@ -16,33 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: 🔎 Debug GITHUB_TOKEN
-        run: |
-          if [ -z "$GITHUB_TOKEN" ]; then
-            echo "❌ GITHUB_TOKEN não está definido!"
-            exit 1
-          else
-            echo "✅ GITHUB_TOKEN está definido!"
-            echo "${GITHUB_TOKEN:0:5}********"
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # - name: 🔎 Debug GITHUB_TOKEN
-      #   run: |
-      #     if [ -z "$GITHUB_TOKEN" ]; then
-      #       echo "❌ GITHUB_TOKEN não está definido!"
-      #       exit 1
-      #     else
-      #       echo "✅ GITHUB_TOKEN está definido!"
-      #       echo "${GITHUB_TOKEN:0:5}********"
-      #     fi
-      #   env:
-      #    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # # # Steps for GitHub Actions
-      # # - name: 📥 Checkout source code
-      # #   uses: actions/checkout@v4
+      # Steps for GitHub Actions
+      - name: 📥 Checkout source code
+        uses: actions/checkout@v4
 
       # # # Steps Set up JDK 17
       # # - name: ☕ Set up JDK 17
