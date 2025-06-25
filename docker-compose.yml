@@ -20,6 +20,14 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+<<<<<<< Updated upstream
+=======
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+>>>>>>> Stashed changes
     volumes:
       - vault-spring-postgres_data:/var/lib/postgresql/data
     networks:
@@ -96,6 +104,34 @@ services:
     networks:
       - vault-spring-shared-net
 
+  # ======================
+  # 📊 SONARQUBE
+  # ======================
+  sonarqube:
+    image: sonarqube:latest
+    container_name: vault-spring-sonarqube
+    env_file: .env
+    restart: always
+    ports:
+      - '9000:9000'
+    environment:
+      SONAR_JDBC_URL: ${SONAR_JDBC_URL}
+      SONAR_JDBC_USERNAME: ${SONAR_JDBC_USERNAME}
+      SONAR_JDBC_PASSWORD: ${SONAR_JDBC_PASSWORD}
+      SONARQUBE_JVM_OPTIONS: ${SONARQUBE_JVM_OPTIONS}
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: ${SONAR_ES_BOOTSTRAP_CHECKS_DISABLE}
+    volumes:
+      - vault-spring-sonarqube_data:/opt/sonarqube/data
+      - vault-spring-sonarqube_extensions:/opt/sonarqube/extensions
+      - vault-spring-sonarqube_logs:/opt/sonarqube/logs
+    depends_on:
+      - postgres
+    networks:
+      - vault-spring-shared-net
+
+  # ======================
+  # 📦 APPLICATION ECOSYSTEM
+  # ======================
   app:
       build: .
       ports:
@@ -112,6 +148,12 @@ services:
         - vault-spring-shared-net
 
 volumes:
+  vault-spring-sonarqube_data:
+    name: vault-spring-sonarqube_data
+  vault-spring-sonarqube_extensions:
+    name: vault-spring-sonarqube_extensions
+  vault-spring-sonarqube_logs:
+    name: vault-spring-sonarqube_logs
   vault-spring-postgres_data:
     name: vault-spring-postgres_data
   vault-spring-pgadmin-data:

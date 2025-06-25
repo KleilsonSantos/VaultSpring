@@ -1,74 +1,118 @@
-# name: Java CI with Maven
+name: Java CI with Maven
 
-# on:
-#   push:
-#     branches: [ "main" ]
-#   pull_request:
-#     branches: [ "main" ]
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
-# jobs:
-#   build:
-#     runs-on: ubuntu-latest
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: 📥 Checkout source
-#         uses: actions/checkout@v4
+    steps:
+      # Steps for GitHub Actions
+      - name: 📥 Checkout source code
+        uses: actions/checkout@v4
 
-#       - name: ☕ Set up JDK 17
-#         uses: actions/setup-java@v4
-#         with:
-#           distribution: 'temurin'
-#           java-version: '17'
-#           cache: 'maven'
+      # Steps Set up JDK 17
+      - name: ☕ Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'maven'
 
-#       - name: 🛠️ Instalar Maven (para uso com act local)
-#         if: env.ACT
-#         run: |
-#           sudo apt-get update
-#           sudo apt-get install -y maven
+      # Steps for ACT local environment
+      - name: 🛠️ Install Maven (for local act usage)
+        if: env.ACT
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y maven
 
-#       - name: 🧩 Criar pasta do cache Maven (necessário p/ act)
-#         if: env.ACT
-#         run: mkdir -p /root/.m2/repository
+      # Steps for local act usage
+      - name: 🧩 Create Maven cache directory (required for act local)
+        if: env.ACT
+        run: mkdir -p /root/.m2/repository
 
-#       - name: 💾 Cache manual do Maven (fallback)
-#         uses: actions/cache@v3
-#         with:
-#           path: /root/.m2/repository
-#           key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
-#           restore-keys: |
-#             maven-${{ runner.os }}-
+      # Step Cache Maven apenas no GitHub Actions
+      - name: 💾 Manual Maven cache
+        if: ${{ !env.ACT }}
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.m2/repository
+            target
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven
 
-#       - name: 🧹 Análise de código com Checkstyle
-#         run: mvn checkstyle:check
+      # Step Code style analysis
+      - name: 🧹 Code analysis with Checkstyle
+        run: mvn checkstyle:check
 
-#       - name: 🧪 Build + Test + Coverage (JaCoCo)
-#         run: mvn clean verify jacoco:report --no-transfer-progress
+      # Step Build, tests, and coverage report generation
+      - name: 🧪 Build + Test + Coverage (JaCoCo)
+        run: mvn clean verify jacoco:report --no-transfer-progress
 
-#       - name: 📤 Upload JaCoCo coverage (opcional)
-#         if: success() && !env.ACT && hashFiles('target/site/jacoco/jacoco.xml') != ''
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: jacoco-report
-#           path: target/site/jacoco/
+      # Step Optional upload of JaCoCo coverage report (only on GitHub Actions)
+      - name: 📤 Upload JaCoCo coverage report
+        if: success() && !env.ACT && hashFiles('target/site/jacoco/jacoco.xml') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-report
+          path: target/site/jacoco/
 
-#       - name: 📊 Submeter grafo de dependência
-#         uses: advanced-security/maven-dependency-submission-action@v4
+      # Step Submit dependency graph
+      - name: 📊 Submit dependency graph
+        if: ${{ !env.ACT }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: advanced-security/maven-dependency-submission-action@v4
 
-#       - name: 📦 Upload do JAR gerado
-#         if: success() && !env.ACT && hashFiles('target/*.jar') != ''
-#         uses: actions/upload-artifact@v4
-#         with:
-#           name: app-build
-#           path: target/*.jar
+      # Step Run Sonar Scanner — runs both on GitHub Actions and local act
+      - name: 🔍 Run Sonar Scanner (GitHub Actions)
+        if: success() && !env.ACT
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          echo "Running Sonar analysis..."
+          mvn sonar:sonar \
+            -Dsonar.projectKey=VaultSpring \
+            -Dsonar.organization=kleilsonsantos \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.token=$SONAR_TOKEN \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
-#       - name: 📈 Enviar relatório para Codecov
-#         if: success() && !env.ACT && hashFiles('target/site/jacoco/jacoco.xml') != ''
-#         uses: codecov/codecov-action@v4
-#         with:
-#           #token: ${{ secrets.CODECOV_TOKEN }} # remova se o repositório for público
-#           files: target/site/jacoco/jacoco.xml
-#           flags: unittests
-#           name: codecov-coverage
-#           fail_ci_if_error: false
+      # Step Run Sonar Scanner — runs both on local act
+      - name: 🔍 Run Sonar Scanner (ACT local)
+        if: success() && env.ACT
+        env:
+          SONAR_TOKEN: ${{ env.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ env.SONAR_HOST_URL }}
+        run: |
+          echo "Running Sonar analysis..."
+          mvn sonar:sonar \
+            -Dsonar.projectKey=vaultspring \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.token=$SONAR_TOKEN \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
 
+      # Step Upload the generated JAR artifact (only on GitHub Actions)
+      - name: 📦 Upload generated JAR
+        if: success() && !env.ACT && hashFiles('target/*.jar') != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-build
+          path: target/*.jar
+
+      # Step Send coverage report to Codecov (only on GitHub Actions)
+      - name: 📈 Send report to Codecov
+        if: success() && !env.ACT && hashFiles('target/site/jacoco/jacoco.xml') != ''
+        uses: codecov/codecov-action@v4
+        with:
+          files: target/site/jacoco/jacoco.xml
+          flags: unittests
+          name: codecov-coverage
+          fail_ci_if_error: false

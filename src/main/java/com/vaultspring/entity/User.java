@@ -87,7 +87,7 @@ public class User implements Serializable {
      */
     @CreatedDate
     @Column(name = "user_created_at", updatable = false)
-    private LocalDateTime created_at;
+    private LocalDateTime createdAt;
 
     /**
      * The timestamp when the user was last updated.
@@ -96,5 +96,5 @@ public class User implements Serializable {
      */
     @LastModifiedDate
     @Column(name = "user_updated_at")
-    private LocalDateTime updated_at;
+    private LocalDateTime updatedAt;
 }

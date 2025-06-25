@@ -159,6 +159,7 @@ test-all:
 # 📈 Code Quality
 # =====================
 coverage:
+	@scripts/wait-for-db.sh
 	@echo "📈 Generating JaCoCo coverage report..."
 	$(MVN) clean verify jacoco:report
 
@@ -176,6 +177,8 @@ verify:
 	@echo "🔍 Verifying project..."
 	$(MVN) verify
 
+# =====================
+# 📌 Phony Targets
 .PHONY: sonar check-sec check-sec-dev check-sec-prod report-sec \
         sql-injection-test xss-test ddos-test zap-scan jwt-verify \
         build package run clean clean-test-jacoco test-unit test-it test-all \
