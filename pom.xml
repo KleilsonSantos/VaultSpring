@@ -105,7 +105,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.7</version> <!-- versão mais atual em junho/2025 -->
+            <version>42.7.11</version> <!-- versão mais atual em junho/2025 -->
             <scope>runtime</scope>
         </dependency>
 
