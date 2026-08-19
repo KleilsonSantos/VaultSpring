@@ -7,6 +7,10 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- CI `sonar` job no longer fails `main` when `SONAR_ORGANIZATION` is unset (HTTP 403 from SonarCloud)
+
 ### Added
 
 - Cursor / Copilot agent layer: `AGENTS.md`, `.cursor/rules/`, `.github/agents/`
