@@ -37,7 +37,7 @@ Optional coverage:
 - Maven `verify` + JaCoCo
 - Codecov upload (non-blocking)
 - CodeQL (`github/codeql-action@v4`)
-- SonarQube Cloud on **push to `main`** (Free plan: main branch only)
+- SonarQube Cloud on **push to `main`** only when repository variable `SONAR_ORGANIZATION` is set (Free plan: main branch). Until then the job is skipped so CI stays green. Also requires secret `SONAR_TOKEN` (SonarCloud, not a local SonarQube token).
 
 ### GitHub settings (owner)
 
