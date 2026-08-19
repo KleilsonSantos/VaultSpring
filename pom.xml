@@ -3,25 +3,22 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <!-- Project Descriptor Metadata -->
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.0</version>
+        <version>3.5.16</version>
+        <relativePath/>
     </parent>
 
-
-    <!-- Project Coordinates -->
     <groupId>com.vaultspring</groupId>
     <artifactId>vaultspring</artifactId>
-    <version>0.1.3-SNAPSHOT</version>
+    <version>0.1.4-SNAPSHOT</version>
     <name>VaultSpring</name>
     <description>Spring Boot project for Vault-based secure secret management</description>
-    <url>https://github.com/KleilsonSantos/vaultspring</url>
+    <url>https://github.com/KleilsonSantos/VaultSpring</url>
 
-    <!-- License Declaration -->
     <licenses>
         <license>
             <name>Apache License 2.0</name>
@@ -30,50 +27,30 @@
         </license>
     </licenses>
 
-    <!-- Developer Information -->
     <developers>
         <developer>
             <id>kleilson</id>
             <name>Kleilson Santos</name>
-            <email>kleilson@email.com</email>
+            <email>kleilson@icloud.com</email>
             <roles>
                 <role>Developer</role>
             </roles>
         </developer>
     </developers>
 
-    <!-- Source Control Management Configuration -->
     <scm>
-        <url>https://github.com/KleilsonSantos/vaultspring</url>
-        <connection>scm:git:https://github.com/KleilsonSantos/vaultspring.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com/KleilsonSantos/vaultspring.git</developerConnection>
+        <url>https://github.com/KleilsonSantos/VaultSpring</url>
+        <connection>scm:git:https://github.com/KleilsonSantos/VaultSpring.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/KleilsonSantos/VaultSpring.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
-    <!-- Global Properties -->
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
-        <spring-cloud.version>2024.0.1</spring-cloud.version>
     </properties>
 
-    <!-- Spring Cloud BOM to ensure compatibility -->
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring-cloud.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <!-- Project Dependencies -->
     <dependencies>
-
-        <!-- Core Spring Boot Modules -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -86,67 +63,64 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
-
-        <!-- Caching Layer -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+        </dependency>
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
-
-        <!-- Dev-only Hot Reloading -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
             <optional>true</optional>
         </dependency>
-
-        <!-- PostgreSQL JDBC Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.7</version> <!-- versão mais atual em junho/2025 -->
             <scope>runtime</scope>
         </dependency>
-
-        <!-- Annotation Processors -->
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.flywaydb</groupId>
+            <artifactId>flyway-database-postgresql</artifactId>
+        </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-
-        <!-- Testing & Integration Test Support -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jetbrains</groupId>
-            <artifactId>annotations</artifactId>
-            <version>26.0.2</version>
-            <scope>compile</scope>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
         </dependency>
-
-        <!-- Flyway for Database Migrations -->
-        <dependency>
-            <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-            <version>9.22.0</version>
-        </dependency>
-
     </dependencies>
 
-    <!-- Build Plugins -->
     <build>
         <finalName>app</finalName>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
                 <configuration>
                     <forkCount>1</forkCount>
                     <reuseForks>false</reuseForks>
@@ -157,32 +131,20 @@
                     <forkedProcessTimeoutInSeconds>120</forkedProcessTimeoutInSeconds>
                     <parallel>none</parallel>
                     <printSummary>true</printSummary>
-                    <reuseForks>false</reuseForks>
                 </configuration>
             </plugin>
-
-            <!-- Compiler Configuration with Annotation Processors -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
                 <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <compilerArgs>
-                    <arg>-parameters</arg>
-                    </compilerArgs>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.30</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-
-            <!-- Spring Boot Executable JAR Builder -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -195,26 +157,10 @@
                     </excludes>
                 </configuration>
             </plugin>
-
-            <!-- Configures JAR Manifest -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.2</version>
-                <configuration>
-                    <archive>
-                        <manifestEntries>
-                            <Main-Class>com.vaultspring.VaultSpringApplicationTest</Main-Class>
-                        </manifestEntries>
-                    </archive>
-                </configuration>
-            </plugin>
-
-            <!-- Code Coverage with JaCoCo -->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.10</version>
+                <version>0.8.15</version>
                 <executions>
                     <execution>
                         <id>prepare-agent</id>
@@ -236,15 +182,11 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Static Code Quality and Coverage Reporting -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>5.1.0.4751</version>
             </plugin>
-
-            <!-- Checkstyle Configuration -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -263,30 +205,22 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 
-    <!-- Maven Profiles -->
     <profiles>
-
-        <!-- Development Environment -->
         <profile>
             <id>dev</id>
             <properties>
                 <spring.profiles.active>dev</spring.profiles.active>
             </properties>
         </profile>
-
-        <!-- Production Environment -->
         <profile>
             <id>prod</id>
             <properties>
                 <spring.profiles.active>prod</spring.profiles.active>
             </properties>
         </profile>
-
-        <!-- Flyway for Database Migrations in Production -->
         <profile>
             <id>flyway-prod</id>
             <build>
@@ -294,7 +228,6 @@
                     <plugin>
                         <groupId>org.flywaydb</groupId>
                         <artifactId>flyway-maven-plugin</artifactId>
-                        <version>9.22.3</version>
                         <configuration>
                             <url>${flyway.url}</url>
                             <user>${flyway.user}</user>
@@ -306,19 +239,13 @@
                 </plugins>
             </build>
         </profile>
-
-        <!-- Explicit activation for integration tests -->
         <profile>
             <id>integration-tests</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>3.1.2</version>
                         <executions>
                             <execution>
                                 <goals>
@@ -337,14 +264,8 @@
                 </plugins>
             </build>
         </profile>
-
-
-        <!-- Dependency Vulnerability Scanning -->
         <profile>
             <id>dependency-check</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -369,15 +290,6 @@
                 </plugins>
             </build>
         </profile>
-
     </profiles>
-
-    <!-- Additional Repositories -->
-    <repositories>
-        <repository>
-            <id>spring-libs-milestone</id>
-            <url>https://repo.spring.io/libs-milestone</url>
-        </repository>
-    </repositories>
 
 </project>

@@ -1,0 +1,28 @@
+---
+description: CI, hooks, Checkstyle, JaCoCo, CodeQL, Sonar, and merge-blocking gates
+globs: "{pom.xml,.github/workflows/**,checkstyle.xml,Makefile,scripts/**}"
+alwaysApply: false
+---
+
+# Quality gates
+
+Sources of truth:
+
+- [`.github/workflows/maven.yml`](../../.github/workflows/maven.yml)
+- [`pom.xml`](../../pom.xml)
+- [`CONTRIBUTING.md`](../../CONTRIBUTING.md)
+
+## Expectations
+
+- Local: `./mvnw -B checkstyle:check test` before push when Java/XML changes
+- CI quality job must pass before merge
+- CodeQL uses `github/codeql-action@v4` (v3 is deprecated)
+- SonarQube Cloud Free: scan on **push to `main` only** — not every PR
+- Maven cache: `actions/setup-java` `cache: maven` only — do not add a second `actions/cache` for `~/.m2`
+- Codecov must not fail the build (`fail_ci_if_error: false`) unless the owner changes that
+
+## SonarQube Cloud (Free)
+
+Official limits: main-branch analysis; PR analysis targeting `main` may be unavailable on Free. Keep the `sonar` job on `push` to `main`.
+
+Refs: [SonarQube Cloud subscription plans](https://docs.sonarsource.com/sonarqube-cloud/administering-sonarcloud/managing-subscription/subscription-plans)

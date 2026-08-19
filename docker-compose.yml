@@ -4,11 +4,7 @@ networks:
     name: vault-spring-shared-net
     driver: bridge
 
-# 🗄️ DATABASE SERVICES
 services:
-  # =======================
-  # 🐘 POSTGRESQL ECOSYSTEM
-  # =======================
   postgres:
     image: postgres:15
     container_name: vault-spring-postgres
@@ -20,22 +16,16 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-<<<<<<< Updated upstream
-=======
-#    healthcheck:
-#      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER}" ]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
->>>>>>> Stashed changes
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - vault-spring-postgres_data:/var/lib/postgresql/data
     networks:
       - vault-spring-shared-net
 
-  # ======================
-  # 🖥️ PGADMIN ECOSYSTEM
-  # =======================
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: vault-spring-pgadmin
@@ -44,7 +34,8 @@ services:
     ports:
       - '8088:80'
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     environment:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
@@ -53,9 +44,6 @@ services:
     networks:
       - vault-spring-shared-net
 
-  # ======================
-  # 🗄️ POSTGRESQL EXPORTER
-  # ======================
   postgres-exporter:
     image: quay.io/prometheuscommunity/postgres-exporter
     container_name: vault-spring-postgres-exporter
@@ -66,26 +54,25 @@ services:
     ports:
       - '9187:9187'
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - vault-spring-shared-net
 
-  # ======================
-  # 📊 VAULT
-  # ======================
   vault:
     image: hashicorp/vault:latest
     container_name: vault-spring-vault
     env_file: .env
     ports:
       - "8200:8200"
+    cap_add:
+      - IPC_LOCK
     environment:
-      VAULT_ADDR: ${VAULT_ADDR}
-      VAULT_API_ADDR: ${VAULT_API_ADDR}
-      VAULT_DEV_ROOT_TOKEN_ID: ${VAULT_DEV_ROOT_TOKEN_ID}
+      VAULT_ADDR: ${VAULT_ADDR:-http://127.0.0.1:8200}
+      VAULT_API_ADDR: ${VAULT_API_ADDR:-http://127.0.0.1:8200}
     volumes:
-      - ./vault/config:/vault/config
-      - ./vault/data:/vault/data
+      - ./vault/config:/vault/config:ro
+      - vault-file-data:/vault/data
     command: "vault server -config=/vault/config/vault.hcl"
     restart: always
     networks:
@@ -104,11 +91,8 @@ services:
     networks:
       - vault-spring-shared-net
 
-  # ======================
-  # 📊 SONARQUBE
-  # ======================
   sonarqube:
-    image: sonarqube:latest
+    image: sonarqube:lts-community
     container_name: vault-spring-sonarqube
     env_file: .env
     restart: always
@@ -118,34 +102,33 @@ services:
       SONAR_JDBC_URL: ${SONAR_JDBC_URL}
       SONAR_JDBC_USERNAME: ${SONAR_JDBC_USERNAME}
       SONAR_JDBC_PASSWORD: ${SONAR_JDBC_PASSWORD}
-      SONARQUBE_JVM_OPTIONS: ${SONARQUBE_JVM_OPTIONS}
-      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: ${SONAR_ES_BOOTSTRAP_CHECKS_DISABLE}
+      SONARQUBE_JVM_OPTIONS: ${SONARQUBE_JVM_OPTIONS:-}
+      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: ${SONAR_ES_BOOTSTRAP_CHECKS_DISABLE:-true}
     volumes:
       - vault-spring-sonarqube_data:/opt/sonarqube/data
       - vault-spring-sonarqube_extensions:/opt/sonarqube/extensions
       - vault-spring-sonarqube_logs:/opt/sonarqube/logs
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     networks:
       - vault-spring-shared-net
 
-  # ======================
-  # 📦 APPLICATION ECOSYSTEM
-  # ======================
   app:
-      build: .
-      ports:
-        - "8080:8080"
-      container_name: vault-spring-app
-      environment:
-        DB_URL: ${DB_URL}
-        DB_USER: ${DB_USER}
-        DB_PASS: ${DB_PASS}
-        SPRING_PROFILES_ACTIVE: prod
-      depends_on:
-        - postgres
-      networks:
-        - vault-spring-shared-net
+    build: .
+    ports:
+      - "8080:8080"
+    container_name: vault-spring-app
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      SPRING_DATASOURCE_USERNAME: ${POSTGRES_USER}
+      SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - vault-spring-shared-net
 
 volumes:
   vault-spring-sonarqube_data:
@@ -160,3 +143,5 @@ volumes:
     name: vault-spring-pgadmin-data
   vault-spring-portainer_data:
     name: vault-spring-portainer_data
+  vault-file-data:
+    name: vault-spring-vault-data

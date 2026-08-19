@@ -5,18 +5,14 @@ spring:
   flyway:
     enabled: false
   datasource:
-    url: ${POSTGRES_URL}
-    username: ${POSTGRES_USER}
-    password: ${POSTGRES_PASSWORD}
-    driver-class-name: ${POSTGRES_DRIVER}
+    url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/users_db}
+    username: ${POSTGRES_USER:admin}
+    password: ${POSTGRES_PASSWORD:adminpass}
+    driver-class-name: org.postgresql.Driver
   jpa:
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
     open-in-view: false
     hibernate:
       ddl-auto: create-drop
-    defer-datasource-initialization: true
     show-sql: true
 logging:
   level:
@@ -24,4 +20,4 @@ logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
   file:
-    name: /tmp/prod-profile.log
+    name: /tmp/vaultspring-dev.log

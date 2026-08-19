@@ -1,0 +1,33 @@
+---
+description: VaultSpring SDLC — Git flow, commits, and product scope for this repo
+alwaysApply: true
+---
+
+# VaultSpring SDLC
+
+Use this file as a short delivery bridge. Details: `CONTRIBUTING.md`, `AGENTS.md`, `.github/pull_request_template.md`.
+
+## Git
+
+- Issue (optional) → semantic branch from `main` (`feature/*`, `fix/*`, `docs/*`, `chore/*`, `ci/*`, `refactor/*`, `test/*`) → PR targeting `main`
+- Do not force-push `main`
+- Commit only when the human asks
+
+## Commits
+
+- Format: `type: description` (Conventional Commits)
+- Types: `feat`, `fix`, `docs`, `refactor`, `ci`, `chore`, `test`, `build`, `perf`
+- No IDE trailers (`Co-authored-by: Cursor`)
+
+## Product
+
+- Spring Boot 3.5.x / Java 17 / Maven Wrapper
+- Secrets never in Git; use env vars and Vault **infrastructure** in Compose
+- `CHANGELOG.md` `[Unreleased]` for notable changes
+- Do not claim MapStruct, Spring Cloud Vault, or Spring Security in docs unless they exist in `pom.xml`
+
+## Checklist
+
+- Does the change match actual code, not README marketing?
+- Tests green (`./mvnw -B test`) when Java is touched?
+- CI workflow still uses current GitHub Actions majors?

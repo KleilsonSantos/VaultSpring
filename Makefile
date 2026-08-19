@@ -123,7 +123,7 @@ run:
 
 run-dev:
 	@echo "🚀 Running application in development mode..."
-	$(MVN) spring-boot:run spring-boot:run -Dspring.profiles.active=dev
+	$(MVN) spring-boot:run -Dspring.profiles.active=dev
 
 run-prod:
 	@echo "🚀 Running application in production mode..."
@@ -168,7 +168,7 @@ coverage:
 # =====================
 wrapper:
 	@echo "🔧 Gerando Maven Wrapper (mvnw)..."
-	$(MVN) -N io.takari:maven:wrapper
+	$(MVN) -N org.apache.maven.plugins:maven-wrapper-plugin:3.3.2:wrapper
 
 # =====================
 # ✅ Verification

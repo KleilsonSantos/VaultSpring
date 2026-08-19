@@ -1,56 +1,78 @@
-# 📦 Changelog
+# Changelog
 
-Todas as alterações importantes neste projeto serão documentadas aqui.
+All notable changes to this project are documented here.
 
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project uses [Semantic Versioning](https://semver.org/).
+
+## [Unreleased]
+
+### Added
+
+- Cursor / Copilot agent layer: `AGENTS.md`, `.cursor/rules/`, `.github/agents/`
+- GitHub productivity: PR template, issue templates, Dependabot (Maven, Actions, Docker), `CONTRIBUTING.md`, `SECURITY.md`
+- CodeQL job with `github/codeql-action@v4` (`java-kotlin`, manual Maven build)
+- Actuator health/info/prometheus endpoints
+- User API DTOs (`UserRequest` / `UserResponse`) and `UserService` with BCrypt hashing (`spring-security-crypto`)
+- H2-backed `test` profile so `./mvnw test` does not need PostgreSQL
+- Versioned Git hooks under `.githooks/` (version bump only when `pom.xml` is staged)
+- Local Vault HCL at `vault/config/vault.hcl` for Compose (TLS off, loopback only)
+
+### Changed
+
+- Spring Boot parent **3.5.16** (last OSS 3.5 patch). Flyway and PostgreSQL versions come from the Boot BOM; added `flyway-database-postgresql`
+- CI uses `actions/checkout@v5`, `setup-java` Maven cache only (no duplicate `actions/cache`), Codecov v5, `./mvnw`
+- SonarQube Cloud job runs on **push to `main`** (Free-plan branch limit). Set repository variable `SONAR_ORGANIZATION` and secret `SONAR_TOKEN`
+- `application.yml` no longer forces `prod`; default profile is `dev`. Production credentials come from the environment
+- Dockerfile copies `target/app.jar` (matches `<finalName>app</finalName>`)
+- README/HELP describe the stack that actually exists in `pom.xml`
+
+### Fixed
+
+- Merge-conflict markers in `docker-compose.yml`
+- JAR `Main-Class` pointed at a non-existent test class
+- Compose app service used `DB_URL` / `DB_USER` while Spring expected datasource env vars
+- `make run-dev` invoked `spring-boot:run` twice
+- Maven Wrapper target no longer uses the retired Takari plugin
+
+### Removed
+
+- Unused Spring Cloud BOM (`2024.0.1` is the Boot 3.4 train; no Cloud starters were on the classpath)
+- `spring-libs-milestone` repository (not required for GA Boot 3.5.x)
+- Duplicate Surefire `reuseForks` and a second Maven cache in CI
+
+## [0.1.3-SNAPSHOT] - 2025-06-24
+
+Documentation and SNAPSHOT alignment in `pom.xml`.
 
 ## [0.1.2-SNAPSHOT] - 2025-06-24
 
-### ✨ Documentação
+### Documentation
 
-- ✨ Melhorias significativas no `README.md`, com:
-  - Descrição mais clara dos objetivos do projeto.
-  - Destaque das tecnologias utilizadas.
-  - Orientações aprimoradas para primeiros passos e execução local.
-
-- 📘 Atualização do `HELP.md`, incluindo:
-  - Instruções detalhadas para desenvolvedores.
-  - Execução local com Docker e PostgreSQL.
-  - Uso de scripts auxiliares (`wait-for-db.sh`, `act-dev.sh`).
-  - Orientações sobre CI, GITHUB_TOKEN, e configuração de ambiente.
-
-### 🔖 Versão
-- Atualizado `pom.xml` para `0.1.2-SNAPSHOT`.
+- README and HELP updates for local Docker, PostgreSQL, `act`, and CI tokens
 
 ## [0.1.1-SNAPSHOT] - 2025-06-25
 
-### 🔧 Chore
-- Atualiza `act-dev.sh` para incluir suporte ao `GITHUB_TOKEN`
-- Adiciona script `wait-for-db.sh` para aguardar readiness do PostgreSQL antes da inicialização da aplicação
-- Atualiza scripts do GitHub Actions para refletir as mudanças de ambiente
+### Chore
 
-### 🔖 Versão
-- Atualizado `pom.xml` para `0.1.1-SNAPSHOT`.
+- `act-dev.sh` GITHUB_TOKEN support
+- `wait-for-db.sh` for PostgreSQL readiness
 
 ## [0.1.0] - 2025-06-24
 
-### ✨ Added
-- Arquivos de configuração separados para produção (`application-prod.yml`) e desenvolvimento (`application-dev.yml`)
-- Novo endpoint de criação de usuário no `UserController`
-- Integração do Flyway para versionamento de banco de dados com perfis Maven separados (`flyway-dev` e `flyway-prod`)
+### Added
 
-## 🔖 Versão
-- Atualizado `pom.xml` para `0.1.0`.
+- Split `application-prod.yml` / `application-dev.yml`
+- User create endpoint
+- Flyway Maven profiles
 
-### 🔧 Changed
-- `Dockerfile` atualizado para aceitar perfis via variável de ambiente `SPRING_PROFILES_ACTIVE` e utilizar build multi-stage
-- Atualização do `pom.xml` com perfis Maven dedicados ao Flyway para ambientes distintos (`dev` e `prod`)
+### Changed
+
+- Multi-stage Dockerfile with `SPRING_PROFILES_ACTIVE`
 
 ## [0.0.15] - 2025-06-22
 
-### ♻️ Changed
-- Atualização do `.dockerignore` para evitar arquivos sensíveis no build
-- Ajuste no `.render.yaml` para usar corretamente o `app.jar` como ponto de entrada
-- Otimização do `Dockerfile` com multistage build para produção
+### Changed
 
-## 🔖 Versão
-- Atualizado `pom.xml` para `0.0.15`.
+- `.dockerignore` and Render entrypoint
+- Multi-stage Dockerfile

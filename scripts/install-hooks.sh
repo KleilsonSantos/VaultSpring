@@ -1,10 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# 📁 Copy the version check script to the Git pre-commit hook location
-cp ./scripts/check-version-alignment.sh .git/hooks/pre-commit
+# 📁 Point Git at versioned hooks (does not copy into .git/hooks)
+git config core.hooksPath .githooks
+chmod +x .githooks/pre-commit scripts/check-version-alignment.sh
 
-# 🔐 Make the script executable
-chmod +x .git/hooks/pre-commit
-
-# ✅ Confirmation message
-echo "✅ Git hook installed successfully!"
+echo "Git hooks path set to .githooks"

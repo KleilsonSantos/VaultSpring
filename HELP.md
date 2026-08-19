@@ -3,9 +3,9 @@
 ## 🚀 Funcionalidades
 - ✅ Execução local 
 - ✅ Cobertura de testes
-- ✅ Integração com Docker
-- ✅ Integrações CI
-- ✅ Integração com Vault
+- ✅ Integração com Docker Compose (PostgreSQL, Vault local, SonarQube)
+- ✅ Integrações CI (Checkstyle, JaCoCo, CodeQL, Sonar em `main`)
+- ✅ Vault como serviço Compose — o app Spring **ainda não** usa `spring-cloud-vault`
 - ✅ Integração com banco de dados PostgreSQL
 - ✅ Arquitetura modular e extensível
 - ✅ Estrutura modular do projeto para fácil manutenção
@@ -88,9 +88,9 @@ target/site/jacoco/index.html
 make sonar
 ```
 
-### 🔧 Executanto ACT Localmente:
+### 🔧 Executando ACT localmente:
 ```
-script/act-dev.sh
+scripts/act-dev.sh
 ```
 >Certifique-se que o SonarQube esteja rodando com o token correto e permissões no projeto.
 
@@ -108,57 +108,24 @@ script/act-dev.sh
 mvn clean test
 ```
 
-## 🔐 Integração com HashiCorp Vault
+## 🔐 HashiCorp Vault (infraestrutura local)
 
-### A aplicação está configurada para se conectar ao Vault em runtime. Certifique-se que seu Vault:
+O Compose sobe o Vault com [`vault/config/vault.hcl`](./vault/config/vault.hcl) (TLS desligado, **só loopback/dev**).
 
->Está rodando (local ou remoto)
+O processo Spring **não** lê segredos do Vault ainda: não há `spring-cloud-starter-vault-config` no `pom.xml`. Quando essa integração for feita, use o train Spring Cloud **2025.0.x** (Boot 3.5), não o BOM 2024.0.x (Boot 3.4).
 
->Possui os segredos esperados em /secret/application ou conforme seu bootstrap.yml
-
->Está acessível no container da aplicação
-
-## 🔧 Exemplo de configuração:
-
-```yaml
-spring:
-  cloud:
-    vault:
-      uri: http://localhost:8200
-      authentication: TOKEN
-      token: ${VAULT_TOKEN}
-    kv:
-     enabled: true
-     backend: secret
-```
+Credenciais de banco no perfil `prod` vêm de `SPRING_DATASOURCE_*` / `POSTGRES_*`.
 
 ## 🔄 CI/CD com GitHub Actions
 
-### O projeto possui um pipeline automatizado configurado em .github/workflows/maven.yml com as seguintes etapas::
+Pipeline em [`.github/workflows/maven.yml`](./.github/workflows/maven.yml):
 
-- ✅ Lint e validação com Maven
-- ✅ Testes automatizados
-- ✅ Análise com SonarCloud
-- Checkout do código
-- Configuração do JDK 17 (usando Temurin)
-- Instalação do Maven (para execuções locais com ACT)
-- Cache do repositório Maven para builds mais rápidos
-- Análise de código com Checkstyle
-- Build, execução de testes e geração de relatório de cobertura (JaCoCo)
-- Upload do relatório de cobertura como artefato
-- Envio do grafo de dependências
-- Análise de qualidade com SonarQube/SonarCloud (usando secrets SONAR_TOKEN e SONAR_HOST_URL)
-- Upload do JAR gerado como artefato
-- Envio do relatório de cobertura para o Codecov
+- Checkstyle + `./mvnw verify` (JaCoCo)
+- Codecov (não bloqueia o build)
+- CodeQL v4 (`java-kotlin`, build Maven manual)
+- SonarQube Cloud no **push para `main`** — secrets `SONAR_TOKEN` e variável `SONAR_ORGANIZATION`
 
-### Secrets usados no pipeline (.github/workflows/maven.yml):
-
-```
-env:
- SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
- SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
- GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
+Contribuição: [`CONTRIBUTING.md`](./CONTRIBUTING.md). Agentes de IA: [`AGENTS.md`](./AGENTS.md).
 ## 🐋 Docker
 
 ### Embora o foco esteja no ambiente local com Maven, o projeto suporta construção com Docker.

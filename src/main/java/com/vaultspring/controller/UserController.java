@@ -1,57 +1,54 @@
 package com.vaultspring.controller;
 
-import com.vaultspring.entity.User;
-import com.vaultspring.repository.UserRepository;
+import com.vaultspring.dto.UserRequest;
+import com.vaultspring.dto.UserResponse;
+import com.vaultspring.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 /**
- * Controller class responsible for handling
- * HTTP requests for the API version 1.
- * Maps all endpoints under the base path "/api/v1".
+ * HTTP API for users under {@code /api/v1}.
  */
 @RestController
 @RequestMapping("/api/v1")
 public final class UserController {
 
     /**
-     * Repository used to manage user data.
+     * User application service.
      */
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
-     * Constructs the controller with the required user repository.
-     *
-     * @param userRepository the user repository to use
+     * @param userService user application service
      */
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(final UserService userService) {
+        this.userService = userService;
     }
 
     /**
-     * Retrieves the list of all users.
-     *
-     * @return a list of all users wrapped in a ResponseEntity
+     * @return all users
      */
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
+    public ResponseEntity<List<UserResponse>> getUsers() {
+        return ResponseEntity.ok(userService.findAll());
     }
 
     /**
-     * Creates a new user.
-     * @param user
-     * @return the created user wrapped in a ResponseEntity
+     * Creates a user.
+     *
+     * @param request validated payload
+     * @return the created user
      */
     @PostMapping("/users")
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.badRequest().build();
-        }
-        return ResponseEntity.ok(userRepository.save(user));
+    public ResponseEntity<UserResponse> createUser(@Valid @RequestBody final UserRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(request));
     }
 }
-

@@ -17,11 +17,10 @@
 <div align="center">
   <!-- Versão de tecnologia -->
   <img src="https://img.shields.io/badge/Java-17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white" alt="Java"/>
-  <img src="https://img.shields.io/badge/Spring%20Boot-3.4.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot"/>
+  <img src="https://img.shields.io/badge/Spring%20Boot-3.5.16-6DB33F?style=for-the-badge&logo=springboot&logoColor=white" alt="Spring Boot"/>
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker"/>
-  <img src="https://img.shields.io/badge/Vault-175DDD?style=for-the-badge&logo=vault&logoColor=white" alt="Vault"/>
+  <img src="https://img.shields.io/badge/Vault-Compose-175DDD?style=for-the-badge&logo=vault&logoColor=white" alt="Vault"/>
   <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
-  <img src="https://img.shields.io/badge/MapStruct-FF6F00?style=for-the-badge&logo=java&logoColor=white" alt="MapStruct"/>
   <img src="https://img.shields.io/badge/Lombok-E9573F?style=for-the-badge&logo=lombok&logoColor=white" alt="Lombok"/>
 
   <!-- Observabilidade e testes -->
@@ -66,63 +65,45 @@ VaultSpring é uma aplicação **Spring Boot** desenvolvida para proporcionar **
 modernos, escaláveis e de alta confiabilidade. O projeto adota uma arquitetura modular e robusta, garantindo fácil
 manutenção, extensibilidade e segurança em todas as camadas.
 
-### 🏗️ **Arquitetura e Organização**
+### 🏗️ **Arquitetura e organização (código atual)**
 
-O projeto está estruturado em múltiplos módulos e pacotes, cada um com responsabilidades bem definidas:
+Pacotes em `src/main/java/com/vaultspring`:
 
-- **config**: Centraliza toda a configuração da aplicação, incluindo integração com Vault, PostgreSQL, segurança, beans
-  customizados e propriedades externas. Isso garante flexibilidade e desacoplamento das dependências.
-- **constantes**: Armazena valores fixos e chaves reutilizáveis, promovendo padronização e evitando duplicidade de
-  informações sensíveis ou recorrentes.
-- **dto**: Define os objetos de transferência de dados (Data Transfer Objects), separando claramente as entidades de
-  domínio das estruturas expostas via API, facilitando a validação e a evolução da interface.
-- **enums**: Centraliza os tipos enumerados para mensagens, status, erros e campos, promovendo consistência e reduzindo
-  erros de digitação em toda a aplicação.
-- **mapper**: Utiliza MapStruct para conversão eficiente e segura entre entidades e DTOs, garantindo que os dados
-  trafeguem corretamente entre as camadas de persistência e apresentação.
-- **response**: Estrutura as respostas padronizadas da API, encapsulando dados, mensagens e metadados, o que facilita o
-  consumo por clientes e integrações externas.
-- **util**: Reúne utilitários e helpers reutilizáveis, como builders de resposta, facilitando a manutenção e a
-  padronização de comportamentos comuns.
+- **controller** — HTTP API (`/api/v1/users`)
+- **dto** — `UserRequest` / `UserResponse` (a senha nunca sai na resposta)
+- **service** — regras de aplicação e hash BCrypt
+- **entity** / **repository** — JPA + Spring Data
+- **resources** — `application.yml` (default `dev`), `application-prod.yml`, `application-hom.yml`, Flyway em `db/migration`
 
-### 🔗 **Integração Funcional**
+Vault roda no **Docker Compose** (`vault/config/vault.hcl`). O cliente **Spring Cloud Vault ainda não está no classpath** — não há `bootstrap.yml` nem `spring-cloud-starter-vault-config`.
 
-- **Integração com Vault**: Gerenciamento seguro de segredos, autenticação e autorização centralizadas.
-- **Integração com PostgreSQL**: Persistência robusta e escalável dos dados de usuários e segredos.
-- **DTOs e Mappers**: Separação clara entre domínio e API, com conversão automática e validação de dados.
-- **Respostas Padronizadas**: Todas as respostas seguem um padrão consistente, facilitando o tratamento de erros e
-  sucesso no frontend e em integrações.
-- **Enums e Constantes**: Redução de erros e aumento da legibilidade do código.
-- **Configurações Centralizadas**: Facilidade para ajustes de ambiente, segurança e integrações externas.
+### 🔗 **O que está integrado**
 
-### 🚀 **Diferenciais da Arquitetura**
+- PostgreSQL + Flyway (perfil `prod` / `hom`)
+- Actuator: `/actuator/health`, `/actuator/info`, `/actuator/prometheus`
+- CI: Checkstyle, JaCoCo, Codecov, CodeQL v4, Sonar em push para `main`
+- Agentes de IA: `AGENTS.md`, `.cursor/rules/`, `.github/agents/` (padrão Copilot/Cursor, adaptado do AIOS)
 
-- **Modularidade**: Cada responsabilidade está isolada, facilitando testes, manutenção e evolução.
-- **Segurança**: Práticas avançadas de segurança desde a configuração até o tratamento de dados sensíveis.
-- **Extensibilidade**: Estrutura pronta para integração com novos serviços, bancos de dados e provedores de
-  autenticação.
-- **Padronização**: Uso intensivo de DTOs, mappers, enums e respostas customizadas, promovendo qualidade e
-  previsibilidade.
+### 🚧 **Próximo (não inventado como pronto)**
 
-> 💡 **Resumo:** O VaultSpring já conta com uma base arquitetural sólida, cobrindo desde a configuração centralizada até
-> a padronização de respostas e integração segura com serviços críticos, tornando-se uma solução moderna e confiável
-> para
-> o gerenciamento de segredos em aplicações Java.
+- Cliente Spring Cloud Vault (train compatível com Boot 3.5: Spring Cloud 2025.0.x)
+- Spring Security (`SecurityFilterChain`) — o checklist AppSec marca itens que o `pom.xml` ainda não entrega
+- Migração planejada para **Spring Boot 4.x** (a linha 3.5 encerrou o OSS em 2026-06-30; 3.5.16 é o último patch)
 
-## 🔥 Tecnologias Utilizadas
+Contribuição e fluxo Git: [`CONTRIBUTING.md`](./CONTRIBUTING.md) · segurança: [`SECURITY.md`](./SECURITY.md)
+
+## 🔥 Tecnologias utilizadas
 
 - **Java 17**
-- **Spring Boot 3.4.5**
-- **Spring Cloud 2024.0.1**
-- **Spring Cloud Vault**
-- **Docker & Docker Vault**
-- **PostgreSQL**
-- **MapStruct**
+- **Spring Boot 3.5.16**
+- **Docker Compose** (PostgreSQL 15, Vault, SonarQube LTS Community, pgAdmin)
+- **PostgreSQL** + **Flyway** (`flyway-core` + `flyway-database-postgresql`)
 - **Lombok**
-- **Micrometer & Prometheus**
-- **Caffeine (Cache)**
-- **OWASP Dependency-Check**
-- **Maven**
+- **Actuator** + **Micrometer Prometheus**
+- **Caffeine**
+- **OWASP Dependency-Check** (perfil Maven)
+- **Maven Wrapper**
+- **GitHub Actions** + **Dependabot** + **CodeQL**
 
 ## 📘 Guia Rápido e Avançado
 
@@ -131,18 +112,16 @@ Para instruções detalhadas de uso local, testes, cobertura, e troubleshooting:
 
 ## ✅ **O que já foi concluído**
 
-- ✅ Estrutura modular do projeto para fácil manutenção e extensibilidade
-- ✅ Aplicação de boas práticas com Lombok e MapStruct
-- ✅ Documentação inicial (`README.md` e `HELP.md`) e instruções de execução local
-- ✅ Integração completa com banco de dados PostgreSQL
-- ✅ Separação de arquivos de configuração para produção e desenvolvimento (`application-prod.yml` e `application-dev.yml`)
-- ✅ Integração do Flyway para versionamento de banco de dados com perfis Maven dedicados (`flyway-dev` e `flyway-prod`)
-- ✅ Novo endpoint de criação de usuário no `UserController`
-- ✅ Dockerfile otimizado com suporte a múltiplos estágios e variáveis de ambiente para perfis
-- ✅ Pipeline CI/CD com GitHub Actions: build, testes automatizados, análise com SonarCloud, Checkstyle e cobertura com JaCoCo
-- ✅ Suporte a execução e build via Docker e Docker Compose
-- ✅ Cobertura de testes automatizada com JUnit 5, Mockito e JaCoCo
-- ✅ Integração com HashiCorp Vault para gerenciamento seguro de segredos
+- ✅ Estrutura modular (controller, dto, service, entity, repository)
+- ✅ Lombok; DTOs sem MapStruct (conversão no `UserService`)
+- ✅ Documentação (`README.md`, `HELP.md`, `CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`)
+- ✅ PostgreSQL + Flyway (prod/hom); H2 no perfil `test`
+- ✅ Perfis `dev`, `prod`, `hom`
+- ✅ Endpoint de usuários com hash BCrypt e resposta sem senha
+- ✅ Dockerfile multi-stage (`target/app.jar`)
+- ✅ GitHub Actions: Checkstyle, JaCoCo, Codecov, CodeQL v4, Sonar em `main`
+- ✅ Docker Compose (Postgres, Vault local, SonarQube LTS Community)
+- ✅ Vault como **infraestrutura** Compose — cliente Spring Cloud Vault ainda não wired
 
 > ⚡ Essas entregas garantem uma base sólida para o gerenciamento seguro de segredos em aplicações Java modernas.
 

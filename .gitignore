@@ -63,4 +63,5 @@ backup
 
 ### 🔹 Vault
 .vault_pass
-vault/
+vault/data/
+vault/data/**

@@ -1,0 +1,22 @@
+# Label catalog — apply with `gh label create` or GitHub UI. Not auto-synced.
+- name: enhancement
+  color: a2eeef
+  description: New feature or improvement
+- name: bug
+  color: d73a4a
+  description: Something does not work as expected
+- name: documentation
+  color: 0075ca
+  description: Documentation improvements
+- name: ci
+  color: bfdadc
+  description: CI/CD and automation
+- name: dependencies
+  color: 0366d6
+  description: Dependency updates (Dependabot)
+- name: security
+  color: ee0701
+  description: Security-related change
+- name: good first issue
+  color: 7057ff
+  description: Good for newcomers
