@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Require a pom.xml version bump only when pom.xml is part of this commit.
+if [ "${SKIP_PRECOMMIT:-}" = "true" ]; then
+  echo "Pre-commit hook skipped."
+  exit 0
+fi
+
+if ! git diff --cached --name-only | grep -qx 'pom.xml'; then
+  exit 0
+fi
+
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+# shellcheck source=scripts/check-version-alignment.sh
+bash "$PROJECT_ROOT/scripts/check-version-alignment.sh"

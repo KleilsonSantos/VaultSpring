@@ -22,7 +22,7 @@ RUN groupadd --gid $GROUP_ID appuser && \
     useradd --uid $USER_ID --gid $GROUP_ID -m appuser
 
 WORKDIR /app
-COPY --from=builder /app/target/vaultspring-0.1.0.jar app.jar
+COPY --from=builder /app/target/app.jar app.jar
 
 
 RUN chown -R appuser:appuser /app

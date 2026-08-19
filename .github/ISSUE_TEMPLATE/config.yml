@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/KleilsonSantos/VaultSpring/security/advisories/new
+    about: Do not open a public issue. Use GitHub Security Advisories or email kleilson@icloud.com

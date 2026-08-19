@@ -1,7 +1,4 @@
 /**
- * This package contains the repository interfaces
- * for interacting with the database.
- * It uses Spring Data JPA to provide CRUD operations
- * and custom queries.
+ * VaultSpring application root package.
  */
 package com.vaultspring;
