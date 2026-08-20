@@ -11,6 +11,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 - CI `sonar` job no longer fails `main` when `SONAR_ORGANIZATION` is unset (HTTP 403 from SonarCloud)
 - SonarCloud `projectKey` set to `KleilsonSantos_VaultSpring` (org `kleilsonsantos`)
+- Render blueprint uses `SPRING_DATASOURCE_*` and `/actuator/health` (aligned with `application-prod.yml`)
 
 ### Added
 
@@ -31,6 +32,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 - `application.yml` no longer forces `prod`; default profile is `dev`. Production credentials come from the environment
 - Dockerfile copies `target/app.jar` (matches `<finalName>app</finalName>`)
 - README/HELP describe the stack that actually exists in `pom.xml`
+- Dependabot ignores semver-major bumps on `spring-boot-starter-parent` (Boot 4 tracked in #33)
 
 ### Fixed
 

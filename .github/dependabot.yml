@@ -12,7 +12,10 @@ updates:
       spring-boot:
         patterns:
           - "org.springframework.boot*"
-          - "org.springframework*"
+    ignore:
+      # Boot 4.x is a dedicated epic (#33), not a Dependabot drive-by
+      - dependency-name: "org.springframework.boot:spring-boot-starter-parent"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
