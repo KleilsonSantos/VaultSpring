@@ -10,7 +10,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - CI `sonar` job no longer fails `main` when `SONAR_ORGANIZATION` is unset (HTTP 403 from SonarCloud)
-- SonarCloud `projectKey` set to `KleilsonSantos_VaultSpring` (org `kleilsonsantos`)
+- Removed duplicate Maven Sonar job that conflicted with SonarCloud Automatic Analysis
 - Render blueprint uses `SPRING_DATASOURCE_*` and `/actuator/health` (aligned with `application-prod.yml`)
 
 ### Added
@@ -28,7 +28,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 - Spring Boot parent **3.5.16** (last OSS 3.5 patch). Flyway and PostgreSQL versions come from the Boot BOM; added `flyway-database-postgresql`
 - CI uses `actions/checkout@v5`, `setup-java` Maven cache only (no duplicate `actions/cache`), Codecov v5, `./mvnw`
-- SonarQube Cloud job runs on **push to `main`** (Free-plan branch limit). Set repository variable `SONAR_ORGANIZATION` and secret `SONAR_TOKEN`
+- SonarQube Cloud via GitHub Automatic Analysis (not a duplicate Maven `sonar` job)
 - `application.yml` no longer forces `prod`; default profile is `dev`. Production credentials come from the environment
 - Dockerfile copies `target/app.jar` (matches `<finalName>app</finalName>`)
 - README/HELP describe the stack that actually exists in `pom.xml`

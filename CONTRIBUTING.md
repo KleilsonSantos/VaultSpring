@@ -37,7 +37,8 @@ Optional coverage:
 - Maven `verify` + JaCoCo
 - Codecov upload (non-blocking)
 - CodeQL (`github/codeql-action@v4`)
-- SonarQube Cloud on **push to `main`** when `SONAR_ORGANIZATION` is set. Project key: `KleilsonSantos_VaultSpring`. Requires secret `SONAR_TOKEN` from [SonarCloud Access Tokens](https://docs.sonarsource.com/sonarqube-cloud/managing-your-account/managing-tokens) (not the local SonarQube on `:9000`).
+- SonarQube Cloud via **GitHub integration** (Automatic Analysis) — check `SonarCloud Code Analysis` on PRs; dashboard: [KleilsonSantos_VaultSpring](https://sonarcloud.io/project/overview?id=KleilsonSantos_VaultSpring). Do not run a Maven `sonar:sonar` job while Automatic Analysis is enabled (SonarCloud rejects duplicate CI analysis).
+- Codecov for JaCoCo coverage in CI
 
 ### GitHub settings (owner)
 
