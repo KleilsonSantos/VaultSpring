@@ -10,6 +10,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - CI `sonar` job no longer fails `main` when `SONAR_ORGANIZATION` is unset (HTTP 403 from SonarCloud)
+- SonarCloud `projectKey` set to `KleilsonSantos_VaultSpring` (org `kleilsonsantos`)
 
 ### Added
 
