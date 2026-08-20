@@ -66,7 +66,7 @@ jobs:
 
       - name: Codecov
         if: success() && !env.ACT && hashFiles('target/site/jacoco/jacoco.xml') != ''
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           files: target/site/jacoco/jacoco.xml
           flags: unittests
