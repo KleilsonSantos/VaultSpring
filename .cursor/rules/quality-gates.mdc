@@ -17,12 +17,12 @@ Sources of truth:
 - Local: `./mvnw -B checkstyle:check test` before push when Java/XML changes
 - CI quality job must pass before merge
 - CodeQL uses `github/codeql-action@v4` (v3 is deprecated)
-- SonarQube Cloud Free: scan on **push to `main` only** — not every PR
+- SonarQube Cloud: **GitHub Automatic Analysis** only — do not add a Maven `sonar:sonar` job while Automatic Analysis is on (SonarCloud rejects duplicate CI analysis). PR check: `SonarCloud Code Analysis`.
 - Maven cache: `actions/setup-java` `cache: maven` only — do not add a second `actions/cache` for `~/.m2`
 - Codecov must not fail the build (`fail_ci_if_error: false`) unless the owner changes that
 
 ## SonarQube Cloud (Free)
 
-Official limits: main-branch analysis; PR analysis targeting `main` may be unavailable on Free. Keep the `sonar` job on `push` to `main`.
+Use the GitHub integration (Automatic Analysis). Dashboard: `KleilsonSantos_VaultSpring` on sonarcloud.io. JaCoCo coverage stays in Codecov unless Automatic Analysis is disabled and CI analysis is configured instead.
 
 Refs: [SonarQube Cloud subscription plans](https://docs.sonarsource.com/sonarqube-cloud/administering-sonarcloud/managing-subscription/subscription-plans)
