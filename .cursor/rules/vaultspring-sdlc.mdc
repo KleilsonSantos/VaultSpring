@@ -1,15 +1,23 @@
 ---
-description: VaultSpring SDLC — Git flow, commits, and product scope for this repo
+description: VaultSpring SDLC — Git flow, traceability, commits, and product scope
 alwaysApply: true
 ---
 
 # VaultSpring SDLC
 
-Use this file as a short delivery bridge. Details: `CONTRIBUTING.md`, `AGENTS.md`, `.github/pull_request_template.md`.
+Use this file as a short delivery bridge. Details: `docs/guides/`, `CONTRIBUTING.md`, `AGENTS.md`, `.github/pull_request_template.md`.
+
+## Traceability (AIOS-aligned)
+
+1. **Issue** with acceptance criteria (`.github/ISSUE_TEMPLATE/implementation.md`)
+2. **Kickoff**: `bash scripts/task-kickoff.sh <issue> <type>/<slug>`
+3. **PR** → `main` with `Closes #N`
+4. **Release**: `pom.xml` + `CHANGELOG [X.Y.Z]` + annotated tag `vX.Y.Z` — see `docs/guides/releases.md`
 
 ## Git
 
-- Issue (optional) → semantic branch from `main` (`feature/*`, `fix/*`, `docs/*`, `chore/*`, `ci/*`, `refactor/*`, `test/*`) → PR targeting `main`
+- Semantic branch from `main` (`feature/*`, `fix/*`, `docs/*`, `chore/*`, `ci/*`, `refactor/*`, `test/*`)
+- No `sandbox` branch in this repo
 - Do not force-push `main`
 - Commit only when the human asks
 
@@ -28,6 +36,7 @@ Use this file as a short delivery bridge. Details: `CONTRIBUTING.md`, `AGENTS.md
 
 ## Checklist
 
+- Issue linked in PR?
 - Does the change match actual code, not README marketing?
 - Tests green (`./mvnw -B test`) when Java is touched?
 - CI workflow still uses current GitHub Actions majors?

@@ -13,6 +13,13 @@ labels: enhancement
 
 - [ ]
 
+## Delivery traceability
+
+| Field | Value |
+| ----- | ----- |
+| Work branch | `feature/<issue>-<slug>` |
+| PR target | `main` |
+
 ## Out of scope
 
 <!-- What this request is not -->

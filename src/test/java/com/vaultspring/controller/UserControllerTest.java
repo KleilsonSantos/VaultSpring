@@ -2,6 +2,7 @@ package com.vaultspring.controller;
 
 import com.vaultspring.dto.UserRequest;
 import com.vaultspring.dto.UserResponse;
+import com.vaultspring.exception.GlobalExceptionHandler;
 import com.vaultspring.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,7 @@ class UserControllerTest {
         LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
         validator.afterPropertiesSet();
         mockMvc = MockMvcBuilders.standaloneSetup(new UserController(userService))
+                .setControllerAdvice(new GlobalExceptionHandler())
                 .setValidator(validator)
                 .setMessageConverters(new MappingJackson2HttpMessageConverter())
                 .build();
@@ -88,5 +90,36 @@ class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.email").value("grace@example.com"))
                 .andExpect(jsonPath("$.password").doesNotExist());
+    }
+
+    /**
+     * POST /api/v1/users returns 400 with ProblemDetail when validation fails.
+     *
+     * @throws Exception on MockMvc errors
+     */
+    @Test
+    void createUserReturnsBadRequestWhenEmailInvalid() throws Exception {
+        mockMvc.perform(post("/api/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Grace\",\"email\":\"not-an-email\",\"password\":\"secret123\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.detail").value("Validation failed"))
+                .andExpect(jsonPath("$.errors.email").exists());
+    }
+
+    /**
+     * POST /api/v1/users returns 400 when password is too short.
+     *
+     * @throws Exception on MockMvc errors
+     */
+    @Test
+    void createUserReturnsBadRequestWhenPasswordTooShort() throws Exception {
+        mockMvc.perform(post("/api/v1/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"Grace\",\"email\":\"grace@example.com\",\"password\":\"short\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value(400))
+                .andExpect(jsonPath("$.errors.password").exists());
     }
 }
