@@ -17,14 +17,17 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 
 ## Task routing
 
-- **Git, PR, CI**: `CONTRIBUTING.md`, `.github/pull_request_template.md`, `.github/workflows/maven.yml`
+- **Git, issues, PR, releases**: `docs/guides/git-workflow.md`, `docs/guides/task-kickoff.md`, `docs/guides/releases.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`
+- **Kickoff script**: `scripts/task-kickoff.sh <issue> <branch>`
 - **AppSec / secrets**: `SECURITY.md`, `CHECKLISTAPPSEC.md` (checklist only — do not add exploit PoCs)
 - **Quality gates**: `.cursor/rules/quality-gates.mdc`, Checkstyle, JaCoCo, CodeQL, Sonar on `main`
+- **AIOS reference platform**: [ai-operating-system](https://github.com/KleilsonSantos/ai-operating-system) (governance patterns; no `sandbox` branch here)
 
 ## Hard constraints
 
 - Java 17 + Spring Boot 3.5.x (OSS line ended 2026-06-30; last patch **3.5.16**). Do not jump to Spring Boot 4 in a drive-by change.
 - Conventional Commits (`feat`, `fix`, `docs`, `ci`, `chore`, `refactor`, `test`). No gitmoji requirement.
+- **Traceability**: new implementation work starts with a GitHub issue; PR body includes `Closes #N`.
 - Commit only when the human asks.
 - Never commit `.env`, Vault unseal keys, or `vault/data/`.
 - Default Git flow: semantic branch from `main` → PR → `main`. Do not introduce an AIOS `sandbox` branch unless the owner asks.

@@ -9,7 +9,7 @@ SONAR_TOKEN?=$(shell echo $$SONAR_TOKEN)
 # =====================
 # ⚙️ Maven Commands
 # =====================
-MVN=mvn
+MVN=./mvnw
 MVN_UNIT=$(MVN) clean test
 MVN_VERIFY_IT=$(MVN) verify -Pintegration-tests
 MVN_FULL_BUILD=$(MVN) clean verify -Pintegration-tests install
@@ -127,7 +127,7 @@ run-dev:
 
 run-prod:
 	@echo "🚀 Running application in production mode..."
-	mvn spring-boot:run -Dspring.profiles.active=prod
+	$(MVN) spring-boot:run -Dspring.profiles.active=prod
 
 # =====================
 # 🧹 Clean Commands
@@ -159,7 +159,6 @@ test-all:
 # 📈 Code Quality
 # =====================
 coverage:
-	@scripts/wait-for-db.sh
 	@echo "📈 Generating JaCoCo coverage report..."
 	$(MVN) clean verify jacoco:report
 
@@ -181,5 +180,6 @@ verify:
 # 📌 Phony Targets
 .PHONY: sonar check-sec check-sec-dev check-sec-prod report-sec \
         sql-injection-test xss-test ddos-test zap-scan jwt-verify \
-        build package run clean clean-test-jacoco test-unit test-it test-all \
-        coverage verify flyway-info flyway-clean flyway-repair flyway-migrate
+        build build-clean-install package run run-dev run-prod clean clean-test-jacoco \
+        test-unit test-it test-all coverage verify wrapper \
+        flyway-clean-dev flyway-info-prod flyway-repair-prod flyway-migrate-prod

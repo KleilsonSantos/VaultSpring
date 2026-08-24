@@ -5,7 +5,6 @@ import com.vaultspring.dto.UserResponse;
 import com.vaultspring.entity.User;
 import com.vaultspring.repository.UserRepository;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,13 +27,15 @@ public class UserService {
     /**
      * BCrypt encoder (strength 10). Not a full Spring Security filter chain.
      */
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * @param userRepository user persistence
+     * @param passwordEncoder shared BCrypt encoder
      */
-    public UserService(final UserRepository userRepository) {
+    public UserService(final UserRepository userRepository, final PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**

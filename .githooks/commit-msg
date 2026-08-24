@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+COMMIT_MSG_FILE="${1:?commit message file required}"
+
+if [ "${SKIP_COMMITMSG:-}" = "true" ]; then
+  exit 0
+fi
+
+SUBJECT=$(head -n 1 "$COMMIT_MSG_FILE")
+
+# Allow merge commits and Dependabot
+if [[ "$SUBJECT" =~ ^merge: ]] || [[ "$SUBJECT" =~ ^Merge\ pull\ request\ # ]]; then
+  exit 0
+fi
+if [[ "$SUBJECT" =~ ^chore\(deps\): ]]; then
+  exit 0
+fi
+
+if [[ ! "$SUBJECT" =~ ^(feat|fix|docs|refactor|ci|chore|test|build|perf)(\([a-z0-9.-]+\))?!?:\ .+ ]]; then
+  echo "commit-msg: use Conventional Commits — type: description"
+  echo "  types: feat, fix, docs, refactor, ci, chore, test, build, perf"
+  echo "  got: $SUBJECT"
+  exit 1
+fi
+
+if grep -qiE 'Co-authored-by:.*(cursor|copilot|github)' "$COMMIT_MSG_FILE"; then
+  echo "commit-msg: remove IDE co-authorship trailers"
+  exit 1
+fi
