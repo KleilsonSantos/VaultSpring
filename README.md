@@ -75,27 +75,29 @@ Pacotes em `src/main/java/com/vaultspring`:
 - **entity** / **repository** — JPA + Spring Data
 - **resources** — `application.yml` (default `dev`), `application-prod.yml`, `application-hom.yml`, Flyway em `db/migration`
 
-Vault roda no **Docker Compose** (`vault/config/vault.hcl`). O cliente **Spring Cloud Vault ainda não está no classpath** — não há `bootstrap.yml` nem `spring-cloud-starter-vault-config`.
+Vault roda no **Docker Compose** (`vault/config/vault.hcl`). O app usa **`spring-cloud-starter-vault-config`** (Spring Cloud **2025.0.x**) com perfil `vault` / `prod-vault` e KV v2 em `secret/vaultspring`. Render/prod sem Vault continua com `SPRING_DATASOURCE_*`.
 
 ### 🔗 **O que está integrado**
 
-- PostgreSQL + Flyway (perfil `prod` / `hom`)
+- PostgreSQL + Flyway (perfil `prod` / `hom` / `dev`)
+- Spring Cloud Vault (KV v2) — perfil `vault`; desligado em `test`
 - Actuator: `/actuator/health`, `/actuator/info`, `/actuator/prometheus`
+- OpenAPI / Swagger UI (dev)
 - CI: Checkstyle, JaCoCo, Codecov, CodeQL v4, Sonar em push para `main`
-- Agentes de IA: `AGENTS.md`, `.cursor/rules/`, `.github/agents/` (padrão Copilot/Cursor, adaptado do AIOS)
+- Governança AIOS: `docs/guides/`, issues, SemVer — ver [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+- Agentes de IA: `AGENTS.md`, `.cursor/rules/`, `.github/agents/`
 
 ### 🚧 **Próximo (não inventado como pronto)**
 
-- Cliente Spring Cloud Vault (train compatível com Boot 3.5: Spring Cloud 2025.0.x)
-- Spring Security (`SecurityFilterChain`) — o checklist AppSec marca itens que o `pom.xml` ainda não entrega
-- Migração planejada para **Spring Boot 4.x** (a linha 3.5 encerrou o OSS em 2026-06-30; 3.5.16 é o último patch)
+- Spring Security (`SecurityFilterChain`) — issue #32
+- Migração planejada para **Spring Boot 4.x** — issue #33
 
 Contribuição e fluxo Git: [`CONTRIBUTING.md`](./CONTRIBUTING.md) · segurança: [`SECURITY.md`](./SECURITY.md)
 
 ## 🔥 Tecnologias utilizadas
 
 - **Java 17**
-- **Spring Boot 3.5.16**
+- **Spring Boot 3.5.16** + **Spring Cloud 2025.0.x** (Vault Config)
 - **Docker Compose** (PostgreSQL 15, Vault, SonarQube LTS Community, pgAdmin)
 - **PostgreSQL** + **Flyway** (`flyway-core` + `flyway-database-postgresql`)
 - **Lombok**
@@ -121,7 +123,7 @@ Para instruções detalhadas de uso local, testes, cobertura, e troubleshooting:
 - ✅ Dockerfile multi-stage (`target/app.jar`)
 - ✅ GitHub Actions: Checkstyle, JaCoCo, Codecov, CodeQL v4, Sonar em `main`
 - ✅ Docker Compose (Postgres, Vault local, SonarQube LTS Community)
-- ✅ Vault como **infraestrutura** Compose — cliente Spring Cloud Vault ainda não wired
+- ✅ Spring Cloud Vault (KV v2, perfil `vault` / `prod-vault`)
 
 > ⚡ Essas entregas garantem uma base sólida para o gerenciamento seguro de segredos em aplicações Java modernas.
 
