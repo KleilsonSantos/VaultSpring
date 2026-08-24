@@ -83,13 +83,14 @@ Vault roda no **Docker Compose** (`vault/config/vault.hcl`). O app usa **`spring
 - Spring Cloud Vault (KV v2) — perfil `vault`; desligado em `test`
 - Actuator: `/actuator/health`, `/actuator/info`, `/actuator/prometheus`
 - OpenAPI / Swagger UI (dev)
+- Spring Security filter chain (`SecurityConfig`) — JWT tracked in #6
 - CI: Checkstyle, JaCoCo, Codecov, CodeQL v4, Sonar em push para `main`
 - Governança AIOS: `docs/guides/`, issues, SemVer — ver [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 - Agentes de IA: `AGENTS.md`, `.cursor/rules/`, `.github/agents/`
 
 ### 🚧 **Próximo (não inventado como pronto)**
 
-- Spring Security (`SecurityFilterChain`) — issue #32
+- JWT authentication — issue #6 (filter chain baseline in #32)
 - Migração planejada para **Spring Boot 4.x** — issue #33
 
 Contribuição e fluxo Git: [`CONTRIBUTING.md`](./CONTRIBUTING.md) · segurança: [`SECURITY.md`](./SECURITY.md)

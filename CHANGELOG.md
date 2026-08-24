@@ -24,6 +24,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 - Maven profile `flyway-dev` for local migration tooling; Makefile uses `./mvnw`
 - Delivery governance (AIOS-aligned): `docs/guides/`, `scripts/task-kickoff.sh`, `scripts/check-semver-alignment.sh`, release workflow, implementation issue template
 - Spring Cloud Vault Config (BOM 2025.0.x): KV v2 datasource via profile `vault` / `prod-vault`; `scripts/vault-seed-dev.sh`; `.env.example`
+- `SecurityFilterChain` with CORS, security headers, public `/actuator/health`, authenticated `/actuator/prometheus` (JWT in #6)
 - Cursor / Copilot agent layer: `AGENTS.md`, `.cursor/rules/`, `.github/agents/`
 - GitHub productivity: PR template, issue templates, Dependabot (Maven, Actions, Docker), `CONTRIBUTING.md`, `SECURITY.md`
 - CodeQL job with `github/codeql-action@v4` (`java-kotlin`, manual Maven build)

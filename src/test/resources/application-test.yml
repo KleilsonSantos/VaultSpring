@@ -14,12 +14,16 @@ spring:
   cloud:
     vault:
       enabled: false
+  security:
+    user:
+      name: metrics
+      password: "{noop}test-metrics-pass"
 
 management:
   endpoints:
     web:
       exposure:
-        include: health
+        include: health,prometheus,info
 
 springdoc:
   api-docs:
