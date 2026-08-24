@@ -22,8 +22,10 @@ jobs:
           java-version: "17"
           cache: maven
 
-      - name: Build and test
-        run: ./mvnw -B verify --no-transfer-progress
+      - name: Build, test, and integration tests
+        run: |
+          ./mvnw -B verify --no-transfer-progress
+          ./mvnw -B -DskipTests verify -Pintegration-tests --no-transfer-progress
 
       - name: Upload release JAR
         uses: actions/upload-artifact@v6

@@ -7,6 +7,11 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- CI: integration-tests job (Testcontainers), dependency-review on PRs, Docker build smoke, concurrency, test report artifacts
+- Release workflow runs integration tests before tagging
+
 ### Fixed
 
 - CI `sonar` job no longer fails `main` when `SONAR_ORGANIZATION` is unset (HTTP 403 from SonarCloud)
