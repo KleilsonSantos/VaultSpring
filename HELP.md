@@ -108,13 +108,23 @@ scripts/act-dev.sh
 mvn clean test
 ```
 
-## 🔐 HashiCorp Vault (infraestrutura local)
+## 🔐 HashiCorp Vault
 
 O Compose sobe o Vault com [`vault/config/vault.hcl`](./vault/config/vault.hcl) (TLS desligado, **só loopback/dev**).
 
-O processo Spring **não** lê segredos do Vault ainda: não há `spring-cloud-starter-vault-config` no `pom.xml`. Quando essa integração for feita, use o train Spring Cloud **2025.0.x** (Boot 3.5), não o BOM 2024.0.x (Boot 3.4).
+O app usa **Spring Cloud Vault** (`spring-cloud-starter-vault-config`, train **2025.0.x**) com KV v2. Perfil `vault` ou grupo `prod-vault` (`prod` + `vault`). Credenciais JDBC vêm de `secret/vaultspring` — não do YAML.
 
-Credenciais de banco no perfil `prod` vêm de `SPRING_DATASOURCE_*` / `POSTGRES_*`.
+### Fluxo local (Compose + Vault)
+
+1. `cp .env.example .env` e preencha `VAULT_TOKEN` após init/unseal (nunca commitar)
+2. `docker compose up -d postgres vault`
+3. Unseal o Vault e obtenha token (operacional — ver docs HashiCorp)
+4. `bash scripts/vault-seed-dev.sh`
+5. `docker compose up -d app` (default `SPRING_PROFILES_ACTIVE=prod-vault`)
+
+Render/prod sem Vault: use `SPRING_PROFILES_ACTIVE=prod` e `SPRING_DATASOURCE_*` como hoje.
+
+Perfil `test` e testes de integração desabilitam Vault (`spring.cloud.vault.enabled=false`).
 
 ## 🔄 CI/CD com GitHub Actions
 

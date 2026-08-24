@@ -1,0 +1,18 @@
+# Loads PostgreSQL credentials from HashiCorp Vault KV v2 (secret/vaultspring).
+# Activate with profile `vault` or group `prod-vault`. Requires VAULT_TOKEN via env.
+
+spring:
+  config:
+    import: vault://
+  cloud:
+    vault:
+      uri: ${VAULT_ADDR:http://127.0.0.1:8200}
+      authentication: TOKEN
+      token: ${VAULT_TOKEN:}
+      fail-fast: true
+      kv:
+        enabled: true
+        backend: secret
+        application-name: ${spring.application.name}
+        default-context: ${spring.application.name}
+        profile-separator: "/"

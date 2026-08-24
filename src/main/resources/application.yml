@@ -6,6 +6,10 @@ spring:
     name: vaultspring
   profiles:
     default: dev
+    group:
+      prod-vault:
+        - prod
+        - vault
 
 management:
   endpoints:

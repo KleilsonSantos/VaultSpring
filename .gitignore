@@ -57,6 +57,7 @@ backup
 ### 🔹 Environment Variables
 .env
 .env.*
+!.env.example
 .secrets
 .secrets.*
 .secrets/
