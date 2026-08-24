@@ -4,7 +4,7 @@ Lightweight pointer for Cursor, GitHub Copilot, and other tools that auto-load `
 
 ## Mission
 
-VaultSpring is a **Spring Boot** service for **secure secret management** with PostgreSQL, Flyway, Docker, and HashiCorp Vault. **Spring Cloud Vault Config** (`spring-cloud-starter-vault-config`, train 2025.0.x) is on the classpath for the `vault` profile. Do not invent other Cloud starters or full Spring Security unless they are in `pom.xml`.
+VaultSpring is a **Spring Boot** service for **secure secret management** with PostgreSQL, Flyway, Docker, and HashiCorp Vault. **Spring Cloud Vault Config** and **`spring-boot-starter-security`** (`SecurityFilterChain`) are on the classpath. JWT login is issue #6. Do not invent other Cloud starters or MapStruct unless they are in `pom.xml`.
 
 ## Source order
 

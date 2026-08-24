@@ -6,8 +6,8 @@
 
 ## 📊 Ambiente Seguro
 
-- [X] Configuração da `SecurityFilterChain` com autenticação por roles
-- [ ] Regras de CORS aplicadas corretamente
+- [X] Configuração da `SecurityFilterChain` (`SecurityConfig` — health público, Prometheus autenticado)
+- [X] Regras de CORS aplicadas em `/api/**`
 - [ ] Headers sensíveis removidos (X-Powered-By, Server)
 - [X] Configuração de CSRF segura (ou desabilitado com cautela)
 - [ ] Logs para eventos de autenticação e autorização ativados
