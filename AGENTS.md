@@ -1,6 +1,13 @@
 # AGENTS.md — VaultSpring
 
-Lightweight pointer for Cursor, GitHub Copilot, and other tools that auto-load `AGENTS.md`.
+Lightweight pointer for AI coding assistants (and humans) that auto-load `AGENTS.md`.
+
+## Attribution (required)
+
+- **Author / owner:** Kleilson Santos — `kleilson@icloud.com` — [KleilsonSantos](https://github.com/KleilsonSantos)
+- **Never** add `Co-authored-by: Cursor`, Copilot, or `cursoragent@cursor.com` to commits
+- **Never** append “Made with Cursor” (or similar) to PR descriptions
+- Details: [`docs/guides/attribution.md`](docs/guides/attribution.md)
 
 ## Mission
 
@@ -17,7 +24,7 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 
 ## Task routing
 
-- **Git, issues, PR, releases**: `docs/guides/git-workflow.md`, `docs/guides/task-kickoff.md`, `docs/guides/releases.md`, `docs/README.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`
+- **Git, issues, PR, releases, attribution**: `docs/guides/attribution.md`, `docs/guides/delivery-automation.md`, `docs/guides/git-workflow.md`, `docs/guides/task-kickoff.md`, `docs/guides/releases.md`, `docs/README.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`
 - **Kickoff script**: `scripts/task-kickoff.sh <issue> <branch>`
 - **AppSec / secrets**: `SECURITY.md`, `CHECKLISTAPPSEC.md` (checklist only — do not add exploit PoCs)
 - **Quality gates**: `.cursor/rules/quality-gates.mdc`, Checkstyle, JaCoCo, CodeQL, Sonar on `main`
@@ -26,7 +33,7 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 ## Hard constraints
 
 - Java 17 + Spring Boot 3.5.x (OSS line ended 2026-06-30; last patch **3.5.16**). Do not jump to Spring Boot 4 in a drive-by change.
-- Conventional Commits (`feat`, `fix`, `docs`, `ci`, `chore`, `refactor`, `test`). No gitmoji requirement.
+- Conventional Commits (`feat`, `fix`, `docs`, `ci`, `chore`, `refactor`, `test`). **No gitmoji** — see [`docs/guides/writing-style.md`](docs/guides/writing-style.md).
 - **Traceability**: new implementation work starts with a GitHub issue; PR body includes `Closes #N`.
 - Commit only when the human asks.
 - Never commit `.env`, Vault unseal keys, or `vault/data/`.
