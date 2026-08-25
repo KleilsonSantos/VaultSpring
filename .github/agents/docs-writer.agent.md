@@ -23,4 +23,5 @@ Given a diff (or requested scope):
 
 - Commits only if the human asks
 - Format: `type: description`
-- Forbidden: `Co-authored-by: Cursor`
+- Author: Kleilson Santos — see [`docs/guides/attribution.md`](../../docs/guides/attribution.md)
+- Forbidden: `Co-authored-by: Cursor`, “Made with Cursor” in commits or PRs

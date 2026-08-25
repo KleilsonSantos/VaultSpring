@@ -23,6 +23,7 @@ Review the current diff or named PR. Actionable comments only; do not rewrite th
 - [ ] CI uses current action majors (`checkout`, `setup-java`, CodeQL v4)?
 - [ ] Docs/CHANGELOG `[Unreleased]` if the change is user-visible?
 - [ ] Conventional Commits; PR targets `main`?
+- [ ] No IDE authorship (`Co-authored-by: Cursor`, “Made with Cursor”) — see `docs/guides/attribution.md`
 
 ## Response format
 

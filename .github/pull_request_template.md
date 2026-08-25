@@ -29,6 +29,7 @@ Closes #
 - [ ] Docs updated if this PR changes build, run, or architecture
 - [ ] `CHANGELOG.md` `[Unreleased]` updated (if notable)
 - [ ] No secrets, `.env`, or Vault unseal material
+- [ ] No IDE attribution (`Co-authored-by: Cursor`, “Made with Cursor”) — author is **Kleilson Santos** ([`attribution.md`](docs/guides/attribution.md))
 
 ## Test plan
 

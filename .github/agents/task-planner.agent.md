@@ -22,5 +22,6 @@ Read and follow [`AGENTS.md`](../../AGENTS.md). Do **not** implement product cod
 ## Constraints
 
 - Do not suggest pushing directly to `main`
+- Do not add IDE co-author trailers or “Made with Cursor” on PRs ([`attribution.md`](../../docs/guides/attribution.md))
 - Do not copy AIOS `sandbox`/gitmoji unless the owner asks
 - Do not plan exploit PoCs or offensive payloads

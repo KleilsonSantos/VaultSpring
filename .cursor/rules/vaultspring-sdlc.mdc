@@ -25,13 +25,15 @@ Use this file as a short delivery bridge. Details: [`docs/README.md`](../../docs
 
 - Format: `type: description` (Conventional Commits)
 - Types: `feat`, `fix`, `docs`, `refactor`, `ci`, `chore`, `test`, `build`, `perf`
-- No IDE trailers (`Co-authored-by: Cursor`)
+- No IDE trailers (`Co-authored-by: Cursor`, `cursoragent@cursor.com`) or “Made with Cursor” in commits/PRs
+- Author: Kleilson Santos `<kleilson@icloud.com>` — see `docs/guides/attribution.md`
 
 ## Product
 
 - Spring Boot 3.5.x / Java 17 / Maven Wrapper
 - Secrets never in Git; use env vars and Vault **infrastructure** in Compose
 - `CHANGELOG.md` `[Unreleased]` for notable changes
+- Docs/commits/issues: no gitmoji — [`docs/guides/writing-style.md`](docs/guides/writing-style.md)
 - Do not claim MapStruct, Spring Cloud Vault, or Spring Security in docs unless they exist in `pom.xml`
 
 ## Checklist
