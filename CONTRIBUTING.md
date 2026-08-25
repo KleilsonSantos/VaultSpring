@@ -65,10 +65,11 @@ bash scripts/check-semver-alignment.sh
 
 ### CI (GitHub Actions)
 
-- Checkstyle
-- Maven `verify` + JaCoCo
-- Codecov upload (non-blocking)
-- CodeQL (`github/codeql-action@v4`)
+- Checkstyle + unit `verify` + JaCoCo (job `quality`)
+- Integration tests with Testcontainers (job `integration-tests`, Docker on `ubuntu-latest`)
+- Dependency Review on pull requests (job `dependency-review`)
+- Dockerfile build smoke (job `docker-build`)
+- CodeQL (`github/codeql-action@v4`) — **single path**: workflow in `.github/workflows/maven.yml`; disable GitHub **Default setup** for CodeQL in repo Settings to avoid duplicate scans
 - SonarQube Cloud via **GitHub Automatic Analysis** — check `SonarCloud Code Analysis` on PRs; dashboard: [KleilsonSantos_VaultSpring](https://sonarcloud.io/project/overview?id=KleilsonSantos_VaultSpring). Do not run a Maven `sonar:sonar` job while Automatic Analysis is enabled.
 - Release workflow on push of annotated tags `v*.*.*`
 

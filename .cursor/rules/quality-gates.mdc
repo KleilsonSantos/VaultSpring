@@ -16,7 +16,7 @@ Sources of truth:
 
 - Local: `./mvnw -B checkstyle:check test` before push when Java/XML changes
 - CI quality job must pass before merge
-- CodeQL uses `github/codeql-action@v4` (v3 is deprecated)
+- CodeQL uses `github/codeql-action@v4` (v3 is deprecated). Use **either** the workflow job in `maven.yml` **or** GitHub Default CodeQL setup — not both (duplicate checks fail PRs).
 - SonarQube Cloud: **GitHub Automatic Analysis** only — do not add a Maven `sonar:sonar` job while Automatic Analysis is on (SonarCloud rejects duplicate CI analysis). PR check: `SonarCloud Code Analysis`.
 - Maven cache: `actions/setup-java` `cache: maven` only — do not add a second `actions/cache` for `~/.m2`
 - Codecov must not fail the build (`fail_ci_if_error: false`) unless the owner changes that
