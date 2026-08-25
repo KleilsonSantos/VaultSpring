@@ -46,11 +46,13 @@ Issue (GitHub) → In Progress → semantic branch from main → kickoff comment
 Kickoff: branch `<type>/<slug>` created from `main` for this issue.
 ```
 
-## Cursor agent + `gh`
+## Agent tooling + `gh`
 
-Cursor’s agent sandbox allowlists `github.com` (git) but not always `api.github.com` (REST used by `gh`). This repo ships [`.cursor/sandbox.json`](../../.cursor/sandbox.json) with `api.github.com` allowed.
+AI agents in this repo follow [`attribution.md`](./attribution.md) — no IDE co-author or “Made with Cursor” on PRs.
 
-In Cursor: **Settings → Agents → Auto Run → Network Access** → `sandbox.json + Defaults`.
+The agent sandbox allowlists `github.com` (git) but not always `api.github.com` (REST used by `gh`). This repo ships [`.cursor/sandbox.json`](../../.cursor/sandbox.json) with `api.github.com` allowed.
+
+In the IDE: **Settings → Agents → Auto Run → Network Access** → `sandbox.json + Defaults`.
 
 ## Traceability matrix
 
