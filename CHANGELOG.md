@@ -7,21 +7,14 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Changed
-
-- CI: integration-tests job (Testcontainers), dependency-review on PRs, Docker build smoke, concurrency, test report artifacts
-- Release workflow runs integration tests before tagging
-
-### Fixed
-
-- CI `sonar` job no longer fails `main` when `SONAR_ORGANIZATION` is unset (HTTP 403 from SonarCloud)
-- Removed duplicate Maven Sonar job that conflicted with SonarCloud Automatic Analysis
-- Render blueprint uses `SPRING_DATASOURCE_*` and `/actuator/health` (aligned with `application-prod.yml`)
-
 ### Added
 
+- Technical documentation hub: `docs/README.md`, architecture/configuration/development/api guides
+- Mermaid diagrams (C4 context/container, sequences, CI pipeline, profile flows) in `docs/`
+- ADRs (MADR) in `docs/adr/` for Vault, security baseline, and docs-as-code
+- Diagram index: `docs/diagrams/README.md`
 - Global API error handling with RFC 7807 `ProblemDetail` (`GlobalExceptionHandler`)
-- `PasswordEncoder` `@Bean` in `SecurityCryptoConfig` (testable BCrypt wiring)
+- `PasswordEncoder` `@Bean` in `SecurityConfig` (testable BCrypt wiring)
 - `UserServiceTest` and validation failure tests in `UserControllerTest`
 - OpenAPI docs via `springdoc-openapi-starter-webmvc-ui` 2.9.0 (Swagger UI in dev; disabled in prod)
 - `UserApiIT` integration test with Testcontainers PostgreSQL 15 and Flyway (profile `integration-tests`)
@@ -32,7 +25,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 - `SecurityFilterChain` with CORS, security headers, public `/actuator/health`, authenticated `/actuator/prometheus` (JWT in #6)
 - Cursor / Copilot agent layer: `AGENTS.md`, `.cursor/rules/`, `.github/agents/`
 - GitHub productivity: PR template, issue templates, Dependabot (Maven, Actions, Docker), `CONTRIBUTING.md`, `SECURITY.md`
-- CodeQL job with `github/codeql-action@v4` (`java-kotlin`, manual Maven build)
+- CodeQL job with `github/codeql-action@v4` (`java-kotlin`)
 - Actuator health/info/prometheus endpoints
 - User API DTOs (`UserRequest` / `UserResponse`) and `UserService` with BCrypt hashing (`spring-security-crypto`)
 - H2-backed `test` profile so `./mvnw test` does not need PostgreSQL
@@ -41,8 +34,11 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- CI: integration-tests job (Testcontainers), dependency-review on PRs, Docker build smoke, concurrency, test report artifacts
+- Release workflow runs integration tests before tagging
+- README, HELP, and CONTRIBUTING aligned with current stack and CI jobs
+- CI uses `actions/checkout@v7`, `setup-java` Maven cache only, Codecov, `./mvnw`
 - Spring Boot parent **3.5.16** (last OSS 3.5 patch). Flyway and PostgreSQL versions come from the Boot BOM; added `flyway-database-postgresql`
-- CI uses `actions/checkout@v5`, `setup-java` Maven cache only (no duplicate `actions/cache`), Codecov v5, `./mvnw`
 - SonarQube Cloud via GitHub Automatic Analysis (not a duplicate Maven `sonar` job)
 - `application.yml` no longer forces `prod`; default profile is `dev`. Production credentials come from the environment
 - Dockerfile copies `target/app.jar` (matches `<finalName>app</finalName>`)
@@ -51,6 +47,9 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- CI `sonar` job no longer fails `main` when `SONAR_ORGANIZATION` is unset (HTTP 403 from SonarCloud)
+- Removed duplicate Maven Sonar job that conflicted with SonarCloud Automatic Analysis
+- Render blueprint uses `SPRING_DATASOURCE_*` and `/actuator/health` (aligned with `application-prod.yml`)
 - Merge-conflict markers in `docker-compose.yml`
 - JAR `Main-Class` pointed at a non-existent test class
 - Compose app service used `DB_URL` / `DB_USER` while Spring expected datasource env vars

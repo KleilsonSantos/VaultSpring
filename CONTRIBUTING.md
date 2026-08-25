@@ -8,6 +8,7 @@ Delivery governance follows patterns from [AI Operating System](https://github.c
 
 | Doc | Purpose |
 | --- | ------- |
+| [`docs/README.md`](./docs/README.md) | Technical doc index (architecture, config, API, dev) |
 | [`docs/guides/git-workflow.md`](./docs/guides/git-workflow.md) | Branches, PRs, commits |
 | [`docs/guides/task-kickoff.md`](./docs/guides/task-kickoff.md) | Issue → branch → traceability |
 | [`docs/guides/releases.md`](./docs/guides/releases.md) | SemVer, tags, CHANGELOG |

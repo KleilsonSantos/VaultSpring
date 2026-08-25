@@ -5,7 +5,7 @@ alwaysApply: true
 
 # VaultSpring SDLC
 
-Use this file as a short delivery bridge. Details: `docs/guides/`, `CONTRIBUTING.md`, `AGENTS.md`, `.github/pull_request_template.md`.
+Use this file as a short delivery bridge. Details: [`docs/README.md`](../../docs/README.md), `docs/guides/`, `CONTRIBUTING.md`, `AGENTS.md`, `.github/pull_request_template.md`.
 
 ## Traceability (AIOS-aligned)
 

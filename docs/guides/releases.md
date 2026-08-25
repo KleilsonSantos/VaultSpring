@@ -59,6 +59,9 @@ bash scripts/check-semver-alignment.sh
 | Tag | Description |
 | --- | ----------- |
 | `v0.1.0` | Initial tagged baseline |
+| (pending) `v0.1.4` | API quality, Vault client, SecurityFilterChain, CI hardening — see `[Unreleased]` in CHANGELOG |
+
+Current development version in `pom.xml`: `0.1.4-SNAPSHOT` (cut release when `[Unreleased]` is ready).
 
 ## Related
 
