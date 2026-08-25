@@ -11,13 +11,13 @@ VaultSpring is a **Spring Boot** service for **secure secret management** with P
 1. **Code** — `src/main/java`, `src/main/resources`, `pom.xml`
 2. **Runtime config** — `application*.yml`, `docker-compose.yml`, `Dockerfile`
 3. **Delivery** — `.github/`, `Makefile`, `scripts/`
-4. **Docs** — `README.md`, `HELP.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`
+4. **Docs** — `docs/README.md`, `README.md`, `HELP.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`
 
 If a summary conflicts with `pom.xml` or source, the code wins.
 
 ## Task routing
 
-- **Git, issues, PR, releases**: `docs/guides/git-workflow.md`, `docs/guides/task-kickoff.md`, `docs/guides/releases.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`
+- **Git, issues, PR, releases**: `docs/guides/git-workflow.md`, `docs/guides/task-kickoff.md`, `docs/guides/releases.md`, `docs/README.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`
 - **Kickoff script**: `scripts/task-kickoff.sh <issue> <branch>`
 - **AppSec / secrets**: `SECURITY.md`, `CHECKLISTAPPSEC.md` (checklist only — do not add exploit PoCs)
 - **Quality gates**: `.cursor/rules/quality-gates.mdc`, Checkstyle, JaCoCo, CodeQL, Sonar on `main`

@@ -1,168 +1,81 @@
-# 🛠️🧪 VaultSpring - Manual Técnico de Uso (HELP.md)
+# 🛠️ VaultSpring — Manual técnico (HELP.md)
 
-## 🚀 Funcionalidades
-- ✅ Execução local 
-- ✅ Cobertura de testes
-- ✅ Integração com Docker Compose (PostgreSQL, Vault local, SonarQube)
-- ✅ Integrações CI (Checkstyle, JaCoCo, CodeQL, Sonar em `main`)
-- ✅ Vault como serviço Compose — o app Spring **ainda não** usa `spring-cloud-vault`
-- ✅ Integração com banco de dados PostgreSQL
-- ✅ Arquitetura modular e extensível
-- ✅ Estrutura modular do projeto para fácil manutenção
-- ✅ Aplicação de boas práticas com Lombok
-- ✅ Documentação inicial e instruções de execução
+Guia rápido. Documentação completa: **[`docs/README.md`](./docs/README.md)**.
 
-### 🌟 Para visão geral do projeto e tecnologias utilizadas, veja o [`README.md`](./README.md)
+## Visão geral
 
-## 🚀 Início Rápido
+- Spring Boot **3.5.16**, Java **17**, PostgreSQL **15**, Flyway  
+- **Spring Cloud Vault Config** (KV v2) — perfis `vault` / `prod-vault`  
+- **Spring Security** (`SecurityFilterChain`) — JWT em [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)  
+- OpenAPI / Swagger UI no perfil **`dev`**  
 
-### Pré-requisitos
-- ☕ Java 17+
-- 🐘 Maven 3.8+
-- 🐳 Docker e Docker Compose
-- 🛢️ PostgreSQL (rodando via container ou local)
-
-## 🧩 Como Executar Localmente
-
-### 🔧 Clone o projeto
+## Início rápido
 
 ```bash
-git clone https://github.com/KleilsonSantos/vaultspring.git
-```
-```
-cd vaultspring
-```
+git clone https://github.com/KleilsonSantos/VaultSpring.git
+cd VaultSpring
+cp .env.example .env
 
-## 🔧 Ajuste as variáveis de ambiente:
-```
-export POSTGRES_DB=seu_db
-export POSTGRES_USER=seu_user
-export POSTGRES_PASSWORD=seu_password
-export POSTGRES_DB=seu_db
-export SONAR_TOKEN=seu_token
-export SONAR_HOST_URL=http://localhost:9000
-
-```
-## 🔧 Inicia o banco e a aplicação:
-```
-docker-compose up -d postgres
-./mvnw spring-boot:run
+docker compose up -d postgres
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-### 💡 Dica: Para executar o projeto
+- API: http://localhost:8080/api/v1/users  
+- Swagger: http://localhost:8080/swagger-ui.html  
+- Health: http://localhost:8080/actuator/health  
 
-```
-mvn clean install
-```
+Passo a passo detalhado: [`docs/development.md`](./docs/development.md).
 
-### Execute o seguinte comando:
+## Vault (Compose)
 
-```
-mvn spring-boot:run
-```
+1. `docker compose up -d postgres vault`  
+2. Init/unseal Vault; definir `VAULT_TOKEN` no `.env`  
+3. `bash scripts/vault-seed-dev.sh`  
+4. `docker compose up -d app` (perfil `prod-vault`)  
 
-## 📌 Acesse a aplicação
+Render/prod sem Vault: `SPRING_PROFILES_ACTIVE=prod` + `SPRING_DATASOURCE_*`.
 
-- A API estará disponível em: http://localhost:8080
-- Utilize ferramentas como Postman ou curl para interagir com os endpoints.
+## Testes
 
-## 📦 Comandos Úteis
-### 🔍 Geração de cobertura de testes com Jacoco
-
-```
-mvn clean test
-```
-```
-mvn jacoco:report
-```
-### 📊 Análise com Sonar Scanner::
-
-```
-target/site/jacoco/index.html
+```bash
+./mvnw -B checkstyle:check test              # unitários (H2)
+./mvnw -B verify -Pintegration-tests        # Testcontainers (Docker)
+make test-all                               # equivalente via Makefile
 ```
 
-## 🚨 Rodando análise local com Sonar Scanner + ACT
+Relatório JaCoCo: `target/site/jacoco/index.html` após `./mvnw verify`.
 
-### 🔧 Executanto Sonar Scanner Localmente:
-```
-make sonar
-```
+## CI/CD
 
-### 🔧 Executando ACT localmente:
-```
-scripts/act-dev.sh
-```
->Certifique-se que o SonarQube esteja rodando com o token correto e permissões no projeto.
+Pipeline [`.github/workflows/maven.yml`](./.github/workflows/maven.yml):
 
-## 🧪 Testes
+| Job | Quando |
+| --- | ------ |
+| `quality` | Checkstyle + unit verify + JaCoCo + Codecov |
+| `integration-tests` | Failsafe + Testcontainers |
+| `dependency-review` | PRs — severidade high bloqueia |
+| `docker-build` | Smoke `docker build` |
+| `codeql` | CodeQL Action v4 (`java-kotlin`) |
 
-### Este projeto utiliza:
+SonarQube Cloud: **Automatic Analysis** (check `SonarCloud Code Analysis` no PR).  
+Release: tag anotada `v*.*.*` → [`.github/workflows/release.yml`](./.github/workflows/release.yml).
 
-- ✅ JUnit 5
-- ✅ Mockito
-- ✅ Jacoco para cobertura
-- ✅ GitHub Actions para testes automatizados
+Contribuição: [`CONTRIBUTING.md`](./CONTRIBUTING.md).
 
-## 🔧 Execute testes locais com:
-```
-mvn clean test
-```
+## Docker (imagem local)
 
-## 🔐 HashiCorp Vault
-
-O Compose sobe o Vault com [`vault/config/vault.hcl`](./vault/config/vault.hcl) (TLS desligado, **só loopback/dev**).
-
-O app usa **Spring Cloud Vault** (`spring-cloud-starter-vault-config`, train **2025.0.x**) com KV v2. Perfil `vault` ou grupo `prod-vault` (`prod` + `vault`). Credenciais JDBC vêm de `secret/vaultspring` — não do YAML.
-
-### Fluxo local (Compose + Vault)
-
-1. `cp .env.example .env` e preencha `VAULT_TOKEN` após init/unseal (nunca commitar)
-2. `docker compose up -d postgres vault`
-3. Unseal o Vault e obtenha token (operacional — ver docs HashiCorp)
-4. `bash scripts/vault-seed-dev.sh`
-5. `docker compose up -d app` (default `SPRING_PROFILES_ACTIVE=prod-vault`)
-
-Render/prod sem Vault: use `SPRING_PROFILES_ACTIVE=prod` e `SPRING_DATASOURCE_*` como hoje.
-
-Perfil `test` e testes de integração desabilitam Vault (`spring.cloud.vault.enabled=false`).
-
-## 🔄 CI/CD com GitHub Actions
-
-Pipeline em [`.github/workflows/maven.yml`](./.github/workflows/maven.yml):
-
-- Checkstyle + `./mvnw verify` (JaCoCo)
-- Codecov (não bloqueia o build)
-- CodeQL v4 (`java-kotlin`, build Maven manual)
-- SonarQube Cloud no **push para `main`** — secrets `SONAR_TOKEN` e variável `SONAR_ORGANIZATION`
-
-Contribuição: [`CONTRIBUTING.md`](./CONTRIBUTING.md). Agentes de IA: [`AGENTS.md`](./AGENTS.md).
-## 🐋 Docker
-
-### Embora o foco esteja no ambiente local com Maven, o projeto suporta construção com Docker.
-Criando imagem
-```
-./mvnw spring-boot:build-image -DskipTests
+```bash
+./mvnw -B package -DskipTests
+docker build -t vaultspring:local .
 ```
 
-### Rodando imagem
-```
-docker run -p 8080:8080 vaultspring:latest
-```
-## 📚 Referências
-### Spring & Maven
+## Referências internas
 
-- Spring Boot Docs
-- Maven Plugin Guide
-- Spring Cloud Vault
+| Doc | Conteúdo |
+| --- | -------- |
+| [`docs/architecture.md`](./docs/architecture.md) | Camadas, segurança, Vault |
+| [`docs/configuration.md`](./docs/configuration.md) | Perfis e variáveis de ambiente |
+| [`docs/api.md`](./docs/api.md) | Endpoints e erros RFC 7807 |
+| [`docs/guides/`](./docs/guides/) | Git, kickoff, releases |
 
-## 📚 Exemplos e guias
-
-- [Building REST APIs](https://spring.io/guides/gs/rest-service/) - Building REST APIs
-- [Spring Boot Maven Plugin Reference Guide](https://spring.io/guides/gs/serving-web-content/) - Spring MVC Web Content
-
-## 🧰 Maven Inheritance (herança indesejada)
-
-Este projeto sobrescreve elementos indesejados herdados do parent do Spring Boot (como <license> e <developers>).
-Caso troque o parent, remova os overrides manualmente.
-
-### 📢 Dica final: Se você encontrar problemas de conexão com o banco, variáveis de ambiente ausentes ou falhas no Vault, consulte a aba Issues ou abra uma nova com detalhes para contribuir com a evolução do projeto.
+Problemas: abra uma [issue](https://github.com/KleilsonSantos/VaultSpring/issues) com perfil, logs e passos (sem segredos).

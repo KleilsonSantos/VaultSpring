@@ -73,7 +73,10 @@ Pacotes em `src/main/java/com/vaultspring`:
 - **dto** — `UserRequest` / `UserResponse` (a senha nunca sai na resposta)
 - **service** — regras de aplicação e hash BCrypt
 - **entity** / **repository** — JPA + Spring Data
-- **resources** — `application.yml` (default `dev`), `application-prod.yml`, `application-hom.yml`, Flyway em `db/migration`
+- **config** — `SecurityConfig`, `OpenApiConfig`
+- **exception** — RFC 7807 `ProblemDetail`
+
+Configuração em `src/main/resources/` (`application.yml`, perfis `dev` / `prod` / `hom` / `vault`, Flyway em `db/migration/`).
 
 Vault roda no **Docker Compose** (`vault/config/vault.hcl`). O app usa **`spring-cloud-starter-vault-config`** (Spring Cloud **2025.0.x**) com perfil `vault` / `prod-vault` e KV v2 em `secret/vaultspring`. Render/prod sem Vault continua com `SPRING_DATASOURCE_*`.
 
@@ -84,8 +87,9 @@ Vault roda no **Docker Compose** (`vault/config/vault.hcl`). O app usa **`spring
 - Actuator: `/actuator/health`, `/actuator/info`, `/actuator/prometheus`
 - OpenAPI / Swagger UI (dev)
 - Spring Security filter chain (`SecurityConfig`) — JWT tracked in #6
-- CI: Checkstyle, JaCoCo, Codecov, CodeQL v4, Sonar em push para `main`
-- Governança AIOS: `docs/guides/`, issues, SemVer — ver [`CONTRIBUTING.md`](./CONTRIBUTING.md)
+- RFC 7807 errors, OpenAPI (springdoc 2.9.0), Testcontainers IT
+- CI: Checkstyle, unit verify, integration-tests, dependency-review, docker-build, JaCoCo, Codecov, CodeQL v4, SonarCloud
+- Governança AIOS: [`docs/`](./docs/README.md), issues, SemVer — ver [`CONTRIBUTING.md`](./CONTRIBUTING.md)
 - Agentes de IA: `AGENTS.md`, `.cursor/rules/`, `.github/agents/`
 
 ### 🚧 **Próximo (não inventado como pronto)**
@@ -108,21 +112,32 @@ Contribuição e fluxo Git: [`CONTRIBUTING.md`](./CONTRIBUTING.md) · segurança
 - **Maven Wrapper**
 - **GitHub Actions** + **Dependabot** + **CodeQL**
 
-## 📘 Guia Rápido e Avançado
+## 📘 Documentação
 
-Para instruções detalhadas de uso local, testes, cobertura, e troubleshooting:  
-➡️ Acesse o arquivo [`HELP.md`](./HELP.md)
+| Doc | Conteúdo |
+| --- | -------- |
+| [`docs/README.md`](./docs/README.md) | Índice técnico (C4, fluxos Mermaid, ADRs) |
+| [`HELP.md`](./HELP.md) | Início rápido |
+| [`CONTRIBUTING.md`](./CONTRIBUTING.md) | Contribuição e quality gates |
+| [`CHANGELOG.md`](./CHANGELOG.md) | Histórico de versões |
+| [`SECURITY.md`](./SECURITY.md) | Segurança e reporte de vulnerabilidades |
+
+## 📘 Guia Rápido
+
+Para execução local, testes e troubleshooting: [`HELP.md`](./HELP.md) e [`docs/development.md`](./docs/development.md).
 
 ## ✅ **O que já foi concluído**
 
 - ✅ Estrutura modular (controller, dto, service, entity, repository)
 - ✅ Lombok; DTOs sem MapStruct (conversão no `UserService`)
-- ✅ Documentação (`README.md`, `HELP.md`, `CONTRIBUTING.md`, `SECURITY.md`, `AGENTS.md`)
-- ✅ PostgreSQL + Flyway (prod/hom); H2 no perfil `test`
+- ✅ RFC 7807 `ProblemDetail`, OpenAPI (springdoc 2.9.0), `SecurityFilterChain`
+- ✅ Testcontainers IT (`UserApiIT`) + job CI `integration-tests`
+- ✅ Documentação técnica (`docs/`: architecture, configuration, development, api)
+- ✅ PostgreSQL + Flyway (prod/hom/dev); H2 no perfil `test`
 - ✅ Perfis `dev`, `prod`, `hom`
 - ✅ Endpoint de usuários com hash BCrypt e resposta sem senha
 - ✅ Dockerfile multi-stage (`target/app.jar`)
-- ✅ GitHub Actions: Checkstyle, JaCoCo, Codecov, CodeQL v4, Sonar em `main`
+- ✅ GitHub Actions: Checkstyle, JaCoCo, integration-tests, dependency-review, CodeQL v4
 - ✅ Docker Compose (Postgres, Vault local, SonarQube LTS Community)
 - ✅ Spring Cloud Vault (KV v2, perfil `vault` / `prod-vault`)
 

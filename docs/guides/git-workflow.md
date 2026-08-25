@@ -76,6 +76,7 @@ Configured in [`.github/dependabot.yml`](../../.github/dependabot.yml). Version 
 
 ## Related
 
+- [`docs/README.md`](../../docs/README.md)
 - [`task-kickoff.md`](./task-kickoff.md)
 - [`releases.md`](./releases.md)
 - [`CONTRIBUTING.md`](../../CONTRIBUTING.md)
