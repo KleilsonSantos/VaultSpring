@@ -29,6 +29,8 @@ During development, `pom.xml` may stay at `X.Y.Z-SNAPSHOT`. When cutting a relea
 
 ## Create a release
 
+When the **SemVer gate** fails on `main` or `[Unreleased]` is ready, the agent (or maintainer) follows this — **not** a discretionary “later” step. Full event map: [`delivery-automation.md`](./delivery-automation.md).
+
 ```bash
 git checkout main && git pull origin main
 
@@ -38,14 +40,14 @@ bash scripts/check-semver-alignment.sh
 # 2. Commit release prep (if not already merged)
 git commit -m "chore: release vX.Y.Z"
 
-# 3. Annotated tag
+# 3. Merge PR to main, then on main HEAD:
 git tag -a vX.Y.Z -m "vX.Y.Z — short summary"
 
-# 4. Push tag (triggers release workflow)
+# 4. Push tag (triggers release workflow — do not duplicate with gh release create)
 git push origin vX.Y.Z
 
-# 5. GitHub Release notes
-gh release create vX.Y.Z --title "vX.Y.Z — title" --notes "See CHANGELOG [X.Y.Z]."
+# 5. Next dev cycle on main
+# pom.xml → (X.Y.(Z+1))-SNAPSHOT, empty CHANGELOG [Unreleased]
 ```
 
 ## Local check
@@ -58,10 +60,10 @@ bash scripts/check-semver-alignment.sh
 
 | Tag | Description |
 | --- | ----------- |
+| `v0.1.4` | API quality, Vault, SecurityFilterChain, CI hardening, technical docs hub |
 | `v0.1.0` | Initial tagged baseline |
-| (pending) `v0.1.4` | API quality, Vault client, SecurityFilterChain, CI hardening — see `[Unreleased]` in CHANGELOG |
 
-Current development version in `pom.xml`: `0.1.4-SNAPSHOT` (cut release when `[Unreleased]` is ready).
+Next development version after tagging: bump `pom.xml` to `0.1.5-SNAPSHOT` on `main`.
 
 ## Related
 
