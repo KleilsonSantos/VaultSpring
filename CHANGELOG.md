@@ -7,6 +7,8 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-08-25
+
 ### Added
 
 - Technical documentation hub: `docs/README.md`, architecture/configuration/development/api guides
@@ -23,7 +25,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 - Delivery governance (AIOS-aligned): `docs/guides/`, `scripts/task-kickoff.sh`, `scripts/check-semver-alignment.sh`, release workflow, implementation issue template
 - Spring Cloud Vault Config (BOM 2025.0.x): KV v2 datasource via profile `vault` / `prod-vault`; `scripts/vault-seed-dev.sh`; `.env.example`
 - `SecurityFilterChain` with CORS, security headers, public `/actuator/health`, authenticated `/actuator/prometheus` (JWT in #6)
-- Cursor / Copilot agent layer: `AGENTS.md`, `.cursor/rules/`, `.github/agents/`
+- AI agent governance: `AGENTS.md`, `.github/agents/`, `docs/guides/attribution.md`
 - GitHub productivity: PR template, issue templates, Dependabot (Maven, Actions, Docker), `CONTRIBUTING.md`, `SECURITY.md`
 - CodeQL job with `github/codeql-action@v4` (`java-kotlin`)
 - Actuator health/info/prometheus endpoints
@@ -34,6 +36,10 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- CI SemVer gate: `fetch-depth: 0` on checkout so tags are visible (gate no longer skipped as “bootstrap”)
+- Delivery automation map: `docs/guides/delivery-automation.md` (push / PR / tag triggers, AIOS-aligned)
+- Author attribution (AIOS): `docs/guides/attribution.md` — Kleilson Santos only; no Cursor co-author or PR footers
+- Writing style guide with references: `docs/guides/writing-style.md`; README and CHECKLISTAPPSEC aligned (no gitmoji in delivery)
 - CI: integration-tests job (Testcontainers), dependency-review on PRs, Docker build smoke, concurrency, test report artifacts
 - Release workflow runs integration tests before tagging
 - README, HELP, and CONTRIBUTING aligned with current stack and CI jobs
