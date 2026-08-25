@@ -47,13 +47,14 @@ Script: `scripts/check-semver-alignment.sh`
 
 - Runs on **every push to `main`** (job `quality`).
 - Requires **full git history + tags** in CI (`fetch-depth: 0` on checkout).
-- If commits since last `v*.*.*` tag include releaseable types (`feat`, `fix`, `perf`, `refactor`) **and** `pom.xml` was not bumped with matching `CHANGELOG [X.Y.Z]` → **CI fails**.
+- **`X.Y.Z-SNAPSHOT` on `main`:** passes while releaseable commits accumulate (dev cycle); cut release via PR when ready.
+- **Non-SNAPSHOT on `main`:** must be ahead of the last tag **and** have matching `CHANGELOG [X.Y.Z]` — otherwise **CI fails** (anti-drift).
 
 Non-releaseable on their own: `chore`, `docs`, `ci`, `test`, `build`, `merge`, Dependabot `Bump …`.
 
 ## Release cadence (when to tag)
 
-**Trigger:** SemVer gate red on `main`, or `[Unreleased]` ready after a feature slice.
+**Trigger:** `[Unreleased]` ready after a feature slice, or non-SNAPSHOT `pom.xml` on `main` without matching CHANGELOG (gate red).
 
 **Steps** (agent executes — see [`releases.md`](./releases.md)):
 

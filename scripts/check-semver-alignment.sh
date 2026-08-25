@@ -87,6 +87,13 @@ if [[ "$RELEASEABLE" -eq 0 ]]; then
   exit 0
 fi
 
+# SNAPSHOT = dev cycle on main; releaseable commits are expected until a release PR lands.
+if [[ "$POM_VERSION" == *-SNAPSHOT ]]; then
+  echo "semver-align: SNAPSHOT $POM_VERSION with releaseable commits after $LAST_TAG — OK (cut release via PR)"
+  exit 0
+fi
+
+# Non-SNAPSHOT on main: version must be ahead of last tag and CHANGELOG must match.
 if version_gt "$POM_VERSION_CLEAN" "$TAG_VERSION_CLEAN"; then
   if ! grep -q "## \\[$POM_VERSION_CLEAN\\]" "$ROOT/CHANGELOG.md" 2>/dev/null; then
     echo "semver-align: pom.xml is $POM_VERSION_CLEAN but CHANGELOG.md lacks ## [$POM_VERSION_CLEAN]"
@@ -96,6 +103,6 @@ if version_gt "$POM_VERSION_CLEAN" "$TAG_VERSION_CLEAN"; then
   exit 0
 fi
 
-echo "semver-align: releaseable commits after $LAST_TAG but pom.xml still at $POM_VERSION_CLEAN"
+echo "semver-align: releaseable commits after $LAST_TAG but pom.xml still at $POM_VERSION (non-SNAPSHOT)"
 echo "semver-align: bump pom.xml and add CHANGELOG [X.Y.Z] before merging to main"
 exit 1
