@@ -26,6 +26,9 @@ flowchart TD
 | [api.md](./api.md) | API consumers | Endpoints, **sequence** diagrams, RFC 7807 |
 | [diagrams/README.md](./diagrams/README.md) | All | Index of all Mermaid diagrams |
 | [adr/README.md](./adr/README.md) | Architects | **Why** decisions (MADR) |
+| [guides/writing-style.md](./guides/writing-style.md) | All | **No gitmoji** — commits, issues, technical docs |
+| [guides/attribution.md](./guides/attribution.md) | All | Author identity — no IDE co-author trailers |
+| [guides/delivery-automation.md](./guides/delivery-automation.md) | All | Push / PR / tag — CI triggers and release cadence |
 | [guides/git-workflow.md](./guides/git-workflow.md) | Contributors | Issue → PR → release |
 | [guides/task-kickoff.md](./guides/task-kickoff.md) | Contributors | Issue → branch traceability |
 | [guides/releases.md](./guides/releases.md) | Maintainers | SemVer, tags, CHANGELOG |
@@ -39,7 +42,7 @@ flowchart TD
 | [../CONTRIBUTING.md](../CONTRIBUTING.md) | Contribution and CI gates |
 | [../CHANGELOG.md](../CHANGELOG.md) | Version history |
 | [../SECURITY.md](../SECURITY.md) | Vulnerability reporting and repo posture |
-| [../AGENTS.md](../AGENTS.md) | AI agent routing (Cursor, Copilot) |
+| [../AGENTS.md](../AGENTS.md) | AI assistant routing (author: Kleilson Santos) |
 | [../CHECKLISTAPPSEC.md](../CHECKLISTAPPSEC.md) | Manual AppSec checklist (no PoCs) |
 
 ## Stack snapshot (verify in `pom.xml`)

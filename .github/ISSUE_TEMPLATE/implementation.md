@@ -40,4 +40,5 @@ labels: enhancement
 ## References
 
 - [Git workflow](../../docs/guides/git-workflow.md)
+- [Writing style](../../docs/guides/writing-style.md)
 - [Task kickoff](../../docs/guides/task-kickoff.md)
