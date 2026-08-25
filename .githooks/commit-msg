@@ -24,7 +24,12 @@ if [[ ! "$SUBJECT" =~ ^(feat|fix|docs|refactor|ci|chore|test|build|perf)(\([a-z0
   exit 1
 fi
 
-if grep -qiE 'Co-authored-by:.*(cursor|copilot|github)' "$COMMIT_MSG_FILE"; then
+if grep -qiE 'Co-authored-by:.*(cursor|copilot|github|cursoragent)' "$COMMIT_MSG_FILE"; then
   echo "commit-msg: remove IDE co-authorship trailers"
+  exit 1
+fi
+
+if grep -qiE 'Made with \[?Cursor|made with cursor' "$COMMIT_MSG_FILE"; then
+  echo "commit-msg: remove IDE marketing lines from commit message"
   exit 1
 fi

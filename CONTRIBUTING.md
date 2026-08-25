@@ -9,6 +9,9 @@ Delivery governance follows patterns from [AI Operating System](https://github.c
 | Doc | Purpose |
 | --- | ------- |
 | [`docs/README.md`](./docs/README.md) | Technical doc index (architecture, config, API, dev) |
+| [`docs/guides/writing-style.md`](./docs/guides/writing-style.md) | Commits, issues, docs — no gitmoji (with references) |
+| [`docs/guides/attribution.md`](./docs/guides/attribution.md) | Author identity — Kleilson Santos; no IDE trailers |
+| [`docs/guides/delivery-automation.md`](./docs/guides/delivery-automation.md) | Push / PR / tag triggers (AIOS-aligned) |
 | [`docs/guides/git-workflow.md`](./docs/guides/git-workflow.md) | Branches, PRs, commits |
 | [`docs/guides/task-kickoff.md`](./docs/guides/task-kickoff.md) | Issue → branch → traceability |
 | [`docs/guides/releases.md`](./docs/guides/releases.md) | SemVer, tags, CHANGELOG |
@@ -21,7 +24,7 @@ GitHub Issue → feature/* | fix/* | … → PR → main → tag vX.Y.Z
 
 Do **not** commit directly to `main`. VaultSpring does **not** use the AIOS `sandbox` branch.
 
-Commits: [Conventional Commits](https://www.conventionalcommits.org/) — **no gitmoji**.
+Commits: [Conventional Commits](https://www.conventionalcommits.org/) — **no gitmoji**. Rationale: [`docs/guides/writing-style.md`](./docs/guides/writing-style.md).
 
 ### Kickoff (required for new work)
 
@@ -37,7 +40,7 @@ bash scripts/install-hooks.sh
 # or: git config core.hooksPath .githooks
 ```
 
-- `commit-msg`: Conventional Commits; blocks IDE co-authorship trailers
+- `commit-msg`: Conventional Commits; blocks IDE co-authorship and “Made with Cursor” trailers
 - `pre-commit`: `pom.xml` version bump when `pom.xml` is staged (release prep)
 
 Do not use `--no-verify` in normal delivery.
