@@ -14,7 +14,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Etapa 2: Imagem final com apenas o JAR gerado
-FROM eclipse-temurin:17-jre
+FROM eclipse-temurin:25-jre
 
 ARG USER_ID="1001"
 ARG GROUP_ID="1001"
