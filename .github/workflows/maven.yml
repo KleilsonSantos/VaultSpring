@@ -71,6 +71,9 @@ jobs:
       - name: Checkstyle
         run: ./mvnw -B checkstyle:check --no-transfer-progress
 
+      - name: Validate observability configs
+        run: bash scripts/validate-observability-config.sh
+
       - name: Unit tests and coverage
         run: ./mvnw -B -DskipTests=false verify --no-transfer-progress
 
