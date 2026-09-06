@@ -18,6 +18,7 @@ Read and follow [`AGENTS.md`](../../AGENTS.md). Do **not** implement product cod
 4. Files/packages likely touched (`src/`, `pom.xml`, `.github/`)
 5. Risks (secrets, Boot 4 jump, CI Free-plan Sonar, breaking Flyway)
 6. Acceptance checklist (`./mvnw -B test`, CHANGELOG if notable)
+7. Reusable prompt? Suggest PKB intake per [`docs/prompts/README.md`](../../docs/prompts/README.md) — do not catalog without owner trigger
 
 ## Constraints
 
@@ -25,3 +26,4 @@ Read and follow [`AGENTS.md`](../../AGENTS.md). Do **not** implement product cod
 - Do not add IDE co-author trailers or “Made with Cursor” on PRs ([`attribution.md`](../../docs/guides/attribution.md))
 - Do not copy AIOS `sandbox`/gitmoji unless the owner asks
 - Do not plan exploit PoCs or offensive payloads
+- For reusable analysis prompts: point to [`docs/prompts/`](../../docs/prompts/README.md) or propose PKB intake — do not paste long prompts inline

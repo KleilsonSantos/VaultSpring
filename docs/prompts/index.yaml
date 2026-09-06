@@ -1,0 +1,56 @@
+# PKB catalog index (VaultSpring)
+# Machine-readable; keep in sync with by-domain/**/*.md frontmatter.
+# Validate: bash scripts/check-pkb-inventory.sh
+
+version: 1
+updated_at: 2026-09-06
+root: docs/prompts
+
+prompts:
+  - id: prompt.documentation.readme-docs-architecture-audit
+    path: by-domain/documentation/readme-docs-architecture-audit.v1.md
+    domain: documentation
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [documentation, readme, architecture-audit, docs-as-code, vaultspring]
+
+  - id: prompt.documentation.docs-code-alignment-audit
+    path: by-domain/documentation/docs-code-alignment-audit.v1.md
+    domain: documentation
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [documentation, alignment, pom-xml, ci, stack-truth]
+
+  - id: prompt.security.jwt-login-review
+    path: by-domain/security/jwt-login-review.v1.md
+    domain: security
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [security, jwt, spring-security, actuator, issue-6]
+
+  - id: prompt.spring-boot.integration-test-review
+    path: by-domain/spring-boot/integration-test-review.v1.md
+    domain: spring-boot
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [spring-boot, testcontainers, flyway, integration-tests, ci]
+
+  - id: prompt.spring-boot.integral-e2e-vault-docker-audit
+    path: by-domain/spring-boot/integral-e2e-vault-docker-audit.v1.md
+    domain: spring-boot
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [spring-boot, e2e, docker, vault, functional-test, devsecops, baseline, qa]
+
+  - id: prompt.delivery.release-readiness
+    path: by-domain/delivery/release-readiness.v1.md
+    domain: delivery
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [delivery, semver, changelog, release, ci]

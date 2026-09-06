@@ -24,6 +24,7 @@ Review the current diff or named PR. Actionable comments only; do not rewrite th
 - [ ] Docs/CHANGELOG `[Unreleased]` if the change is user-visible?
 - [ ] Conventional Commits; PR targets `main`?
 - [ ] No IDE authorship (`Co-authored-by: Cursor`, “Made with Cursor”) — see `docs/guides/attribution.md`
+- [ ] Long analysis prompts: prefer [`docs/prompts/`](../../docs/prompts/README.md) catalog over inline duplication
 
 ## Response format
 
