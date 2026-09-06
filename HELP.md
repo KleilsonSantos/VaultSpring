@@ -6,7 +6,7 @@ Guia rápido. Documentação completa: **[`docs/README.md`](./docs/README.md)**.
 
 - Spring Boot **3.5.16**, Java **17**, PostgreSQL **15**, Flyway  
 - **Spring Cloud Vault Config** (KV v2) — perfis `vault` / `prod-vault`  
-- **Spring Security** (`SecurityFilterChain`) — JWT em [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)  
+- **Spring Security** + JWT Bearer (`POST /api/v1/auth/login`) — issue [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)  
 - OpenAPI / Swagger UI no perfil **`dev`**  
 
 ## Início rápido
@@ -20,7 +20,8 @@ docker compose up -d postgres
 ./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-- API: http://localhost:8080/api/v1/users  
+- API: http://localhost:8080/api/v1/users (JWT required — login first)  
+- Login: `POST /api/v1/auth/login` — seed `john@example.com` / `secret123`  
 - Swagger: http://localhost:8080/swagger-ui.html  
 - Health: http://localhost:8080/actuator/health  
 
@@ -38,7 +39,7 @@ Render/prod sem Vault: `SPRING_PROFILES_ACTIVE=prod` + `SPRING_DATASOURCE_*`.
 ## Testes
 
 ```bash
-./mvnw -B checkstyle:check test              # unitários (H2)
+./mvnw -B checkstyle:check test              # unit tests (34 tests, H2)
 ./mvnw -B verify -Pintegration-tests        # Testcontainers (Docker)
 make test-all                               # equivalente via Makefile
 ```

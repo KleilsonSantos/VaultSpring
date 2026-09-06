@@ -31,7 +31,22 @@ flowchart TD
 | [guides/delivery-automation.md](./guides/delivery-automation.md) | All | Push / PR / tag — CI triggers and release cadence |
 | [guides/git-workflow.md](./guides/git-workflow.md) | Contributors | Issue → PR → release |
 | [guides/task-kickoff.md](./guides/task-kickoff.md) | Contributors | Issue → branch traceability |
+| [guides/local-runtime-authorization.md](./guides/local-runtime-authorization.md) | All | **MacBook gate** — task vs infra owner approval |
 | [guides/releases.md](./guides/releases.md) | Maintainers | SemVer, tags, CHANGELOG |
+| [prompts/README.md](./prompts/README.md) | All | **PKB** — catalog, intake, reusable prompts |
+
+## Prompt Knowledge Base (PKB)
+
+Reusable analysis prompts (Docs-as-Code). Intake triggers: `PKB intake` · `catalogar prompt` · `guardar prompt` — see [`prompts/README.md`](./prompts/README.md).
+
+| Domain | Examples |
+| ------ | -------- |
+| `documentation` | README/hub audit, docs ↔ code alignment |
+| `security` | JWT review (#6), AppSec checklist |
+| `spring-boot` | Integration tests, Flyway |
+| `delivery` | Release readiness, SemVer gate |
+
+Catalog: [`prompts/index.yaml`](./prompts/index.yaml) · Drift check: `bash scripts/check-pkb-inventory.sh`
 
 ## Root docs
 
@@ -49,5 +64,5 @@ flowchart TD
 
 - Java **17**, Spring Boot **3.5.16**, Spring Cloud **2025.0.3**
 - PostgreSQL **15**, Flyway, HashiCorp Vault (KV v2 via Spring Cloud Vault Config)
-- Spring Security `SecurityFilterChain` (JWT planned — issue #6)
+- Spring Security `SecurityFilterChain` + JWT Bearer (`AuthController`, `JwtService`) — issue [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)
 - springdoc OpenAPI **2.9.0**, Testcontainers, JaCoCo, Checkstyle

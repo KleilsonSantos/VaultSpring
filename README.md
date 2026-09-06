@@ -33,10 +33,11 @@ Packages under `src/main/java/com/vaultspring`:
 
 | Package | Role |
 | ------- | ---- |
-| `controller` | REST `/api/v1/users` |
-| `dto` / `service` | DTOs; BCrypt via `PasswordEncoder` |
+| `controller` | REST `/api/v1/users`, `/api/v1/auth/login` |
+| `dto` / `service` | DTOs; `UserService`, `AuthService`; BCrypt via `PasswordEncoder` |
+| `security` | `JwtService`; RFC 7807 security entry points |
 | `entity` / `repository` | JPA |
-| `config` | `SecurityConfig`, `OpenApiConfig` |
+| `config` | `SecurityConfig`, `JwtConfig`, `OpenApiConfig` |
 | `exception` | RFC 7807 `ProblemDetail` |
 
 Configuration: `src/main/resources/` (`dev`, `prod`, `hom`, `vault`, Flyway migrations).
@@ -47,7 +48,8 @@ Configuration: `src/main/resources/` (`dev`, `prod`, `hom`, `vault`, Flyway migr
 - Spring Cloud Vault Config 2025.0.x (`vault` / `prod-vault`)
 - Actuator: health (public), info/prometheus (authenticated)
 - OpenAPI / Swagger UI in `dev` (springdoc 2.9.0)
-- `SecurityFilterChain` baseline — JWT in [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)
+- JWT login (`POST /api/v1/auth/login`, HS256 Bearer) — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6) on branch `feature/6-jwt-login`
+- `/api/v1/**` protected except login; Actuator prometheus/info require JWT
 - CI: Checkstyle, unit verify, integration-tests (Testcontainers), dependency-review, docker-build, CodeQL, SonarCloud
 - Delivery governance: [`CONTRIBUTING.md`](./CONTRIBUTING.md), [`docs/guides/`](./docs/guides/)
 
@@ -55,7 +57,6 @@ Configuration: `src/main/resources/` (`dev`, `prod`, `hom`, `vault`, Flyway migr
 
 | Item | Issue |
 | ---- | ----- |
-| JWT login | [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6) |
 | Spring Boot 4.x | [#33](https://github.com/KleilsonSantos/VaultSpring/issues/33) (epic) |
 
 ## Stack
