@@ -14,7 +14,9 @@ Sources of truth:
 
 ## Expectations
 
-- Local: `./mvnw -B checkstyle:check test` before push when Java/XML changes
+- Local before commit/push: `bash scripts/pre-push-check.sh` (mirrors CI `quality`: checkstyle + verify)
+- Quick iteration: `./mvnw -B checkstyle:check test` during development; **full pre-push gate before push**
+- After push: monitor PR checks (`gh pr checks --watch`) until Maven jobs complete — do not hand off a red PR as green
 - CI quality job must pass before merge
 - CodeQL uses `github/codeql-action@v4` (v3 is deprecated). Use **either** the workflow job in `maven.yml` **or** GitHub Default CodeQL setup — not both (duplicate checks fail PRs).
 - SonarQube Cloud: **GitHub Automatic Analysis** only — do not add a Maven `sonar:sonar` job while Automatic Analysis is on (SonarCloud rejects duplicate CI analysis). PR check: `SonarCloud Code Analysis`.

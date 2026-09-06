@@ -7,6 +7,32 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Git branching aligned with AIOS: permanent **`sandbox`** integration branch + two-PR promotion to `main` ([ADR-0004](docs/adr/0004-git-branching-strategy-sandbox.md)); `scripts/bootstrap-sandbox.sh`, `scripts/check-pr-issue-link.sh`; Dependabot targets `sandbox`
+- Postman smoke collection and local environment under `tests/api/postman/` (optional audit layer; not a CI merge gate)
+- PKB: `prompt.delivery.aios-postman-api-suite` (cross-repo AIOS reference)
+- Prompt Knowledge Base (PKB): `docs/prompts/` with `index.yaml`, domains, intake triggers, and `scripts/check-pkb-inventory.sh`
+- Local runtime authorization gate for MacBook: `docs/guides/local-runtime-authorization.md`, `.cursor/rules/local-runtime-gate.mdc` — ordered pipeline: unit tests green before `ok infra`; commit only after audit/tests success and explicit owner request
+- JWT login at `POST /api/v1/auth/login` with HS256 Bearer tokens
+- OAuth2 resource server on `/api/v1/**` and authenticated Actuator routes (`/actuator/prometheus`, `/actuator/info`)
+- `vaultspring.jwt.*` configuration via `VAULTSPRING_JWT_SECRET` (never commit secrets)
+- OpenAPI Bearer security scheme for Swagger UI (dev profile)
+
+### Changed
+
+- `/api/v1/**` requires valid JWT except `/api/v1/auth/login` and public health endpoints
+- Actuator Prometheus/info use JWT instead of HTTP Basic
+- Security 401/403 responses return RFC 7807 JSON (`Bearer token required`, `invalid or expired bearer token`)
+- Profile `dev` disables Spring Cloud Vault auto-config (Vault only via `vault` / `prod-vault`)
+- Flyway `V3__align_seed_passwords.sql`: dev seed users use documented password `secret123`
+
+### Fixed
+
+- OpenAPI/Swagger: `POST /api/v1/auth/login` no longer requires Bearer auth in UI
+- Empty HTTP 401 bodies on protected routes and Actuator endpoints
+- Docs aligned with JWT API: `README.md`, `HELP.md`, `docs/api.md`, `docs/architecture.md`, `docs/README.md`
+
 ## [0.1.4] - 2026-08-25
 
 ### Added

@@ -4,6 +4,8 @@ import com.vaultspring.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /**
  * Repository interface for managing User entities.
  * Extends JpaRepository to provide CRUD operations
@@ -19,4 +21,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return true if a User with the given email exists, false otherwise.
      */
     boolean existsByEmail(String email);
+
+    /**
+     * Finds a user by email (login lookup).
+     *
+     * @param email unique email
+     * @return matching user, if any
+     */
+    Optional<User> findByEmail(String email);
 }

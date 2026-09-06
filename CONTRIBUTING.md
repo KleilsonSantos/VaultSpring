@@ -2,7 +2,7 @@
 
 Thanks for considering a contribution to **VaultSpring**.
 
-Delivery governance follows patterns from [AI Operating System](https://github.com/KleilsonSantos/ai-operating-system), adapted for a single integration branch (`main`).
+Delivery governance follows patterns from [AI Operating System](https://github.com/KleilsonSantos/ai-operating-system), including the permanent **`sandbox`** integration branch ([ADR-0004](./docs/adr/0004-git-branching-strategy-sandbox.md)).
 
 ## Guides
 
@@ -19,10 +19,10 @@ Delivery governance follows patterns from [AI Operating System](https://github.c
 ## Git flow
 
 ```text
-GitHub Issue → feature/* | fix/* | … → PR → main → tag vX.Y.Z
+GitHub Issue → feature/* | fix/* | … → PR → sandbox → PR → main → tag vX.Y.Z
 ```
 
-Do **not** commit directly to `main`. VaultSpring does **not** use the AIOS `sandbox` branch.
+Do **not** commit directly to `main` or `sandbox`. Do **not** open `feature/*` PRs straight to `main`.
 
 Commits: [Conventional Commits](https://www.conventionalcommits.org/) — **no gitmoji**. Rationale: [`docs/guides/writing-style.md`](./docs/guides/writing-style.md).
 
@@ -47,7 +47,7 @@ Do not use `--no-verify` in normal delivery.
 
 ## Quality gates
 
-To merge into `main`:
+To merge into `sandbox` or `main`:
 
 ### Local
 
@@ -82,12 +82,13 @@ bash scripts/check-semver-alignment.sh
 - Dependabot **alerts** on
 - Secret scanning + push protection on
 - Code scanning via the CodeQL job
-- Branch protection on `main`: required checks + no direct push
+- Branch protection on `main` and `sandbox`: required checks + no direct push
+- `sandbox`: require `issue-link` on PRs from work branches
 
 ## How to contribute
 
 1. Open an issue ([Implementation](./.github/ISSUE_TEMPLATE/implementation.md) or [Feature Request](./.github/ISSUE_TEMPLATE/feature_request.md))
-2. Kickoff branch from `main` (`scripts/task-kickoff.sh`)
+2. Kickoff branch from `sandbox` (`scripts/task-kickoff.sh`; bootstrap: `scripts/bootstrap-sandbox.sh`)
 3. Keep commits as `type: description`
 4. Open a PR with `Closes #N` and the template checklist
 5. Update `CHANGELOG.md` `[Unreleased]` for notable changes

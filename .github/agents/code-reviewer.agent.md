@@ -22,8 +22,9 @@ Review the current diff or named PR. Actionable comments only; do not rewrite th
 - [ ] Flyway migrations stay backward-safe?
 - [ ] CI uses current action majors (`checkout`, `setup-java`, CodeQL v4)?
 - [ ] Docs/CHANGELOG `[Unreleased]` if the change is user-visible?
-- [ ] Conventional Commits; PR targets `main`?
+- [ ] Conventional Commits; work PR → `sandbox` (`Refs #N`); promote PR → `main` (`Closes #N`)?
 - [ ] No IDE authorship (`Co-authored-by: Cursor`, “Made with Cursor”) — see `docs/guides/attribution.md`
+- [ ] Long analysis prompts: prefer [`docs/prompts/`](../../docs/prompts/README.md) catalog over inline duplication
 
 ## Response format
 

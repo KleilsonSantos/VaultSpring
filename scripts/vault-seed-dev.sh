@@ -17,14 +17,19 @@ DATASOURCE_URL="${DATASOURCE_URL:-jdbc:postgresql://postgres:5432/users_db}"
 DATASOURCE_USERNAME="${DATASOURCE_USERNAME:-admin}"
 DATASOURCE_PASSWORD="${DATASOURCE_PASSWORD:-adminpass}"
 
-if ! command -v vault >/dev/null 2>&1; then
-  echo "vault CLI not found. Install HashiCorp Vault CLI or use docker exec vault-spring-vault vault ..."
-  exit 1
-fi
+CONTAINER="${VAULT_CONTAINER:-vault-spring-vault}"
 
-vault secrets enable -path=secret kv-v2 2>/dev/null || true
+run_vault() {
+  if command -v vault >/dev/null 2>&1; then
+    vault "$@"
+  else
+    docker exec -e VAULT_ADDR="$VAULT_ADDR" -e VAULT_TOKEN="$VAULT_TOKEN" "$CONTAINER" vault "$@"
+  fi
+}
 
-vault kv put secret/vaultspring \
+run_vault secrets enable -path=secret kv-v2 2>/dev/null || true
+
+run_vault kv put secret/vaultspring \
   spring.datasource.url="${DATASOURCE_URL}" \
   spring.datasource.username="${DATASOURCE_USERNAME}" \
   spring.datasource.password="${DATASOURCE_PASSWORD}"

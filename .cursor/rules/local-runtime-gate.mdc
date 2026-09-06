@@ -1,0 +1,42 @@
+---
+description: MacBook resource gate — ordered audit → unit tests → pre-push CI parity → infra → commit → monitor GitHub CI
+alwaysApply: true
+---
+
+# Local runtime authorization gate
+
+Full policy: [`docs/guides/local-runtime-authorization.md`](../../docs/guides/local-runtime-authorization.md)
+
+## Canonical order (do not skip)
+
+1. Inspect → 2. Audit → 3. Task gate → 4. **Unit tests green** → **4b. `pre-push-check.sh`** → 5. Infra gate (if live needed) → 6. Live proof → 7. Commit-ready → 8. Commit (owner asks) → **9. Monitor GitHub CI**
+
+**Never** request infra before step 4 passes. **Never** commit/push before step 4b passes. **Never** declare PR green without step 9.
+
+## Three gates
+
+| Gate | Trigger | After |
+| ---- | ------- | ----- |
+| Task | `ok` / `prossegue` | Inspect/plan accepted |
+| Infra | `ok infra` | `./mvnw checkstyle:check test` + `pre-push-check.sh` BUILD SUCCESS |
+| Commit | owner explicitly asks | Steps 4–6 green for scope |
+
+## Pre-push (step 4b)
+
+```bash
+bash scripts/pre-push-check.sh
+```
+
+Mirrors CI `quality` job. Required before every commit/push when Java/XML changed.
+
+## Post-push (step 9)
+
+```bash
+gh pr checks --watch
+```
+
+Fix and re-push on Maven CI failure. Report Sonar/GitGuardian separately.
+
+## Commit-ready ≠ commit
+
+Report "pronto para commitar" with checklist; wait for explicit owner commit request.
