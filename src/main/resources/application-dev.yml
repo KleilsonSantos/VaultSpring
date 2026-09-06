@@ -6,6 +6,9 @@ spring:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
+  cloud:
+    vault:
+      enabled: false
   datasource:
     url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/users_db}
     username: ${POSTGRES_USER:admin}
@@ -27,3 +30,8 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+vaultspring:
+  jwt:
+    secret: ${VAULTSPRING_JWT_SECRET:dev-only-change-me-use-at-least-32-chars}
+    expiration-seconds: ${VAULTSPRING_JWT_EXPIRATION_SECONDS:3600}

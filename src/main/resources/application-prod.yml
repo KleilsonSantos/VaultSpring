@@ -35,3 +35,8 @@ springdoc:
     enabled: false
   swagger-ui:
     enabled: false
+
+vaultspring:
+  jwt:
+    secret: ${VAULTSPRING_JWT_SECRET:prod-jwt-secret-must-be-set-via-env-var-32c}
+    expiration-seconds: ${VAULTSPRING_JWT_EXPIRATION_SECONDS:3600}

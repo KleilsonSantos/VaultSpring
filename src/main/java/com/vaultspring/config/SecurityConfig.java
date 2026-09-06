@@ -1,7 +1,10 @@
 package com.vaultspring.config;
 
+import com.vaultspring.security.ProblemDetailAccessDeniedHandler;
+import com.vaultspring.security.ProblemDetailAuthenticationEntryPoint;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.boot.actuate.metrics.export.prometheus.PrometheusScrapeEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,16 +24,41 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * HTTP security for the API and Actuator. JWT login is tracked in issue #6;
- * this chain prepares CSRF, CORS, headers, and endpoint authorization.
+ * HTTP security for the API and Actuator with JWT bearer authentication.
  */
 @Configuration
 public class SecurityConfig {
 
     /**
+     * JSON 401 responses for unauthenticated callers.
+     */
+    private final ProblemDetailAuthenticationEntryPoint authenticationEntryPoint;
+
+    /**
+     * JSON 403 responses for forbidden callers.
+     */
+    private final ProblemDetailAccessDeniedHandler accessDeniedHandler;
+
+    /**
+     * @param authenticationEntryPoint RFC 7807 401 handler
+     * @param accessDeniedHandler      RFC 7807 403 handler
+     */
+    public SecurityConfig(
+            final ProblemDetailAuthenticationEntryPoint authenticationEntryPoint,
+            final ProblemDetailAccessDeniedHandler accessDeniedHandler) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
+    }
+
+    /**
      * API CORS paths.
      */
     private static final String API_CORS_PATTERN = "/api/**";
+
+    /**
+     * Public authentication endpoint.
+     */
+    private static final String LOGIN_PATH = "/api/v1/auth/login";
 
     /**
      * OpenAPI / Swagger UI paths (dev).
@@ -67,13 +95,21 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(EndpointRequest.to(HealthEndpoint.class)).permitAll()
                         .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                        .requestMatchers(LOGIN_PATH).permitAll()
                         .requestMatchers(EndpointRequest.to(PrometheusScrapeEndpoint.class)).authenticated()
                         .requestMatchers("/actuator/prometheus").authenticated()
+                        .requestMatchers(EndpointRequest.to(InfoEndpoint.class)).authenticated()
                         .requestMatchers("/actuator/info").authenticated()
                         .requestMatchers(DOCS_PATHS).permitAll()
-                        .requestMatchers("/api/v1/**").permitAll()
+                        .requestMatchers("/api/v1/**").authenticated()
                         .anyRequest().authenticated())
-                .httpBasic(Customizer.withDefaults());
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .jwt(Customizer.withDefaults()));
 
         return http.build();
     }
@@ -89,7 +125,7 @@ public class SecurityConfig {
     }
 
     /**
-     * @return CORS rules for the public API (JWT #6 will reuse the same origin policy)
+     * @return CORS rules for the public API
      */
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
