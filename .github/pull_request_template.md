@@ -1,8 +1,13 @@
 ## Summary
 
-<!-- What changed and why. Link the issue: Closes #N -->
+<!-- What changed and why. Link the issue below. -->
 
-Closes #
+## PR type
+
+- [ ] **Work → sandbox** — use `Refs #N` (required for CI `issue-link`)
+- [ ] **Promote sandbox → main** — use `Closes #N`
+
+Refs # / Closes #
 
 ## Change type
 
@@ -16,14 +21,15 @@ Closes #
 
 ## Traceability
 
-- [ ] GitHub issue exists and is linked above (`Closes #N`)
+- [ ] GitHub issue exists and is linked above
 - [ ] Branch uses semantic prefix (`feature/`, `fix/`, …) — ideally `feature/<issue>-<slug>`
 - [ ] Kickoff comment on the issue (see `scripts/task-kickoff.sh`)
+- [ ] Work PR targets **`sandbox`** (not `main` directly)
 
 ## Checklist
 
-- [ ] Branch created from `main`
-- [ ] Target is `main`
+- [ ] Branch created from **`sandbox`** (or bootstrap documented)
+- [ ] Target branch is **`sandbox`** (work) or **`main`** (promote only)
 - [ ] `./mvnw -B checkstyle:check test` passed locally (when Java/XML changed)
 - [ ] `./mvnw -B verify -Pintegration-tests` when persistence/Flyway/API integration touched (Docker)
 - [ ] Docs updated if this PR changes build, run, or architecture

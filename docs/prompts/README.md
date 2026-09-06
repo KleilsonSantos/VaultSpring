@@ -79,7 +79,7 @@ treat that as **catalog only**, not “run the analysis now”.
 7. Fill required frontmatter + register the row in [`index.yaml`](./index.yaml).
 8. Add a short **catalog note** if a related ADR, issue, or guide already exists — link it; do not duplicate results.
 9. Keep the chat reply to: id, path, domain, duplicate status.
-10. Commit / PR only when the owner asks. Branch from `main` (`docs/*` or `feature/*`), PR → `main` (no `sandbox` branch).
+10. Commit / PR only when the owner asks. Branch from **`sandbox`** (`docs/*` or `feature/*`), PR → **`sandbox`** (`Refs #N`); promote → **`main`** (`Closes #N`). Bootstrap: `scripts/bootstrap-sandbox.sh`.
 
 **Excluded:** one-off chat dumps, vendor skill packs copied wholesale, prompts that only repeat `AGENTS.md` / `.cursor/rules`, auto-persisting every chat message.
 

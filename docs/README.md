@@ -29,7 +29,7 @@ flowchart TD
 | [guides/writing-style.md](./guides/writing-style.md) | All | **No gitmoji** — commits, issues, technical docs |
 | [guides/attribution.md](./guides/attribution.md) | All | Author identity — no IDE co-author trailers |
 | [guides/delivery-automation.md](./guides/delivery-automation.md) | All | Push / PR / tag — CI triggers and release cadence |
-| [guides/git-workflow.md](./guides/git-workflow.md) | Contributors | Issue → PR → release |
+| [guides/git-workflow.md](./guides/git-workflow.md) | Contributors | Issue → `sandbox` → `main` → release ([ADR-0004](./adr/0004-git-branching-strategy-sandbox.md)) |
 | [guides/task-kickoff.md](./guides/task-kickoff.md) | Contributors | Issue → branch traceability |
 | [guides/local-runtime-authorization.md](./guides/local-runtime-authorization.md) | All | **MacBook gate** — task vs infra owner approval |
 | [guides/releases.md](./guides/releases.md) | Maintainers | SemVer, tags, CHANGELOG |

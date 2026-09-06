@@ -11,14 +11,14 @@ Use this file as a short delivery bridge. Details: [`docs/README.md`](../../docs
 
 1. **Issue** with acceptance criteria (`.github/ISSUE_TEMPLATE/implementation.md`)
 2. **Kickoff**: `bash scripts/task-kickoff.sh <issue> <type>/<slug>`
-3. **PR** → `main` with `Closes #N`
+3. **PR** → `sandbox` (`Refs #N`), then promote → `main` (`Closes #N`)
 4. **Release**: `pom.xml` + `CHANGELOG [X.Y.Z]` + annotated tag `vX.Y.Z` — see `docs/guides/releases.md`
 
 ## Git
 
-- Semantic branch from `main` (`feature/*`, `fix/*`, `docs/*`, `chore/*`, `ci/*`, `refactor/*`, `test/*`)
-- No `sandbox` branch in this repo
-- Do not force-push `main`
+- Semantic branch from **`sandbox`** (`feature/*`, `fix/*`, `docs/*`, `chore/*`, `ci/*`, `refactor/*`, `test/*`)
+- Permanent branches: **`sandbox`** (integration) + **`main`** (releases) — [ADR-0004](../../docs/adr/0004-git-branching-strategy-sandbox.md)
+- Do not force-push `main` or `sandbox`
 - Commit only when the human asks
 
 ## Commits

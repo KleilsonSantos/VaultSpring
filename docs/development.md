@@ -23,7 +23,7 @@ flowchart LR
 
 ## CI pipeline overview
 
-Runs on every push/PR to `main` (`.github/workflows/maven.yml`):
+Runs on every push/PR to **`main`** and **`sandbox`** (`.github/workflows/maven.yml`); SemVer gate only on `main`:
 
 ```mermaid
 flowchart TB
@@ -114,7 +114,9 @@ Details: [configuration.md](./configuration.md).
 
 | Script | Purpose |
 | ------ | ------- |
-| `scripts/task-kickoff.sh <issue> <branch>` | Branch from `main` + issue comment |
+| `scripts/task-kickoff.sh <issue> <branch>` | Branch from `sandbox` + issue comment |
+| `scripts/bootstrap-sandbox.sh` | One-time create remote `sandbox` from `main` |
+| `scripts/check-pr-issue-link.sh` | CI: require `Refs #N` on PRs → `sandbox` |
 | `scripts/install-hooks.sh` | Enable `.githooks/` (Conventional Commits) |
 | `scripts/check-semver-alignment.sh` | Release gate (CI on `main`) |
 | `scripts/vault-seed-dev.sh` | Seed Vault KV for local JDBC |
@@ -153,7 +155,7 @@ bash scripts/install-hooks.sh
 
 ## Delivery flow
 
-New work: GitHub issue → `scripts/task-kickoff.sh` → PR with `Closes #N` → `main`.
+New work: GitHub issue → `scripts/task-kickoff.sh` → PR `Refs #N` → **`sandbox`** → promote PR `Closes #N` → **`main`**.
 
 See [guides/git-workflow.md](./guides/git-workflow.md) and [../CONTRIBUTING.md](../CONTRIBUTING.md).
 

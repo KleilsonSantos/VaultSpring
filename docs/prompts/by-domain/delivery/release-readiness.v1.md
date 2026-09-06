@@ -26,7 +26,7 @@ Validar se o repositório está pronto para PR `chore: release vX.Y.Z`, tag anot
 
 ## Constraints
 
-- Fluxo: slices mergeados em `main` → PR release dedicado → tag `vX.Y.Z` → **não** `gh release create` manual se `release.yml` ativo
+- Fluxo: slices em **`sandbox`** → promote PR → **`main`** → PR release dedicado → tag `vX.Y.Z` → **não** `gh release create` manual se `release.yml` ativo
 - SNAPSHOT em `main` é ciclo dev — ver fix SemVer gate (#66)
 - Conventional Commits, sem gitmoji
 

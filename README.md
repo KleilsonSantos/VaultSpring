@@ -91,7 +91,7 @@ Details: [`docs/development.md`](./docs/development.md).
 - Modular API, RFC 7807 errors, OpenAPI, Testcontainers IT
 - Spring Cloud Vault (KV v2), Security filter chain
 - Technical docs hub under `docs/`
-- AIOS-aligned Git flow (issue → PR → `main` → tag)
+- AIOS-aligned Git flow (issue → PR → `sandbox` → PR → `main` → tag)
 
 ## Contributing
 

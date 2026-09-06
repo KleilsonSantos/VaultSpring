@@ -31,7 +31,7 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 - **Quality gates**: `.cursor/rules/quality-gates.mdc`, Checkstyle, JaCoCo, CodeQL, Sonar on `main`
 - **Local runtime (MacBook)**: [`docs/guides/local-runtime-authorization.md`](docs/guides/local-runtime-authorization.md), `.cursor/rules/local-runtime-gate.mdc` — **order:** inspect → audit → unit tests green → **`ok infra`** (if live needed) → live proof → commit-ready → commit only when you ask
 - **PKB intake** (`PKB intake` / `catalogar prompt` / `guardar prompt`): catalog into `docs/prompts/` per [`docs/prompts/README.md`](docs/prompts/README.md). Do **not** run the prompt unless the owner also says `ok` / `prossegue`. Validate with `bash scripts/check-pkb-inventory.sh`.
-- **AIOS reference platform**: [ai-operating-system](https://github.com/KleilsonSantos/ai-operating-system) (governance patterns; no `sandbox` branch here)
+- **AIOS reference platform**: [ai-operating-system](https://github.com/KleilsonSantos/ai-operating-system) (governance patterns; **`sandbox` + `main`** — [ADR-0004](docs/adr/0004-git-branching-strategy-sandbox.md))
 
 ## Hard constraints
 
@@ -40,7 +40,7 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 - **Traceability**: new implementation work starts with a GitHub issue; PR body includes `Closes #N`.
 - Commit only when the human asks.
 - Never commit `.env`, Vault unseal keys, or `vault/data/`.
-- Default Git flow: semantic branch from `main` → PR → `main`. Do not introduce an AIOS `sandbox` branch unless the owner asks.
+- Default Git flow: semantic branch from **`sandbox`** → PR → **`sandbox`** → PR → **`main`**. Bootstrap: `bash scripts/bootstrap-sandbox.sh` if remote `sandbox` is missing.
 
 ## Owner cadence
 

@@ -490,4 +490,4 @@ UNDERSTAND → INSPECT → CHECK ENV → CHECK DOCKER → CHECK PORTS → CHECK 
 
 Primeiro provar o que existe. Depois corrigir. Depois provar novamente.
 
-**VaultSpring delivery:** branch `main` only, PR traceável, commit só quando owner pedir.
+**VaultSpring delivery:** `sandbox` + `main` ([ADR-0004](../../../adr/0004-git-branching-strategy-sandbox.md)); PR traceável; commit só quando owner pedir.
