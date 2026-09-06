@@ -1,0 +1,160 @@
+{
+  "info": {
+    "_postman_id": "vaultspring-smoke-v1",
+    "name": "VaultSpring - Smoke Tests",
+    "description": "Smoke tests aligned with docs/api.md and scripts/api-live-smoke.sh. Requires app running on {{base_url}} (profile dev).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 - Health",
+      "item": [
+        {
+          "name": "SMOKE-001 GET /actuator/health",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('status UP', () => {",
+                  "  const j = pm.response.json();",
+                  "  pm.expect(j.status).to.eql('UP');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/actuator/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 - Actuator auth",
+      "item": [
+        {
+          "name": "SMOKE-002 GET /actuator/prometheus without token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));",
+                  "pm.test('RFC 7807 detail', () => {",
+                  "  const j = pm.response.json();",
+                  "  pm.expect(j.detail).to.include('Bearer');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/actuator/prometheus"
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 - Auth login",
+      "item": [
+        {
+          "name": "SMOKE-003 POST /api/v1/auth/login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Bearer token issued', () => {",
+                  "  const j = pm.response.json();",
+                  "  pm.expect(j.tokenType).to.eql('Bearer');",
+                  "  pm.expect(j.accessToken).to.be.a('string').and.not.empty;",
+                  "  pm.expect(j.expiresIn).to.eql(3600);",
+                  "  pm.environment.set('access_token', j.accessToken);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{smoke_email}}\",\n  \"password\": \"{{smoke_password}}\"\n}"
+            },
+            "url": "{{base_url}}/api/v1/auth/login"
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 - Users API",
+      "item": [
+        {
+          "name": "SMOKE-004 GET /api/v1/users without token (401)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 401', () => pm.response.to.have.status(401));",
+                  "pm.test('detail present', () => {",
+                  "  pm.expect(pm.response.json().detail).to.include('Bearer');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{base_url}}/api/v1/users"
+          }
+        },
+        {
+          "name": "SMOKE-005 GET /api/v1/users with Bearer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('HTTP 200', () => pm.response.to.have.status(200));",
+                  "pm.test('array of users', () => {",
+                  "  pm.expect(pm.response.json()).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": "{{base_url}}/api/v1/users"
+          }
+        }
+      ]
+    }
+  ]
+}

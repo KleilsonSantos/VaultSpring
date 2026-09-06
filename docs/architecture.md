@@ -117,7 +117,7 @@ Implemented in `SecurityConfig`:
 | `/actuator/health`, `/actuator/health/**` | Public |
 | `/api/v1/**` | Public (JWT login tracked in [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)) |
 | `/swagger-ui/**`, `/v3/api-docs/**` | Public (disabled in prod via springdoc) |
-| `/actuator/prometheus`, `/actuator/info` | Authenticated (HTTP Basic for now) |
+| `/actuator/prometheus`, `/actuator/info` | Authenticated (Bearer JWT) |
 | Other | Authenticated |
 
 - CSRF disabled (stateless API baseline)

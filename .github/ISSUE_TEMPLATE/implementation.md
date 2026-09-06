@@ -22,8 +22,8 @@ labels: enhancement
 
 | Field | Value |
 | ----- | ----- |
-| Target branch | `main` |
-| Work branch | `feature/<issue>-<slug>` |
+| Target branch | `sandbox` (integrate) → `main` (promote) |
+| Work branch | `feature/<issue>-<slug>` from `sandbox` |
 | CHANGELOG | `[Unreleased]` when merged |
 | Release | patch / minor / none |
 

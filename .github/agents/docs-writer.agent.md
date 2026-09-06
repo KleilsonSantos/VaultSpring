@@ -18,6 +18,7 @@ Given a diff (or requested scope):
 2. Update `README.md` / `HELP.md` if build, run, or architecture changed
 3. Do not invent versions or Git tags
 4. Keep tone factual
+5. Reusable prompts belong in [`docs/prompts/`](../../docs/prompts/README.md) (PKB intake) — not duplicated in README
 
 ## Git
 

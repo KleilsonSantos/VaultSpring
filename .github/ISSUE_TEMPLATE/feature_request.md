@@ -17,8 +17,9 @@ labels: enhancement
 
 | Field | Value |
 | ----- | ----- |
-| Work branch | `feature/<issue>-<slug>` |
-| PR target | `main` |
+| Work branch | `feature/<issue>-<slug>` (from `sandbox`) |
+| PR #1 target | `sandbox` (`Refs #N`) |
+| PR #2 target | `main` (`Closes #N`) |
 
 ## Out of scope
 

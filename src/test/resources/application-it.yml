@@ -15,6 +15,11 @@ spring:
     vault:
       enabled: false
 
+vaultspring:
+  jwt:
+    secret: it-jwt-secret-at-least-32-characters-long!!
+    expiration-seconds: 3600
+
 springdoc:
   api-docs:
     enabled: false

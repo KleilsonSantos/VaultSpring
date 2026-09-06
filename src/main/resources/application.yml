@@ -24,3 +24,8 @@ management:
     metrics:
       export:
         enabled: true
+
+vaultspring:
+  jwt:
+    secret: ${VAULTSPRING_JWT_SECRET:}
+    expiration-seconds: ${VAULTSPRING_JWT_EXPIRATION_SECONDS:3600}

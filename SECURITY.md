@@ -21,7 +21,7 @@ We aim to respond within 5 business days.
 | Feature | Expected posture | Notes |
 | ------- | ---------------- | ----- |
 | Dependabot alerts | On | Complements OWASP Dependency-Check (`-Pdependency-check`) |
-| Dependabot version updates | On → `main` | See `.github/dependabot.yml` |
+| Dependabot version updates | On → `sandbox` | See `.github/dependabot.yml`; promote via PR to `main` |
 | Secret scanning + push protection | On | Block accidental secret commits |
 | Code scanning (CodeQL) | On via CI workflow only | `java-kotlin`, CodeQL Action v4 — **disable** GitHub Default CodeQL setup to avoid duplicate analysis |
 | Spring Cloud Vault | On (profile `vault`) | KV v2 via `spring-cloud-starter-vault-config` 2025.0.x |

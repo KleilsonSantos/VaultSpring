@@ -20,6 +20,7 @@ import lombok.AccessLevel;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -97,4 +98,15 @@ public class User implements Serializable {
     @LastModifiedDate
     @Column(name = "user_updated_at")
     private LocalDateTime updatedAt;
+
+    /**
+     * Verifies a plaintext password against the stored BCrypt hash.
+     *
+     * @param encoder password encoder
+     * @param rawPassword plaintext candidate
+     * @return true when the password matches
+     */
+    public boolean matchesPassword(final PasswordEncoder encoder, final String rawPassword) {
+        return encoder.matches(rawPassword, password);
+    }
 }

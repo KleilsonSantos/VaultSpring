@@ -23,7 +23,7 @@ flowchart LR
 
 ## CI pipeline overview
 
-Runs on every push/PR to `main` (`.github/workflows/maven.yml`):
+Runs on every push/PR to **`main`** and **`sandbox`** (`.github/workflows/maven.yml`); SemVer gate only on `main`:
 
 ```mermaid
 flowchart TB
@@ -59,6 +59,34 @@ docker compose up -d postgres
 - Swagger UI (dev): http://localhost:8080/swagger-ui.html  
 - Health: http://localhost:8080/actuator/health  
 
+### Dev seed users (Flyway)
+
+After migrations, log in with any seeded account:
+
+| Email | Password |
+| ----- | -------- |
+| `john@example.com` | `secret123` |
+| `jane@example.com` | `secret123` |
+
+(V3 migration aligns legacy seed hashes to `secret123`.)
+
+Live smoke (app must be running on `:8080`):
+
+```bash
+bash scripts/api-live-smoke.sh
+```
+
+Postman (optional — same scenarios as smoke script): import [`tests/api/postman/`](../tests/api/postman/README.md). **Not blocking** for commit/merge if Collections are absent or stale; Maven + smoke script are the gates.
+
+## Test layers (audit flow)
+
+| Layer | Command / artifact | Merge-blocking? |
+| ----- | ------------------ | --------------- |
+| Unit + embedded HTTP | `./mvnw -B checkstyle:check test` | **Yes** |
+| Integration (Docker) | `bash scripts/run-integration-tests.sh` | **Yes** when API/DB touched |
+| Live curl smoke | `bash scripts/api-live-smoke.sh` | **Yes** when live proof required |
+| Postman Collection Runner | `tests/api/postman/collections/` | **No** — regression / audit aid |
+
 ## Quick start (Compose + Vault)
 
 ```bash
@@ -76,7 +104,7 @@ Details: [configuration.md](./configuration.md).
 ### Maven
 
 ```bash
-./mvnw -B checkstyle:check test          # unit tests (12 tests, H2)
+./mvnw -B checkstyle:check test          # unit tests (34 tests, H2)
 ./mvnw -B verify -Pintegration-tests     # + UserApiIT (requires Docker)
 ./mvnw -B verify                         # unit + JaCoCo report
 ```
@@ -97,7 +125,9 @@ Details: [configuration.md](./configuration.md).
 
 | Script | Purpose |
 | ------ | ------- |
-| `scripts/task-kickoff.sh <issue> <branch>` | Branch from `main` + issue comment |
+| `scripts/task-kickoff.sh <issue> <branch>` | Branch from `sandbox` + issue comment |
+| `scripts/bootstrap-sandbox.sh` | One-time create remote `sandbox` from `main` |
+| `scripts/check-pr-issue-link.sh` | CI: require `Refs #N` on PRs → `sandbox` |
 | `scripts/install-hooks.sh` | Enable `.githooks/` (Conventional Commits) |
 | `scripts/check-semver-alignment.sh` | Release gate (CI on `main`) |
 | `scripts/vault-seed-dev.sh` | Seed Vault KV for local JDBC |
@@ -136,7 +166,7 @@ bash scripts/install-hooks.sh
 
 ## Delivery flow
 
-New work: GitHub issue → `scripts/task-kickoff.sh` → PR with `Closes #N` → `main`.
+New work: GitHub issue → `scripts/task-kickoff.sh` → PR `Refs #N` → **`sandbox`** → promote PR `Closes #N` → **`main`**.
 
 See [guides/git-workflow.md](./guides/git-workflow.md) and [../CONTRIBUTING.md](../CONTRIBUTING.md).
 
@@ -150,3 +180,21 @@ See [guides/git-workflow.md](./guides/git-workflow.md) and [../CONTRIBUTING.md](
 | Integration tests skip | Docker daemon running; `disabledWithoutDocker = true` on IT |
 
 Open an issue with logs and profile/env (no secrets).
+
+## Local runtime authorization (agents & contributors)
+
+Shared MacBook — **canonical order:**
+
+```text
+inspect → audit → ok/prossegue → unit tests GREEN → ok infra → live proof → commit-ready → commit (owner asks)
+```
+
+| Gate | Owner says | When |
+| ---- | ---------- | ---- |
+| Task | `ok` / `prossegue` | After plan accepted |
+| Infra | `ok infra` / `autorizo infra` / `prossegue infra` | **After unit tests pass** |
+| Commit | explicit request | **After audit + tests (+ live if required) pass** |
+
+Full policy: [`guides/local-runtime-authorization.md`](./guides/local-runtime-authorization.md) · Cursor rule: `.cursor/rules/local-runtime-gate.mdc`
+
+Live smoke (step 6, with infra approval): `bash scripts/api-live-smoke.sh`
