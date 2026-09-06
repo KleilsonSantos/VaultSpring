@@ -17,6 +17,8 @@ Agents and contributors follow this sequence. **Do not skip or reorder steps.**
        ↓
 4. UNIT PROOF  ./mvnw -B checkstyle:check test → BUILD SUCCESS (required)
        ↓
+4b. PRE-PUSH   bash scripts/pre-push-check.sh → mirrors CI quality job (required before commit/push)
+       ↓
 5. INFRA GATE  only if live/Docker/Vault/E2E still needed — owner: ok infra / autorizo infra
        ↓
 6. LIVE PROOF  minimal Compose/JVM, curl/smoke, IT with Testcontainers → record status + body
@@ -24,11 +26,14 @@ Agents and contributors follow this sequence. **Do not skip or reorder steps.**
 7. COMMIT READY report success, diff summary, suggested Conventional Commit messages
        ↓
 8. COMMIT      only when owner explicitly asks to commit (never automatic)
+       ↓
+9. POST-PUSH   monitor GitHub CI on the PR until required checks finish (gh pr checks --watch)
 ```
 
 **Rules:**
 
 - **Step 5 never before step 4.** Do not request `ok infra` until unit tests (and any in-scope fixes) pass.
+- **Step 4b never before step 4; step 8 never before 4b.** Do not commit or push until `pre-push-check.sh` passes (same scope as CI `quality` job).
 - **Step 8 never before steps 4–6.** Do not commit until audit scope is green: unit tests mandatory; live proof mandatory when the task required infra.
 - If live proof is **not** needed, step 5–6 may be skipped and marked `N/A` in the report — still require step 4 before commit-ready.
 - If step 6 fails, return to step 3 (fix) and re-run 4 → 5 → 6; do not commit.
@@ -91,12 +96,24 @@ Before stating "ready to commit", confirm:
 
 - [ ] Audit scope executed and reported
 - [ ] `./mvnw -B checkstyle:check test` — BUILD SUCCESS
+- [ ] `bash scripts/pre-push-check.sh` — BUILD SUCCESS (CI parity)
 - [ ] Live proof done or explicitly `N/A` with justification
 - [ ] CHANGELOG / docs updated when behavior changed
 - [ ] No secrets in diff (`.env`, tokens, unseal keys)
 - [ ] Suggested commit message(s) — Conventional Commits, one concern per commit
 
 Wait for owner to say **commit** — do not commit on "ready to commit" alone.
+
+## Post-push CI monitoring (step 9 — mandatory after push)
+
+After `git push` opens or updates a PR:
+
+1. `gh pr checks --watch` (or poll until `quality`, `integration-tests`, `issue-link` complete)
+2. On **FAIL**: read logs (`gh run view --log-failed`), fix locally, re-run `pre-push-check.sh`, push again
+3. Do **not** tell the owner the PR is green until required Maven CI jobs pass
+4. External checks (SonarCloud, GitGuardian) — report status; distinguish from Maven `quality` failures
+
+Agents must not end the turn after push without checking CI status at least once.
 
 ## Owner cadence (summary)
 

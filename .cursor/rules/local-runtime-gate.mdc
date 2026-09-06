@@ -1,5 +1,5 @@
 ---
-description: MacBook resource gate — ordered audit → unit tests → infra approval → live proof → commit only when owner asks
+description: MacBook resource gate — ordered audit → unit tests → pre-push CI parity → infra → commit → monitor GitHub CI
 alwaysApply: true
 ---
 
@@ -9,29 +9,33 @@ Full policy: [`docs/guides/local-runtime-authorization.md`](../../docs/guides/lo
 
 ## Canonical order (do not skip)
 
-1. Inspect (read-only) → 2. Audit report → 3. Task gate (`ok`/`prossegue`) → 4. **Unit tests green** → 5. Infra gate (`ok infra`) **only if live proof needed** → 6. Live proof → 7. Commit-ready report → 8. Commit **only when owner explicitly asks**.
+1. Inspect → 2. Audit → 3. Task gate → 4. **Unit tests green** → **4b. `pre-push-check.sh`** → 5. Infra gate (if live needed) → 6. Live proof → 7. Commit-ready → 8. Commit (owner asks) → **9. Monitor GitHub CI**
 
-**Never** request infra before step 4 passes. **Never** commit before steps 4–6 succeed for the task scope.
+**Never** request infra before step 4 passes. **Never** commit/push before step 4b passes. **Never** declare PR green without step 9.
 
 ## Three gates
 
 | Gate | Trigger | After |
 | ---- | ------- | ----- |
 | Task | `ok` / `prossegue` | Inspect/plan accepted |
-| Infra | `ok infra` / `autorizo infra` / `prossegue infra` | `./mvnw checkstyle:check test` BUILD SUCCESS |
-| Commit | owner explicitly asks | Audit + unit (+ live if required) all green |
+| Infra | `ok infra` | `./mvnw checkstyle:check test` + `pre-push-check.sh` BUILD SUCCESS |
+| Commit | owner explicitly asks | Steps 4–6 green for scope |
 
-## Read-only without infra
+## Pre-push (step 4b)
 
-Steps 1–2; `docker ps`; `docker compose config`; `lsof`; `colima status`; unit tests under task gate.
+```bash
+bash scripts/pre-push-check.sh
+```
 
-## Never without infra gate
+Mirrors CI `quality` job. Required before every commit/push when Java/XML changed.
 
-`colima start`, `docker compose up`, `spring-boot:run`, `-Pintegration-tests`, live curl/smoke on agent-started stack, `docker compose down -v`.
+## Post-push (step 9)
 
-## Infra brief must cite unit test success
+```bash
+gh pr checks --watch
+```
 
-Then: services, ports, coexistence, MacBook impact, stop plan → ask `ok infra`.
+Fix and re-push on Maven CI failure. Report Sonar/GitGuardian separately.
 
 ## Commit-ready ≠ commit
 

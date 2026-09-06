@@ -2,6 +2,7 @@ package com.vaultspring;
 
 import com.vaultspring.entity.User;
 import com.vaultspring.repository.UserRepository;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,7 +11,10 @@ import org.springframework.test.context.ActiveProfiles;
 
 /**
  * Seeds a known dev user for live curl audits against localhost:8080.
+ * Excluded from default Surefire (tag {@code live}) — requires PostgreSQL dev profile.
+ * Run manually: {@code ./mvnw test -Dgroups=live} with Postgres up.
  */
+@Tag("live")
 @SpringBootTest
 @ActiveProfiles("dev")
 class LiveAuditSeedTest {
