@@ -3,6 +3,7 @@ package com.vaultspring.service;
 import com.vaultspring.dto.LoginRequest;
 import com.vaultspring.dto.LoginResponse;
 import com.vaultspring.entity.User;
+import com.vaultspring.observability.AuthMetrics;
 import com.vaultspring.repository.UserRepository;
 import com.vaultspring.security.JwtService;
 import org.springframework.http.HttpStatus;
@@ -33,17 +34,25 @@ public class AuthService {
     private final JwtService jwtService;
 
     /**
+     * Login observability metrics.
+     */
+    private final AuthMetrics authMetrics;
+
+    /**
      * @param userRepository  user persistence
      * @param passwordEncoder password hasher
      * @param jwtService      JWT issuer
+     * @param authMetrics     login metrics
      */
     public AuthService(
             final UserRepository userRepository,
             final PasswordEncoder passwordEncoder,
-            final JwtService jwtService) {
+            final JwtService jwtService,
+            final AuthMetrics authMetrics) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.authMetrics = authMetrics;
     }
 
     /**
@@ -54,14 +63,21 @@ public class AuthService {
      */
     @Transactional(readOnly = true)
     public LoginResponse login(final LoginRequest request) {
-        User user = userRepository.findByEmail(request.email())
-                .orElseThrow(() -> invalidCredentials());
+        return authMetrics.loginDurationTimer().record(() -> {
+            User user = userRepository.findByEmail(request.email())
+                    .orElseThrow(() -> {
+                        authMetrics.recordLoginFailure();
+                        return invalidCredentials();
+                    });
 
-        if (!user.matchesPassword(passwordEncoder, request.password())) {
-            throw invalidCredentials();
-        }
+            if (!user.matchesPassword(passwordEncoder, request.password())) {
+                authMetrics.recordLoginFailure();
+                throw invalidCredentials();
+            }
 
-        return jwtService.createLoginResponse(user);
+            authMetrics.recordLoginSuccess();
+            return jwtService.createLoginResponse(user);
+        });
     }
 
     /**

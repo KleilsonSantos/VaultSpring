@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false">
+    <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="vaultspring"/>
+    <springProperty scope="context" name="appEnv" source="APP_ENV" defaultValue="dev"/>
+
+    <conversionRule conversionWord="sanitize" converterClass="com.vaultspring.observability.SensitiveDataConverter"/>
+
+    <springProfile name="prod | prod-vault | hom">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+                <customFields>{"service.name":"${appName}","deployment.environment":"${appEnv}"}</customFields>
+                <includeMdcKeyName>correlation_id</includeMdcKeyName>
+                <includeMdcKeyName>traceId</includeMdcKeyName>
+                <includeMdcKeyName>spanId</includeMdcKeyName>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="dev | test | default">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} correlation_id=%X{correlation_id} trace_id=%X{traceId} span_id=%X{spanId} - %sanitize%n</pattern>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+</configuration>

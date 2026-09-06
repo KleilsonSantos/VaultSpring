@@ -15,15 +15,37 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus
+        include: health,info,prometheus,metrics
   endpoint:
     health:
       probes:
         enabled: true
+      group:
+        liveness:
+          include: livenessState
+        readiness:
+          include: readinessState,db
+      show-details: when_authorized
+    metrics:
+      access: read_only
+    prometheus:
+      access: read_only
   prometheus:
     metrics:
       export:
         enabled: true
+  tracing:
+    enabled: true
+    sampling:
+      probability: ${OTEL_TRACES_SAMPLER_ARG:1.0}
+  otlp:
+    tracing:
+      endpoint: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4318/v1/traces}
+      timeout: 5s
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: ${APP_ENV:dev}
 
 vaultspring:
   jwt:
