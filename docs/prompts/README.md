@@ -36,7 +36,7 @@ Naming: `{slug}.v{n}.md` — descriptive English kebab slug, integer version `n`
 | `documentation` | README/docs hub audits, docs-as-code alignment |
 | `security` | JWT, AppSec checklist runs, Vault posture (no exploit PoCs) |
 | `spring-boot` | API, Flyway, Testcontainers, configuration reviews |
-| `delivery` | Release readiness, SemVer, CI/delivery automation |
+| `delivery` | Release readiness, SemVer, CI/delivery automation, Postman API suites (VaultSpring or cross-repo AIOS reference) |
 | `templates` | Skeletons only — promote to `by-domain/` when ready |
 
 Do **not** invent a new domain without owner approval.

@@ -200,6 +200,15 @@ curl -s -X POST http://localhost:8080/api/v1/users \
 
 Live smoke script: `bash scripts/api-live-smoke.sh` (app must be running).
 
+## Postman (optional regression layer)
+
+Import from [`tests/api/postman/`](../tests/api/postman/README.md):
+
+- **Collection:** `VaultSpring - Smoke Tests` — mirrors the curl smoke flow (health, 401, login, users).
+- **Environment:** `VaultSpring - Local` — `base_url`, seed credentials, `access_token` (set by login request).
+
+Postman is for **manual audit and regression**; it is **not** a merge-blocking CI gate. Required gates remain `./mvnw test` and (when applicable) `api-live-smoke.sh` / Testcontainers IT.
+
 ## Security testing
 
 Manual checklist: [../CHECKLISTAPPSEC.md](../CHECKLISTAPPSEC.md). Do not commit exploit payloads or scan results with secrets.

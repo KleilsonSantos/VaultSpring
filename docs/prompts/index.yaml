@@ -54,3 +54,11 @@ prompts:
     status: active
     language: pt-BR
     tags: [delivery, semver, changelog, release, ci]
+
+  - id: prompt.delivery.aios-postman-api-suite
+    path: by-domain/delivery/aios-postman-api-suite.v1.md
+    domain: delivery
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [delivery, postman, api-testing, aios, mcp, console, ci, integration-tests]

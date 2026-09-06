@@ -10,6 +10,8 @@ and this project uses [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Git branching aligned with AIOS: permanent **`sandbox`** integration branch + two-PR promotion to `main` ([ADR-0004](docs/adr/0004-git-branching-strategy-sandbox.md)); `scripts/bootstrap-sandbox.sh`, `scripts/check-pr-issue-link.sh`; Dependabot targets `sandbox`
+- Postman smoke collection and local environment under `tests/api/postman/` (optional audit layer; not a CI merge gate)
+- PKB: `prompt.delivery.aios-postman-api-suite` (cross-repo AIOS reference)
 - Prompt Knowledge Base (PKB): `docs/prompts/` with `index.yaml`, domains, intake triggers, and `scripts/check-pkb-inventory.sh`
 - Local runtime authorization gate for MacBook: `docs/guides/local-runtime-authorization.md`, `.cursor/rules/local-runtime-gate.mdc` — ordered pipeline: unit tests green before `ok infra`; commit only after audit/tests success and explicit owner request
 - JWT login at `POST /api/v1/auth/login` with HS256 Bearer tokens

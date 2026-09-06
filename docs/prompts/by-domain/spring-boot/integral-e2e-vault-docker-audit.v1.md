@@ -100,7 +100,7 @@ Antes de modificar qualquer código, configuração, Dockerfile, compose, teste 
 10. Execute os testes existentes.
 11. Faça testes funcionais.
 12. Faça testes de integração.
-13. Faça testes da API.
+13. Faça testes da API (Maven `ApiFunctionalAuditTest`, `api-live-smoke.sh`; Postman smoke opcional — ver `tests/api/postman/` — **não bloqueia** commit se ausente).
 14. Faça testes envolvendo o Vault.
 15. Faça o fluxo E2E.
 16. Registre problemas encontrados.

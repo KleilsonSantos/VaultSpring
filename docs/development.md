@@ -76,6 +76,17 @@ Live smoke (app must be running on `:8080`):
 bash scripts/api-live-smoke.sh
 ```
 
+Postman (optional — same scenarios as smoke script): import [`tests/api/postman/`](../tests/api/postman/README.md). **Not blocking** for commit/merge if Collections are absent or stale; Maven + smoke script are the gates.
+
+## Test layers (audit flow)
+
+| Layer | Command / artifact | Merge-blocking? |
+| ----- | ------------------ | --------------- |
+| Unit + embedded HTTP | `./mvnw -B checkstyle:check test` | **Yes** |
+| Integration (Docker) | `bash scripts/run-integration-tests.sh` | **Yes** when API/DB touched |
+| Live curl smoke | `bash scripts/api-live-smoke.sh` | **Yes** when live proof required |
+| Postman Collection Runner | `tests/api/postman/collections/` | **No** — regression / audit aid |
+
 ## Quick start (Compose + Vault)
 
 ```bash
