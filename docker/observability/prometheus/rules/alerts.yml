@@ -1,0 +1,41 @@
+groups:
+  - name: vaultspring-alerts
+    rules:
+      - alert: VaultSpringHighErrorRate
+        expr: |
+          sum(rate(http_server_requests_seconds_count{application="vaultspring",status=~"5.."}[5m]))
+          /
+          sum(rate(http_server_requests_seconds_count{application="vaultspring"}[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: VaultSpring HTTP 5xx error rate above 5%
+
+      - alert: VaultSpringHighLatencyP95
+        expr: |
+          histogram_quantile(0.95, sum(rate(http_server_requests_seconds_bucket{application="vaultspring"}[5m])) by (le)) > 2
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: VaultSpring HTTP p95 latency above 2s
+
+      - alert: VaultSpringDown
+        expr: up{job="vaultspring"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: VaultSpring Prometheus scrape target is down
+
+      - alert: VaultSpringJvmMemoryPressure
+        expr: |
+          sum(jvm_memory_used_bytes{application="vaultspring",area="heap"})
+          /
+          sum(jvm_memory_max_bytes{application="vaultspring",area="heap"}) > 0.9
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: VaultSpring JVM heap usage above 90%

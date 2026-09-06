@@ -130,6 +130,36 @@ run-prod:
 	$(MVN) spring-boot:run -Dspring.profiles.active=prod
 
 # =====================
+# 📊 Observability stack
+# =====================
+OBS_COMPOSE=docker/observability/docker-compose.observability.yml
+OBS_DOCKER=bash -lc 'source scripts/ensure-colima-docker.sh && docker'
+
+observability-up:
+	@echo "📊 Starting observability stack..."
+	bash -lc 'source scripts/ensure-colima-docker.sh && docker compose -f $(OBS_COMPOSE) up -d'
+
+observability-down:
+	@echo "📊 Stopping observability stack..."
+	bash -lc 'source scripts/ensure-colima-docker.sh && docker compose -f $(OBS_COMPOSE) down'
+
+observability-restart:
+	@echo "📊 Restarting observability stack..."
+	bash -lc 'source scripts/ensure-colima-docker.sh && docker compose -f $(OBS_COMPOSE) down && docker compose -f $(OBS_COMPOSE) up -d'
+
+observability-logs:
+	@echo "📊 Tailing observability stack logs..."
+	bash -lc 'source scripts/ensure-colima-docker.sh && docker compose -f $(OBS_COMPOSE) logs -f --tail=100'
+
+observability-status:
+	@echo "📊 Observability stack status..."
+	bash -lc 'source scripts/ensure-colima-docker.sh && docker compose -f $(OBS_COMPOSE) ps'
+
+observability-validate:
+	@echo "📊 Validating observability configs..."
+	bash scripts/validate-observability-config.sh
+
+# =====================
 # 🧹 Clean Commands
 # =====================
 clean:
@@ -182,4 +212,5 @@ verify:
         sql-injection-test xss-test ddos-test zap-scan jwt-verify \
         build build-clean-install package run run-dev run-prod clean clean-test-jacoco \
         test-unit test-it test-all coverage verify wrapper \
+        observability-up observability-down observability-restart observability-logs observability-status observability-validate \
         flyway-clean-dev flyway-info-prod flyway-repair-prod flyway-migrate-prod

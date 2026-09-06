@@ -1,0 +1,27 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/rules/*.yml
+
+scrape_configs:
+  - job_name: vaultspring
+    metrics_path: /actuator/prometheus
+    scheme: http
+    bearer_token_file: /etc/prometheus/vaultspring.token
+    static_configs:
+      - targets:
+          - host.docker.internal:8080
+        labels:
+          service: vaultspring
+
+  - job_name: postgres-exporter
+    static_configs:
+      - targets:
+          - host.docker.internal:9187
+        labels:
+          service: postgres
+
+alerting:
+  alertmanagers: []

@@ -5,6 +5,7 @@ import com.vaultspring.security.ProblemDetailAuthenticationEntryPoint;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.boot.actuate.health.HealthEndpoint;
 import org.springframework.boot.actuate.info.InfoEndpoint;
+import org.springframework.boot.actuate.metrics.MetricsEndpoint;
 import org.springframework.boot.actuate.metrics.export.prometheus.PrometheusScrapeEndpoint;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -98,6 +99,8 @@ public class SecurityConfig {
                         .requestMatchers(LOGIN_PATH).permitAll()
                         .requestMatchers(EndpointRequest.to(PrometheusScrapeEndpoint.class)).authenticated()
                         .requestMatchers("/actuator/prometheus").authenticated()
+                        .requestMatchers(EndpointRequest.to(MetricsEndpoint.class)).authenticated()
+                        .requestMatchers("/actuator/metrics", "/actuator/metrics/**").authenticated()
                         .requestMatchers(EndpointRequest.to(InfoEndpoint.class)).authenticated()
                         .requestMatchers("/actuator/info").authenticated()
                         .requestMatchers(DOCS_PATHS).permitAll()

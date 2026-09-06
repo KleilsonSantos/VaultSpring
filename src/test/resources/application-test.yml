@@ -24,7 +24,13 @@ management:
   endpoints:
     web:
       exposure:
-        include: health,prometheus,info
+        include: health,prometheus,info,metrics
+  tracing:
+    enabled: false
+  otlp:
+    tracing:
+      export:
+        enabled: false
 
 springdoc:
   api-docs:
