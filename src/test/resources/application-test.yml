@@ -14,10 +14,11 @@ spring:
   cloud:
     vault:
       enabled: false
-  security:
-    user:
-      name: metrics
-      password: "{noop}test-metrics-pass"
+
+vaultspring:
+  jwt:
+    secret: test-jwt-secret-at-least-32-characters-long
+    expiration-seconds: 3600
 
 management:
   endpoints:
