@@ -48,8 +48,9 @@ Configuration: `src/main/resources/` (`dev`, `prod`, `hom`, `vault`, Flyway migr
 - Spring Cloud Vault Config 2025.0.x (`vault` / `prod-vault`)
 - Actuator: health (public), info/prometheus (authenticated)
 - OpenAPI / Swagger UI in `dev` (springdoc 2.9.0)
-- JWT login (`POST /api/v1/auth/login`, HS256 Bearer) — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6) on branch `feature/6-jwt-login`
-- `/api/v1/**` protected except login; Actuator prometheus/info require JWT
+- JWT login (`POST /api/v1/auth/login`, HS256 Bearer) — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)
+- `/api/v1/**` protected except login; Actuator prometheus/info/metrics require JWT
+- **Observability:** structured JSON logs (prod), `X-Correlation-ID`, OpenTelemetry OTLP tracing, custom auth metrics, local Grafana/Prometheus/Loki/Tempo stack — [`docs/observability/`](./docs/observability/)
 - CI: Checkstyle, unit verify, integration-tests (Testcontainers), dependency-review, docker-build, CodeQL, SonarCloud
 - Delivery governance: [`CONTRIBUTING.md`](./CONTRIBUTING.md), [`docs/guides/`](./docs/guides/)
 
@@ -71,8 +72,20 @@ Java 17 · Spring Boot 3.5.16 · Spring Cloud 2025.0.x · Docker Compose · Mave
 | [`HELP.md`](./HELP.md) | Quick start |
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | PRs, commits, quality gates |
 | [`docs/guides/writing-style.md`](./docs/guides/writing-style.md) | Style rules (no gitmoji in delivery) |
+| [`docs/observability/README.md`](./docs/observability/README.md) | Logs, metrics, traces, local Grafana stack |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Releases |
 | [`SECURITY.md`](./SECURITY.md) | Vulnerability reporting |
+
+## Observability
+
+Structured logs, Micrometer/Prometheus metrics, and OpenTelemetry traces with correlation via `X-Correlation-ID`, `trace_id`, and `span_id`.
+
+```bash
+make observability-up    # Grafana :3000, Prometheus :9090, Tempo, Loki, OTEL Collector
+make run-dev             # app :8080 — export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318/v1/traces
+```
+
+Details: [`docs/observability/`](./docs/observability/).
 
 ## Quick start
 

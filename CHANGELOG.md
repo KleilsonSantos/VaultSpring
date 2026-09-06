@@ -9,6 +9,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Observability platform: structured JSON logging (prod), `X-Correlation-ID` filter, OpenTelemetry OTLP tracing (Micrometer bridge), auth metrics, local stack under `docker/observability/`, Grafana dashboard provisioning, `docs/observability/`, Makefile `observability-*` targets, CI config validation
 - Git branching aligned with AIOS: permanent **`sandbox`** integration branch + two-PR promotion to `main` ([ADR-0004](docs/adr/0004-git-branching-strategy-sandbox.md)); `scripts/bootstrap-sandbox.sh`, `scripts/check-pr-issue-link.sh`; Dependabot targets `sandbox`
 - Postman smoke collection and local environment under `tests/api/postman/` (optional audit layer; not a CI merge gate)
 - PKB: `prompt.delivery.aios-postman-api-suite` (cross-repo AIOS reference)
