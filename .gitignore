@@ -66,3 +66,6 @@ backup
 .vault_pass
 vault/data/
 vault/data/**
+
+### Observability (local JWT for Prometheus scrape)
+docker/observability/prometheus/vaultspring.token
