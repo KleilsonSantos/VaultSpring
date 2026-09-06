@@ -1,0 +1,38 @@
+---
+description: MacBook resource gate — ordered audit → unit tests → infra approval → live proof → commit only when owner asks
+alwaysApply: true
+---
+
+# Local runtime authorization gate
+
+Full policy: [`docs/guides/local-runtime-authorization.md`](../../docs/guides/local-runtime-authorization.md)
+
+## Canonical order (do not skip)
+
+1. Inspect (read-only) → 2. Audit report → 3. Task gate (`ok`/`prossegue`) → 4. **Unit tests green** → 5. Infra gate (`ok infra`) **only if live proof needed** → 6. Live proof → 7. Commit-ready report → 8. Commit **only when owner explicitly asks**.
+
+**Never** request infra before step 4 passes. **Never** commit before steps 4–6 succeed for the task scope.
+
+## Three gates
+
+| Gate | Trigger | After |
+| ---- | ------- | ----- |
+| Task | `ok` / `prossegue` | Inspect/plan accepted |
+| Infra | `ok infra` / `autorizo infra` / `prossegue infra` | `./mvnw checkstyle:check test` BUILD SUCCESS |
+| Commit | owner explicitly asks | Audit + unit (+ live if required) all green |
+
+## Read-only without infra
+
+Steps 1–2; `docker ps`; `docker compose config`; `lsof`; `colima status`; unit tests under task gate.
+
+## Never without infra gate
+
+`colima start`, `docker compose up`, `spring-boot:run`, `-Pintegration-tests`, live curl/smoke on agent-started stack, `docker compose down -v`.
+
+## Infra brief must cite unit test success
+
+Then: services, ports, coexistence, MacBook impact, stop plan → ask `ok infra`.
+
+## Commit-ready ≠ commit
+
+Report "pronto para commitar" with checklist; wait for explicit owner commit request.

@@ -11,7 +11,7 @@ Lightweight pointer for AI coding assistants (and humans) that auto-load `AGENTS
 
 ## Mission
 
-VaultSpring is a **Spring Boot** service for **secure secret management** with PostgreSQL, Flyway, Docker, and HashiCorp Vault. **Spring Cloud Vault Config** and **`spring-boot-starter-security`** (`SecurityFilterChain`) are on the classpath. JWT login is issue #6. Do not invent other Cloud starters or MapStruct unless they are in `pom.xml`.
+VaultSpring is a **Spring Boot** service for **secure secret management** with PostgreSQL, Flyway, Docker, and HashiCorp Vault. **Spring Cloud Vault Config** and **`spring-boot-starter-security`** with **JWT Bearer** (`POST /api/v1/auth/login`, issue #6) are on the classpath. Do not invent other Cloud starters or MapStruct unless they are in `pom.xml`.
 
 ## Source order
 
@@ -19,6 +19,7 @@ VaultSpring is a **Spring Boot** service for **secure secret management** with P
 2. **Runtime config** — `application*.yml`, `docker-compose.yml`, `Dockerfile`
 3. **Delivery** — `.github/`, `Makefile`, `scripts/`
 4. **Docs** — `docs/README.md`, `README.md`, `HELP.md`, `CHANGELOG.md`, `CONTRIBUTING.md`, `SECURITY.md`
+5. **Prompt knowledge base** — `docs/prompts/` (catalog only; policies in guides/rules win over long prompts)
 
 If a summary conflicts with `pom.xml` or source, the code wins.
 
@@ -28,6 +29,8 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 - **Kickoff script**: `scripts/task-kickoff.sh <issue> <branch>`
 - **AppSec / secrets**: `SECURITY.md`, `CHECKLISTAPPSEC.md` (checklist only — do not add exploit PoCs)
 - **Quality gates**: `.cursor/rules/quality-gates.mdc`, Checkstyle, JaCoCo, CodeQL, Sonar on `main`
+- **Local runtime (MacBook)**: [`docs/guides/local-runtime-authorization.md`](docs/guides/local-runtime-authorization.md), `.cursor/rules/local-runtime-gate.mdc` — **order:** inspect → audit → unit tests green → **`ok infra`** (if live needed) → live proof → commit-ready → commit only when you ask
+- **PKB intake** (`PKB intake` / `catalogar prompt` / `guardar prompt`): catalog into `docs/prompts/` per [`docs/prompts/README.md`](docs/prompts/README.md). Do **not** run the prompt unless the owner also says `ok` / `prossegue`. Validate with `bash scripts/check-pkb-inventory.sh`.
 - **AIOS reference platform**: [ai-operating-system](https://github.com/KleilsonSantos/ai-operating-system) (governance patterns; no `sandbox` branch here)
 
 ## Hard constraints
@@ -41,5 +44,7 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 
 ## Owner cadence
 
-`next` = proposal only.  
-`ok` / `prossegue` = implement the accepted slice.
+`next` = proposal only (inspect/audit; no implement, no infra, no commit).  
+`ok` / `prossegue` = implement + unit tests (steps 3–4).  
+`ok infra` / `autorizo infra` / `prossegue infra` = live Docker/JVM/Vault **only after unit tests pass** (steps 5–6).  
+Explicit **commit** request = step 8, **only after** audit/tests (and live proof when required) succeed. Never commit automatically on "ready to commit".
