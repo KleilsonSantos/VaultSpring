@@ -96,6 +96,22 @@ bash scripts/check-semver-alignment.sh
 7. Update `CHANGELOG.md` `[Unreleased]` for notable changes
 8. Cut releases per [`docs/guides/releases.md`](./docs/guides/releases.md)
 
+## Documentation review
+
+PRs that change runtime behavior, configuration, or architecture **must** update relevant docs in the same PR (or explain why not in the PR body).
+
+| Change type | Update at minimum |
+| ----------- | ----------------- |
+| New/changed API | `docs/api.md`, OpenAPI annotations |
+| Profile or env var | `docs/configuration.md`, `.env.example` if applicable |
+| Vault / datasource | `docs/guides/vault-integration.md`, ADR if decision-level |
+| Security behavior | `SECURITY.md`, `CHECKLISTAPPSEC.md`, `docs/architecture.md` |
+| Delivery / CI | `CONTRIBUTING.md`, `docs/guides/delivery-automation.md` |
+
+Docs-only PRs: use prefix `[docs]` and target **`sandbox`**. Verify claims against `pom.xml` and source — code wins over prose.
+
+Style: [`docs/guides/writing-style.md`](./docs/guides/writing-style.md) (no gitmoji in delivery docs).
+
 ## Branch prefixes
 
 `feature/` · `fix/` · `docs/` · `chore/` · `ci/` · `refactor/` · `test/` · `build/` · `perf/`

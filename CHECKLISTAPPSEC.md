@@ -13,7 +13,9 @@ Style: no emoji in section titles — see [`docs/guides/writing-style.md`](docs/
 - [ ] Sensitive headers removed (X-Powered-By, Server)
 - [x] CSRF disabled with documented rationale (stateless API baseline)
 - [ ] AuthN/AuthZ audit logging enabled
-- [ ] JWT expiry and revocation (blocked on [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6))
+- [x] JWT login at `POST /api/v1/auth/login` (HS256 Bearer — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6))
+- [ ] Per-resource authorization / RBAC (any valid JWT can access all users today)
+- [ ] Rate limiting on login and sensitive endpoints
 
 ---
 
@@ -58,11 +60,20 @@ Style: no emoji in section titles — see [`docs/guides/writing-style.md`](docs/
 
 ---
 
-## JWT (after #6)
+## JWT
 
-- [ ] Token expiry enforced
-- [ ] Malformed token rejected
-- [ ] Missing scope/role blocked
+- [x] Token expiry configured (`vaultspring.jwt.expiration-seconds`)
+- [ ] Malformed / expired token rejected (covered by unit/IT — verify manually on staging)
+- [ ] `iss` / `aud` / `jti` claims and revocation strategy
+- [ ] RS256 or asymmetric keys for production (today: HS256 symmetric)
+
+---
+
+## Vault (Database Secrets Engine)
+
+- [x] Dynamic JDBC credentials via `vault` / `prod-vault` profiles ([ADR-0005](docs/adr/0005-dynamic-postgresql-credentials-vault.md))
+- [ ] Vault AppRole / Kubernetes auth (today: `TOKEN` in dev Compose)
+- [ ] Lease rotation at `max_ttl` validated in staging (Phase 2 — when deployed)
 
 ---
 
@@ -76,3 +87,5 @@ Some targets in `Makefile` reference endpoints not yet implemented — verify ag
 ---
 
 Run this checklist before major releases or after security-related changes. Use an isolated environment.
+
+Comprehensive audit prompt: [`docs/prompts/by-domain/security/comprehensive-appsec-audit.v1.md`](docs/prompts/by-domain/security/comprehensive-appsec-audit.v1.md).

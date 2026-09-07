@@ -73,6 +73,7 @@ Java 17 · Spring Boot 3.5.16 · Spring Cloud 2025.0.x · Docker Compose · Mave
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | PRs, commits, quality gates |
 | [`docs/guides/writing-style.md`](./docs/guides/writing-style.md) | Style rules (no gitmoji in delivery) |
 | [`docs/observability/README.md`](./docs/observability/README.md) | Logs, metrics, traces, local Grafana stack |
+| [`docs/guides/vault-integration.md`](./docs/guides/vault-integration.md) | Vault init, Database Engine, Compose |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Releases |
 | [`SECURITY.md`](./SECURITY.md) | Vulnerability reporting |
 

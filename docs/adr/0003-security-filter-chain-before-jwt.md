@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (JWT tracked in [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6))
+Accepted (baseline merged; JWT Bearer login delivered in 0.1.x — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6))
 
 ## Context
 
@@ -17,7 +17,7 @@ Ship `SecurityConfig` with:
 - CSRF off, stateless sessions, CORS on `/api/**`, HSTS in `prod`
 - `PasswordEncoder` BCrypt bean in the same config class
 
-JWT will extend this chain in #6 — not replace undocumented ad-hoc rules.
+JWT extends this chain (delivered in #6) — it did not replace the filter-chain structure documented here.
 
 ## Alternatives considered
 
@@ -27,6 +27,6 @@ JWT will extend this chain in #6 — not replace undocumented ad-hoc rules.
 ## Consequences
 
 - Positive: testable via `SecurityFilterChainTest`; CI integration-tests pass
-- Negative: API is public until JWT lands (documented, not hidden)
+- Negative: baseline shipped with public API until JWT (#6); now `/api/v1/**` requires Bearer except login
 
 See [architecture.md](../architecture.md#security-model-current).
