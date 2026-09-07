@@ -92,20 +92,21 @@ Postman (optional — same scenarios as smoke script): import [`tests/api/postma
 ```bash
 cp .env.example .env
 docker compose up -d postgres vault
-# Init/unseal Vault — operational steps per HashiCorp docs; set VAULT_TOKEN in .env
+bash scripts/vault-init-dev.sh
+export VAULT_TOKEN=$(cat target/vault-dev-root-token.txt)
 bash scripts/vault-seed-dev.sh
 docker compose up -d app    # SPRING_PROFILES_ACTIVE=prod-vault by default
 ```
 
-Details: [configuration.md](./configuration.md).
+Details: [configuration.md](./configuration.md) · Vault guide: [guides/vault-integration.md](./guides/vault-integration.md).
 
 ## Common commands
 
 ### Maven
 
 ```bash
-./mvnw -B checkstyle:check test          # unit tests (34 tests, H2)
-./mvnw -B verify -Pintegration-tests     # + UserApiIT (requires Docker)
+./mvnw -B checkstyle:check test          # unit tests (profile test, H2)
+./mvnw -B verify -Pintegration-tests     # UserApiIT, VaultDatabaseSecretsIT (Docker)
 ./mvnw -B verify                         # unit + JaCoCo report
 ```
 
@@ -128,9 +129,13 @@ Details: [configuration.md](./configuration.md).
 | `scripts/task-kickoff.sh <issue> <branch>` | Branch from `sandbox` + issue comment |
 | `scripts/bootstrap-sandbox.sh` | One-time create remote `sandbox` from `main` |
 | `scripts/check-pr-issue-link.sh` | CI: require `Refs #N` on PRs → `sandbox` |
+| `scripts/check-pr-delivery-gate.sh` | **Local** parity for `issue-link` — run before push |
+| `scripts/pre-push-check.sh` | **Local** full gate: delivery + observability configs + Maven `quality` |
+| `scripts/check-pr-delivery-gate-selftest.sh` | Regression tests for delivery gate |
 | `scripts/install-hooks.sh` | Enable `.githooks/` (Conventional Commits) |
 | `scripts/check-semver-alignment.sh` | Release gate (CI on `main`) |
-| `scripts/vault-seed-dev.sh` | Seed Vault KV for local JDBC |
+| `scripts/vault-seed-database-dev.sh` | Configure Vault Database Secrets Engine for local JDBC |
+| `scripts/vault-seed-dev.sh` | Alias → `vault-seed-database-dev.sh` |
 | `scripts/act-dev.sh` | Run GitHub Actions locally with `act` |
 
 ## Docker image
@@ -150,7 +155,7 @@ CI runs the same `docker build` smoke on every PR (`docker-build` job).
 | Type | Location | Runner |
 | ---- | -------- | ------ |
 | Unit | `*Test.java` | Surefire, profile `test` |
-| Integration | `*IT.java` | Failsafe, profile `it`, Testcontainers |
+| Integration | `*IT.java` | Failsafe, profile `it`, Testcontainers — e.g. `UserApiIT`, `VaultDatabaseSecretsIT` |
 | Security smoke | `SecurityFilterChainTest` | MockMvc |
 
 Coverage: JaCoCo on `verify`; Codecov uploads from CI (non-blocking).

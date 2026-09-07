@@ -1,4 +1,4 @@
-# ADR-0002: Datasource credentials via Vault KV v2 or environment
+# ADR-0002: Datasource credentials via Vault or environment
 
 ## Status
 
@@ -15,9 +15,9 @@ Support **two explicit paths** (never hard-code secrets in YAML):
 | Path | Profiles | Source |
 | ---- | -------- | ------ |
 | Environment | `dev`, `prod`, `hom` | `POSTGRES_*` or `SPRING_DATASOURCE_*` |
-| Vault KV v2 | `vault`, group `prod-vault` | `secret/vaultspring` via `spring.config.import: vault://` |
+| Vault Database Engine | `vault`, group `prod-vault` | Dynamic JDBC via `spring.cloud.vault.database` ([ADR-0005](./0005-dynamic-postgresql-credentials-vault.md)) |
 
-Disable Vault in `test` and `it` profiles. Seed local Vault with `scripts/vault-seed-dev.sh`.
+Disable Vault in `test` and `it` profiles. Seed local Vault with `scripts/vault-seed-database-dev.sh` (or `vault-seed-dev.sh`).
 
 ## Alternatives considered
 
@@ -30,3 +30,5 @@ Disable Vault in `test` and `it` profiles. Seed local Vault with `scripts/vault-
 - Negative: operators must know which profile group is active
 
 See [configuration.md](../configuration.md) and [architecture.md](../architecture.md).
+
+**Superseded path:** Static KV v2 JDBC credentials were replaced by the Database Secrets Engine in [ADR-0005](./0005-dynamic-postgresql-credentials-vault.md) (Phase 1, 2026-09-07). The environment/Render path is unchanged.

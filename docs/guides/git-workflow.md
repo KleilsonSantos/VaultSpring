@@ -122,11 +122,44 @@ Rationale for scopes: [`writing-style.md`](./writing-style.md).
 
 Each commit should pass `./mvnw -B test` when Java changed (ideal for `git bisect`).
 
+## Local pre-push gate (before CI)
+
+**Diagnose delivery failures on the MacBook — not on GitHub Actions.**
+
+```bash
+bash scripts/pre-push-check.sh
+```
+
+Includes:
+
+| Step | CI parity |
+| ---- | --------- |
+| `check-pr-delivery-gate.sh` | job `issue-link` (PR → `sandbox`) |
+| `validate-observability-config.sh` | step in job `quality` |
+| `./mvnw checkstyle:check verify` | job `quality` |
+| `check-semver-alignment.sh` | job `quality` on `main` |
+
+Validate a **draft PR** before `gh pr create`:
+
+```bash
+PR_BASE=sandbox PR_HEAD=feature/83-slug \
+  PR_TITLE='feat(observability): summary (#83)' \
+  PR_BODY='Refs #83' \
+  bash scripts/check-pr-delivery-gate.sh
+```
+
+Operational **`main` → `sandbox`** sync PRs skip `issue-link` (local and CI). Work PRs must use `Refs #N` or branch `feature/<N>-slug`.
+
+After push: **`gh pr checks --watch`** — do not merge until `issue-link`, `quality`, and `integration-tests` are green.
+
+See [`local-runtime-authorization.md`](./local-runtime-authorization.md) steps 4b and 9.
+
 ## What NOT to do
 
 - Commit or force-push directly to `main` or `sandbox`
 - PR `feature/*` straight to `main` (skip `sandbox`)
-- Merge without CI checks
+- Merge without CI checks — **including `issue-link`**
+- Push or open a PR without `bash scripts/pre-push-check.sh` when delivery metadata may fail CI
 - Commit secrets, `.env`, or Vault unseal material
 - Bump `pom.xml` version on every feature commit (aggregate at release — see [`releases.md`](./releases.md))
 

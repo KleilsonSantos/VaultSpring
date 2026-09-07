@@ -7,6 +7,16 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Vault Database Secrets Engine integration (ADR-0005 Phase 1): dynamic JDBC credentials in `vault` / `prod-vault` profiles; `scripts/vault-seed-database-dev.sh`; `VaultDatabaseSecretsIT`
+- Local delivery gate: `scripts/check-pr-delivery-gate.sh` + expanded `pre-push-check.sh` (issue-link parity before push); `main` → `sandbox` sync PRs skip issue-link; selftest in CI
+- PKB: `prompt.security.comprehensive-appsec-audit` cataloged
+
+### Changed
+
+- Documentation audit remediation ([#97](https://github.com/KleilsonSantos/VaultSpring/issues/97)): `SECURITY.md` Vault posture, ADR index, `docs/guides/vault-integration.md`, `CHECKLISTAPPSEC` JWT/Vault items, Diátaxis map in `docs/README.md`, CONTRIBUTING doc-review section
+
 ## [0.1.5] - 2026-09-06
 
 ### Added

@@ -9,7 +9,7 @@ Full policy: [`docs/guides/local-runtime-authorization.md`](../../docs/guides/lo
 
 ## Canonical order (do not skip)
 
-1. Inspect → 2. Audit → 3. Task gate → 4. **Unit tests green** → **4b. `pre-push-check.sh`** → 5. Infra gate (if live needed) → 6. Live proof → 7. Commit-ready → 8. Commit (owner asks) → **9. Monitor GitHub CI**
+1. Inspect → 2. Audit → 3. Task gate → 4. **Unit tests green** → **4b. `pre-push-check.sh` (delivery gate + Maven)** → 5. Infra gate (if live needed) → 6. Live proof → 7. Commit-ready → 8. Commit (owner asks) → **9. Monitor GitHub CI (`gh pr checks --watch`; never merge on red `issue-link`)**
 
 **Never** request infra before step 4 passes. **Never** commit/push before step 4b passes. **Never** declare PR green without step 9.
 
@@ -27,7 +27,13 @@ Full policy: [`docs/guides/local-runtime-authorization.md`](../../docs/guides/lo
 bash scripts/pre-push-check.sh
 ```
 
-Mirrors CI `quality` job. Required before every commit/push when Java/XML changed.
+Mirrors CI **`quality`** + **`issue-link`** parity + observability config validation. Required before every **push**.
+
+```bash
+bash scripts/pre-push-check.sh
+```
+
+Draft PR only: `bash scripts/check-pr-delivery-gate.sh`
 
 ## Post-push (step 9)
 
@@ -35,7 +41,7 @@ Mirrors CI `quality` job. Required before every commit/push when Java/XML change
 gh pr checks --watch
 ```
 
-Fix and re-push on Maven CI failure. Report Sonar/GitGuardian separately.
+Fix and re-push on Maven CI failure. **Never merge while `issue-link` is red.** Report Sonar/GitGuardian separately.
 
 ## Commit-ready ≠ commit
 

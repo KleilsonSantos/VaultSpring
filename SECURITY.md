@@ -24,7 +24,7 @@ We aim to respond within 5 business days.
 | Dependabot version updates | On → `sandbox` | See `.github/dependabot.yml`; promote via PR to `main` |
 | Secret scanning + push protection | On | Block accidental secret commits |
 | Code scanning (CodeQL) | On via CI workflow only | `java-kotlin`, CodeQL Action v4 — **disable** GitHub Default CodeQL setup to avoid duplicate analysis |
-| Spring Cloud Vault | On (profile `vault`) | KV v2 via `spring-cloud-starter-vault-config` 2025.0.x |
+| Spring Cloud Vault | On (profiles `vault`, `prod-vault`) | Database Secrets Engine via `spring-cloud-vault-config-databases` 2025.0.x — dynamic JDBC credentials ([ADR-0005](docs/adr/0005-dynamic-postgresql-credentials-vault.md)); KV disabled for datasource |
 | OWASP Dependency-Check | Optional Maven profile | `./mvnw verify -Pdependency-check` (local/scheduled; not duplicated in CI) |
 
 Owner checklist: repo **Settings → Code security**.

@@ -90,9 +90,27 @@ bash scripts/check-semver-alignment.sh
 1. Open an issue ([Implementation](./.github/ISSUE_TEMPLATE/implementation.md) or [Feature Request](./.github/ISSUE_TEMPLATE/feature_request.md))
 2. Kickoff branch from `sandbox` (`scripts/task-kickoff.sh`; bootstrap: `scripts/bootstrap-sandbox.sh`)
 3. Keep commits as `type: description`
-4. Open a PR with `Closes #N` and the template checklist
-5. Update `CHANGELOG.md` `[Unreleased]` for notable changes
-6. Cut releases per [`docs/guides/releases.md`](./docs/guides/releases.md)
+4. **`bash scripts/pre-push-check.sh`** before push (delivery gate + Maven CI parity)
+5. Open a PR with `Refs #N` / `Closes #N` and the template checklist
+6. **`gh pr checks --watch`** after push — do not merge on red `issue-link`
+7. Update `CHANGELOG.md` `[Unreleased]` for notable changes
+8. Cut releases per [`docs/guides/releases.md`](./docs/guides/releases.md)
+
+## Documentation review
+
+PRs that change runtime behavior, configuration, or architecture **must** update relevant docs in the same PR (or explain why not in the PR body).
+
+| Change type | Update at minimum |
+| ----------- | ----------------- |
+| New/changed API | `docs/api.md`, OpenAPI annotations |
+| Profile or env var | `docs/configuration.md`, `.env.example` if applicable |
+| Vault / datasource | `docs/guides/vault-integration.md`, ADR if decision-level |
+| Security behavior | `SECURITY.md`, `CHECKLISTAPPSEC.md`, `docs/architecture.md` |
+| Delivery / CI | `CONTRIBUTING.md`, `docs/guides/delivery-automation.md` |
+
+Docs-only PRs: use prefix `[docs]` and target **`sandbox`**. Verify claims against `pom.xml` and source — code wins over prose.
+
+Style: [`docs/guides/writing-style.md`](./docs/guides/writing-style.md) (no gitmoji in delivery docs).
 
 ## Branch prefixes
 

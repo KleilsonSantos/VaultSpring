@@ -14,7 +14,7 @@ Spring Boot · PostgreSQL · Flyway · HashiCorp Vault · DevSecOps CI
   <img src="https://img.shields.io/badge/Java-17-ED8B00?style=flat-square&logo=openjdk&logoColor=white" alt="Java 17"/>
   <img src="https://img.shields.io/badge/Spring%20Boot-3.5.16-6DB33F?style=flat-square&logo=springboot&logoColor=white" alt="Spring Boot"/>
   <img src="https://img.shields.io/badge/PostgreSQL-15-336791?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
-  <img src="https://img.shields.io/badge/Vault-KV%20v2-175DDD?style=flat-square&logo=vault&logoColor=white" alt="Vault"/>
+  <img src="https://img.shields.io/badge/Vault-Database%20Engine-175DDD?style=flat-square&logo=vault&logoColor=white" alt="Vault"/>
 </p>
 
 *Active development — APIs and behavior may change. Contributions welcome.*
@@ -23,7 +23,7 @@ Spring Boot · PostgreSQL · Flyway · HashiCorp Vault · DevSecOps CI
 
 ## Description
 
-Spring Boot service for **secure credential handling**: user API with BCrypt, PostgreSQL + Flyway, optional Spring Cloud Vault (KV v2), Actuator, and a hardened CI pipeline.
+Spring Boot service for **secure credential handling**: user API with BCrypt, PostgreSQL + Flyway, optional Spring Cloud Vault (Database Secrets Engine), Actuator, and a hardened CI pipeline.
 
 **Technical documentation:** [`docs/README.md`](./docs/README.md) (architecture, configuration, API, ADRs).
 
@@ -45,7 +45,7 @@ Configuration: `src/main/resources/` (`dev`, `prod`, `hom`, `vault`, Flyway migr
 ## Integrated today
 
 - PostgreSQL 15 + Flyway; H2 in `test` profile
-- Spring Cloud Vault Config 2025.0.x (`vault` / `prod-vault`)
+- Spring Cloud Vault Config 2025.0.x (`vault` / `prod-vault`) — dynamic PostgreSQL credentials
 - Actuator: health (public), info/prometheus (authenticated)
 - OpenAPI / Swagger UI in `dev` (springdoc 2.9.0)
 - JWT login (`POST /api/v1/auth/login`, HS256 Bearer) — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)
@@ -73,6 +73,7 @@ Java 17 · Spring Boot 3.5.16 · Spring Cloud 2025.0.x · Docker Compose · Mave
 | [`CONTRIBUTING.md`](./CONTRIBUTING.md) | PRs, commits, quality gates |
 | [`docs/guides/writing-style.md`](./docs/guides/writing-style.md) | Style rules (no gitmoji in delivery) |
 | [`docs/observability/README.md`](./docs/observability/README.md) | Logs, metrics, traces, local Grafana stack |
+| [`docs/guides/vault-integration.md`](./docs/guides/vault-integration.md) | Vault init, Database Engine, Compose |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Releases |
 | [`SECURITY.md`](./SECURITY.md) | Vulnerability reporting |
 
@@ -102,7 +103,7 @@ Details: [`docs/development.md`](./docs/development.md).
 ## Delivered baseline
 
 - Modular API, RFC 7807 errors, OpenAPI, Testcontainers IT
-- Spring Cloud Vault (KV v2), Security filter chain
+- Spring Cloud Vault (Database Engine), Security filter chain
 - Technical docs hub under `docs/`
 - AIOS-aligned Git flow (issue → PR → `sandbox` → PR → `main` → tag)
 

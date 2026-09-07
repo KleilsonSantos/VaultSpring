@@ -56,6 +56,11 @@ if [[ "$BASE_REF" != "sandbox" ]]; then
   exit 0
 fi
 
+if [[ "$HEAD_REF" == "main" ]]; then
+  echo "issue-link: skip (main → sandbox integration sync)"
+  exit 0
+fi
+
 if [[ "$ACTOR" == "dependabot[bot]" || "$ACTOR" == "dependabot" ]]; then
   echo "issue-link: skip (Dependabot)"
   exit 0

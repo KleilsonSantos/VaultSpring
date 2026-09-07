@@ -32,6 +32,7 @@ flowchart TD
 | [guides/git-workflow.md](./guides/git-workflow.md) | Contributors | Issue → `sandbox` → `main` → release ([ADR-0004](./adr/0004-git-branching-strategy-sandbox.md)) |
 | [guides/task-kickoff.md](./guides/task-kickoff.md) | Contributors | Issue → branch traceability |
 | [guides/local-runtime-authorization.md](./guides/local-runtime-authorization.md) | All | **MacBook gate** — task vs infra owner approval |
+| [guides/vault-integration.md](./guides/vault-integration.md) | DevOps, developers | Vault init, Database Engine seed, Compose flow |
 | [guides/releases.md](./guides/releases.md) | Maintainers | SemVer, tags, CHANGELOG |
 | [prompts/README.md](./prompts/README.md) | All | **PKB** — catalog, intake, reusable prompts |
 
@@ -48,6 +49,17 @@ Reusable analysis prompts (Docs-as-Code). Intake triggers: `PKB intake` · `cata
 
 Catalog: [`prompts/index.yaml`](./prompts/index.yaml) · Drift check: `bash scripts/check-pkb-inventory.sh`
 
+## Diátaxis map (where to look)
+
+| Diátaxis quadrant | VaultSpring paths |
+| ----------------- | ----------------- |
+| **Tutorial** (learning-oriented) | [development.md](./development.md) — first local run |
+| **How-to** (task-oriented) | [guides/](./guides/) — git, releases, Vault, delivery |
+| **Reference** (information-oriented) | [configuration.md](./configuration.md), [api.md](./api.md), [adr/](./adr/) |
+| **Explanation** (understanding-oriented) | [architecture.md](./architecture.md), ADRs, [observability/01-architecture.md](./observability/01-architecture.md) |
+
+Folder names are historical; this table is the navigation index. A full rename to `tutorials/` / `how-to/` is deferred — see issue [#97](https://github.com/KleilsonSantos/VaultSpring/issues/97).
+
 ## Root docs
 
 | File | Purpose |
@@ -63,6 +75,6 @@ Catalog: [`prompts/index.yaml`](./prompts/index.yaml) · Drift check: `bash scri
 ## Stack snapshot (verify in `pom.xml`)
 
 - Java **17**, Spring Boot **3.5.16**, Spring Cloud **2025.0.3**
-- PostgreSQL **15**, Flyway, HashiCorp Vault (KV v2 via Spring Cloud Vault Config)
+- PostgreSQL **15**, Flyway, HashiCorp Vault (Database Secrets Engine via Spring Cloud Vault Config)
 - Spring Security `SecurityFilterChain` + JWT Bearer (`AuthController`, `JwtService`) — issue [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)
 - springdoc OpenAPI **2.9.0**, Testcontainers, JaCoCo, Checkstyle
