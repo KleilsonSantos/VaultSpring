@@ -30,3 +30,5 @@ Disable Vault in `test` and `it` profiles. Seed local Vault with `scripts/vault-
 - Negative: operators must know which profile group is active
 
 See [configuration.md](../configuration.md) and [architecture.md](../architecture.md).
+
+**Evolution:** [ADR-0005](./0005-dynamic-postgresql-credentials-vault.md) (Proposed) — Vault profile path may move from static KV v2 to Database Secrets Engine; env/Render path unchanged.

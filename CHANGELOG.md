@@ -9,6 +9,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- ADR-0005 (Proposed): dynamic PostgreSQL credentials via Vault Database Secrets Engine; PKB prompt `prompt.security.dynamic-postgresql-credentials`
 - Local delivery gate: `scripts/check-pr-delivery-gate.sh` + expanded `pre-push-check.sh` (issue-link parity before push); `main` → `sandbox` sync PRs skip issue-link; selftest in CI
 
 ## [0.1.5] - 2026-09-06
