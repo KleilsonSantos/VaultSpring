@@ -63,6 +63,6 @@ Catalog: [`prompts/index.yaml`](./prompts/index.yaml) · Drift check: `bash scri
 ## Stack snapshot (verify in `pom.xml`)
 
 - Java **17**, Spring Boot **3.5.16**, Spring Cloud **2025.0.3**
-- PostgreSQL **15**, Flyway, HashiCorp Vault (KV v2 via Spring Cloud Vault Config)
+- PostgreSQL **15**, Flyway, HashiCorp Vault (Database Secrets Engine via Spring Cloud Vault Config)
 - Spring Security `SecurityFilterChain` + JWT Bearer (`AuthController`, `JwtService`) — issue [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)
 - springdoc OpenAPI **2.9.0**, Testcontainers, JaCoCo, Checkstyle

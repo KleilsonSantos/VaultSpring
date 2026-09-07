@@ -133,7 +133,8 @@ Details: [configuration.md](./configuration.md).
 | `scripts/check-pr-delivery-gate-selftest.sh` | Regression tests for delivery gate |
 | `scripts/install-hooks.sh` | Enable `.githooks/` (Conventional Commits) |
 | `scripts/check-semver-alignment.sh` | Release gate (CI on `main`) |
-| `scripts/vault-seed-dev.sh` | Seed Vault KV for local JDBC |
+| `scripts/vault-seed-database-dev.sh` | Configure Vault Database Secrets Engine for local JDBC |
+| `scripts/vault-seed-dev.sh` | Alias → `vault-seed-database-dev.sh` |
 | `scripts/act-dev.sh` | Run GitHub Actions locally with `act` |
 
 ## Docker image

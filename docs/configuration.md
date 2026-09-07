@@ -17,7 +17,7 @@ flowchart TD
   Q2 -->|Yes| PV
 
   DEV --> PG1[(Postgres localhost)]
-  PV --> VLT[Vault KV v2] --> PG2[(Postgres)]
+  PV --> VLT[Vault Database Engine] --> PG2[(Postgres)]
   PR --> PG3[(Managed Postgres)]
   TST --> H2[(H2 memory)]
   IT --> TC[(Testcontainers PG 15)]
@@ -30,7 +30,7 @@ flowchart TD
 | `dev` (default) | Local development | `POSTGRES_*` env / defaults | Off | Enabled (`/swagger-ui.html`) |
 | `prod` | Production / Render | `SPRING_DATASOURCE_*` | Off | Disabled |
 | `hom` | Homologation | Same pattern as prod | Off | Disabled |
-| `vault` | Vault-backed JDBC | From Vault KV v2 | On | Follows active doc profile |
+| `vault` | Vault-backed JDBC | Dynamic user/password from Database Engine | On | Follows active doc profile |
 | `prod-vault` | **Group**: `prod` + `vault` | Vault | On | Disabled (prod springdoc) |
 | `test` | Unit tests (H2) | In-memory H2 | Off | N/A |
 | `it` | Integration tests | Testcontainers PostgreSQL | Off | N/A |
@@ -72,11 +72,13 @@ Copy [`.env.example`](../.env.example) to `.env` (never commit `.env`).
 | `VAULT_TOKEN` | App or root token after init/unseal — **secret** |
 | `SPRING_PROFILES_ACTIVE` | `prod-vault` for Compose app with Vault |
 
-Vault KV v2 (see `application-vault.yml`):
+Vault Database Secrets Engine (see `application-vault.yml`, ADR-0005):
 
-- Backend: `secret`
-- Application context: `vaultspring` → path `secret/vaultspring`
-- Expected keys (after `scripts/vault-seed-dev.sh`): `spring.datasource.url`, `username`, `password`
+- Backend: `database`
+- Role: `vaultspring-app` (override with `VAULT_DB_ROLE`)
+- Dynamic properties: `spring.datasource.username`, `spring.datasource.password`
+- JDBC URL: `POSTGRES_URL` / `SPRING_DATASOURCE_URL` (not from Vault KV)
+- Seed dev: `bash scripts/vault-seed-database-dev.sh` (after `vault-init-dev.sh`)
 
 ### Optional local tooling
 

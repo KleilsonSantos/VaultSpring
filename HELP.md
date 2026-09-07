@@ -5,7 +5,7 @@ Guia rápido. Documentação completa: **[`docs/README.md`](./docs/README.md)**.
 ## Visão geral
 
 - Spring Boot **3.5.16**, Java **17**, PostgreSQL **15**, Flyway  
-- **Spring Cloud Vault Config** (KV v2) — perfis `vault` / `prod-vault`  
+- **Spring Cloud Vault Config** (Database Secrets Engine) — perfis `vault` / `prod-vault`  
 - **Spring Security** + JWT Bearer (`POST /api/v1/auth/login`) — issue [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)  
 - OpenAPI / Swagger UI no perfil **`dev`**  
 
