@@ -7,6 +7,8 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.6] - 2026-09-07
+
 ### Added
 
 - Vault Database Secrets Engine integration (ADR-0005 Phase 1): dynamic JDBC credentials in `vault` / `prod-vault` profiles; `scripts/vault-seed-database-dev.sh`; `VaultDatabaseSecretsIT`

@@ -60,10 +60,12 @@ bash scripts/check-semver-alignment.sh
 
 | Tag | Description |
 | --- | ----------- |
+| `v0.1.6` | Vault Database Secrets Engine (ADR-0005 Phase 1/2), delivery gate, doc audit |
+| `v0.1.5` | Observability platform, sandbox branching (ADR-0004), JWT login |
 | `v0.1.4` | API quality, Vault, SecurityFilterChain, CI hardening, technical docs hub |
 | `v0.1.0` | Initial tagged baseline |
 
-Next development version after tagging: bump `pom.xml` to `0.1.5-SNAPSHOT` on `main`.
+After tagging `vX.Y.Z`, bump `pom.xml` to `(X.Y.(Z+1))-SNAPSHOT` on `main` for the next cycle.
 
 ## Related
 
