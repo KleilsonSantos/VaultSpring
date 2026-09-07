@@ -27,7 +27,7 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 
 - **Git, issues, PR, releases, attribution**: `docs/guides/attribution.md`, `docs/guides/delivery-automation.md`, `docs/guides/git-workflow.md`, `docs/guides/task-kickoff.md`, `docs/guides/releases.md`, `docs/README.md`, `CONTRIBUTING.md`, `.github/pull_request_template.md`
 - **Kickoff script**: `scripts/task-kickoff.sh <issue> <branch>`
-- **AppSec / secrets**: `SECURITY.md`, `CHECKLISTAPPSEC.md` (checklist only — do not add exploit PoCs); dynamic PostgreSQL credentials — [ADR-0005](docs/adr/0005-dynamic-postgresql-credentials-vault.md), PKB `prompt.security.dynamic-postgresql-credentials`
+- **AppSec / secrets**: `SECURITY.md`, `CHECKLISTAPPSEC.md`; comprehensive audit — PKB `prompt.security.comprehensive-appsec-audit`; JWT — `prompt.security.jwt-login-review`; dynamic PostgreSQL — [ADR-0005](docs/adr/0005-dynamic-postgresql-credentials-vault.md), PKB `prompt.security.dynamic-postgresql-credentials`
 - **Quality gates**: `.cursor/rules/quality-gates.mdc`, Checkstyle, JaCoCo, CodeQL, Sonar on `main`
 - **Local runtime (MacBook)**: [`docs/guides/local-runtime-authorization.md`](docs/guides/local-runtime-authorization.md), `.cursor/rules/local-runtime-gate.mdc` — **order:** inspect → audit → unit tests green → **`ok infra`** (if live needed) → live proof → commit-ready → commit only when you ask
 - **PKB intake** (`PKB intake` / `catalogar prompt` / `guardar prompt`): catalog into `docs/prompts/` per [`docs/prompts/README.md`](docs/prompts/README.md). Do **not** run the prompt unless the owner also says `ok` / `prossegue`. Validate with `bash scripts/check-pkb-inventory.sh`.

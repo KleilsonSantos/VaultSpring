@@ -39,6 +39,14 @@ prompts:
     language: pt-BR
     tags: [security, vault, postgresql, dynamic-secrets, spring-cloud-vault, lease-lifecycle]
 
+  - id: prompt.security.comprehensive-appsec-audit
+    path: by-domain/security/comprehensive-appsec-audit.v1.md
+    domain: security
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [security, appsec, vault, jwt, owasp, threat-model, devsecops, audit]
+
   - id: prompt.spring-boot.integration-test-review
     path: by-domain/spring-boot/integration-test-review.v1.md
     domain: spring-boot
