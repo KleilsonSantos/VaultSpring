@@ -1,4 +1,4 @@
-# ADR-0002: Datasource credentials via Vault KV v2 or environment
+# ADR-0002: Datasource credentials via Vault or environment
 
 ## Status
 
@@ -31,4 +31,4 @@ Disable Vault in `test` and `it` profiles. Seed local Vault with `scripts/vault-
 
 See [configuration.md](../configuration.md) and [architecture.md](../architecture.md).
 
-**Evolution:** [ADR-0005](./0005-dynamic-postgresql-credentials-vault.md) (Proposed) — Vault profile path may move from static KV v2 to Database Secrets Engine; env/Render path unchanged.
+**Superseded path:** Static KV v2 JDBC credentials were replaced by the Database Secrets Engine in [ADR-0005](./0005-dynamic-postgresql-credentials-vault.md) (Phase 1, 2026-09-07). The environment/Render path is unchanged.

@@ -92,20 +92,21 @@ Postman (optional — same scenarios as smoke script): import [`tests/api/postma
 ```bash
 cp .env.example .env
 docker compose up -d postgres vault
-# Init/unseal Vault — operational steps per HashiCorp docs; set VAULT_TOKEN in .env
+bash scripts/vault-init-dev.sh
+export VAULT_TOKEN=$(cat target/vault-dev-root-token.txt)
 bash scripts/vault-seed-dev.sh
 docker compose up -d app    # SPRING_PROFILES_ACTIVE=prod-vault by default
 ```
 
-Details: [configuration.md](./configuration.md).
+Details: [configuration.md](./configuration.md) · Vault guide: [guides/vault-integration.md](./guides/vault-integration.md).
 
 ## Common commands
 
 ### Maven
 
 ```bash
-./mvnw -B checkstyle:check test          # unit tests (34 tests, H2)
-./mvnw -B verify -Pintegration-tests     # + UserApiIT (requires Docker)
+./mvnw -B checkstyle:check test          # unit tests (profile test, H2)
+./mvnw -B verify -Pintegration-tests     # UserApiIT, VaultDatabaseSecretsIT (Docker)
 ./mvnw -B verify                         # unit + JaCoCo report
 ```
 
@@ -154,7 +155,7 @@ CI runs the same `docker build` smoke on every PR (`docker-build` job).
 | Type | Location | Runner |
 | ---- | -------- | ------ |
 | Unit | `*Test.java` | Surefire, profile `test` |
-| Integration | `*IT.java` | Failsafe, profile `it`, Testcontainers |
+| Integration | `*IT.java` | Failsafe, profile `it`, Testcontainers — e.g. `UserApiIT`, `VaultDatabaseSecretsIT` |
 | Security smoke | `SecurityFilterChainTest` | MockMvc |
 
 Coverage: JaCoCo on `verify`; Codecov uploads from CI (non-blocking).
