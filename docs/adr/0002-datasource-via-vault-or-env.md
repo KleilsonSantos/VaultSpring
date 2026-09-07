@@ -15,9 +15,9 @@ Support **two explicit paths** (never hard-code secrets in YAML):
 | Path | Profiles | Source |
 | ---- | -------- | ------ |
 | Environment | `dev`, `prod`, `hom` | `POSTGRES_*` or `SPRING_DATASOURCE_*` |
-| Vault KV v2 | `vault`, group `prod-vault` | `secret/vaultspring` via `spring.config.import: vault://` |
+| Vault Database Engine | `vault`, group `prod-vault` | Dynamic JDBC via `spring.cloud.vault.database` ([ADR-0005](./0005-dynamic-postgresql-credentials-vault.md)) |
 
-Disable Vault in `test` and `it` profiles. Seed local Vault with `scripts/vault-seed-dev.sh`.
+Disable Vault in `test` and `it` profiles. Seed local Vault with `scripts/vault-seed-database-dev.sh` (or `vault-seed-dev.sh`).
 
 ## Alternatives considered
 

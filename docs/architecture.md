@@ -15,7 +15,7 @@ C4Context
   Person(ops, "Operator", "Deploys Render / Compose")
   System(vs, "VaultSpring", "User API + Actuator")
   System_Ext(pg, "PostgreSQL", "Persistent users")
-  System_Ext(vault, "HashiCorp Vault", "KV v2 secrets optional")
+  System_Ext(vault, "HashiCorp Vault", "Database Secrets Engine optional")
   System_Ext(render, "Render", "Docker hosting prod profile")
   System_Ext(gh, "GitHub Actions", "CI quality gates")
 
@@ -45,7 +45,7 @@ C4Container
   }
 
   ContainerDb(db, "PostgreSQL 15", "users_db Flyway schema")
-  Container_Ext(vault, "Vault", "secret/vaultspring")
+  Container_Ext(vault, "Vault", "database/creds/vaultspring-app")
   Container_Ext(prom, "Prometheus", "Scrapes /actuator/prometheus")
 
   Rel(client, web, "HTTPS JSON")
@@ -73,7 +73,7 @@ flowchart TB
   subgraph infra [Infrastructure]
     UR[UserRepository JPA]
     PG[(PostgreSQL)]
-    VLT[(Vault KV v2 optional)]
+    VLT[(Vault Database Engine optional)]
   end
   UC --> US
   UC --> GEH
@@ -133,7 +133,7 @@ ADR: [0003-security-filter-chain-before-jwt.md](./adr/0003-security-filter-chain
 flowchart TB
   START([App start]) --> PROF{Active profile}
   PROF -->|dev prod hom| ENV[Read POSTGRES_* or SPRING_DATASOURCE_*]
-  PROF -->|vault prod-vault| VAULT[Spring Cloud Vault KV v2]
+  PROF -->|vault prod-vault| VAULT[Spring Cloud Vault Database Engine]
   ENV --> DS[(HikariCP)]
   VAULT --> DS
   DS --> PG[(PostgreSQL)]
@@ -142,7 +142,7 @@ flowchart TB
 Two supported paths:
 
 1. **Environment** — profile `prod` / `dev`: `SPRING_DATASOURCE_*` or `POSTGRES_*` (see [configuration.md](./configuration.md)).
-2. **Vault** — profiles `vault` or group `prod-vault`: Spring Cloud Vault Config imports `vault://`, KV v2 path `secret/vaultspring` (seed via `scripts/vault-seed-dev.sh`).
+2. **Vault** — profiles `vault` or group `prod-vault`: Spring Cloud Vault Database Secrets Engine role `vaultspring-app` (seed via `scripts/vault-seed-database-dev.sh`); JDBC URL from env/YAML ([ADR-0005](./adr/0005-dynamic-postgresql-credentials-vault.md)).
 
 ADR: [0002-datasource-via-vault-or-env.md](./adr/0002-datasource-via-vault-or-env.md)
 

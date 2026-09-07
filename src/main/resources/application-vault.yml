@@ -1,9 +1,13 @@
-# Loads PostgreSQL credentials from HashiCorp Vault KV v2 (secret/vaultspring).
+# PostgreSQL credentials from Vault Database Secrets Engine (ADR-0005 Phase 1).
+# JDBC URL from prod/dev env or POSTGRES_URL; username/password from dynamic role.
 # Activate with profile `vault` or group `prod-vault`. Requires VAULT_TOKEN via env.
 
 spring:
   config:
     import: vault://
+  datasource:
+    url: ${POSTGRES_URL:${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/users_db}}
+    driver-class-name: org.postgresql.Driver
   cloud:
     vault:
       uri: ${VAULT_ADDR:http://127.0.0.1:8200}
@@ -11,8 +15,17 @@ spring:
       token: ${VAULT_TOKEN:}
       fail-fast: true
       kv:
+        enabled: false
+      database:
         enabled: true
-        backend: secret
-        application-name: ${spring.application.name}
-        default-context: ${spring.application.name}
-        profile-separator: "/"
+        role: ${VAULT_DB_ROLE:vaultspring-app}
+        backend: database
+        username-property: spring.datasource.username
+        password-property: spring.datasource.password
+      config:
+        lifecycle:
+          enabled: true
+          min-renewal: 10s
+          expiry-threshold: 1m
+          lease-endpoints: SysLeases
+          lease-strategy: RetainOnError
