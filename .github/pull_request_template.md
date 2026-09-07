@@ -30,6 +30,7 @@ Refs # / Closes #
 
 - [ ] Branch created from **`sandbox`** (or bootstrap documented)
 - [ ] Target branch is **`sandbox`** (work) or **`main`** (promote only)
+- [ ] `bash scripts/pre-push-check.sh` passed locally (delivery gate + CI parity)
 - [ ] `./mvnw -B checkstyle:check test` passed locally (when Java/XML changed)
 - [ ] `./mvnw -B verify -Pintegration-tests` when persistence/Flyway/API integration touched (Docker)
 - [ ] Docs updated if this PR changes build, run, or architecture

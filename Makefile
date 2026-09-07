@@ -206,11 +206,15 @@ verify:
 	@echo "🔍 Verifying project..."
 	$(MVN) verify
 
+pre-push:
+	@echo "🚦 Running local delivery gate (pre-push-check)..."
+	bash scripts/pre-push-check.sh
+
 # =====================
 # 📌 Phony Targets
 .PHONY: sonar check-sec check-sec-dev check-sec-prod report-sec \
         sql-injection-test xss-test ddos-test zap-scan jwt-verify \
         build build-clean-install package run run-dev run-prod clean clean-test-jacoco \
-        test-unit test-it test-all coverage verify wrapper \
+        test-unit test-it test-all coverage verify pre-push wrapper \
         observability-up observability-down observability-restart observability-logs observability-status observability-validate \
         flyway-clean-dev flyway-info-prod flyway-repair-prod flyway-migrate-prod

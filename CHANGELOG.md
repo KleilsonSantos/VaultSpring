@@ -7,6 +7,10 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Local delivery gate: `scripts/check-pr-delivery-gate.sh` + expanded `pre-push-check.sh` (issue-link parity before push); `main` → `sandbox` sync PRs skip issue-link; selftest in CI
+
 ## [0.1.5] - 2026-09-06
 
 ### Added

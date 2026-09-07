@@ -90,9 +90,11 @@ bash scripts/check-semver-alignment.sh
 1. Open an issue ([Implementation](./.github/ISSUE_TEMPLATE/implementation.md) or [Feature Request](./.github/ISSUE_TEMPLATE/feature_request.md))
 2. Kickoff branch from `sandbox` (`scripts/task-kickoff.sh`; bootstrap: `scripts/bootstrap-sandbox.sh`)
 3. Keep commits as `type: description`
-4. Open a PR with `Closes #N` and the template checklist
-5. Update `CHANGELOG.md` `[Unreleased]` for notable changes
-6. Cut releases per [`docs/guides/releases.md`](./docs/guides/releases.md)
+4. **`bash scripts/pre-push-check.sh`** before push (delivery gate + Maven CI parity)
+5. Open a PR with `Refs #N` / `Closes #N` and the template checklist
+6. **`gh pr checks --watch`** after push — do not merge on red `issue-link`
+7. Update `CHANGELOG.md` `[Unreleased]` for notable changes
+8. Cut releases per [`docs/guides/releases.md`](./docs/guides/releases.md)
 
 ## Branch prefixes
 
