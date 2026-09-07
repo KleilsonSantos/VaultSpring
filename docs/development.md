@@ -106,7 +106,7 @@ Details: [configuration.md](./configuration.md) · Vault guide: [guides/vault-in
 
 ```bash
 ./mvnw -B checkstyle:check test          # unit tests (profile test, H2)
-./mvnw -B verify -Pintegration-tests     # UserApiIT, VaultDatabaseSecretsIT (Docker)
+./mvnw -B verify -Pintegration-tests     # UserApiIT, VaultDatabaseSecretsIT, VaultDatabaseCredentialRotationIT (Docker)
 ./mvnw -B verify                         # unit + JaCoCo report
 ```
 
@@ -155,7 +155,7 @@ CI runs the same `docker build` smoke on every PR (`docker-build` job).
 | Type | Location | Runner |
 | ---- | -------- | ------ |
 | Unit | `*Test.java` | Surefire, profile `test` |
-| Integration | `*IT.java` | Failsafe, profile `it`, Testcontainers — e.g. `UserApiIT`, `VaultDatabaseSecretsIT` |
+| Integration | `*IT.java` | Failsafe, profile `it`, Testcontainers — e.g. `UserApiIT`, `VaultDatabaseSecretsIT`, `VaultDatabaseCredentialRotationIT` |
 | Security smoke | `SecurityFilterChainTest` | MockMvc |
 
 Coverage: JaCoCo on `verify`; Codecov uploads from CI (non-blocking).

@@ -78,6 +78,7 @@ Vault Database Secrets Engine (see `application-vault.yml`, ADR-0005):
 - Role: `vaultspring-app` (override with `VAULT_DB_ROLE`)
 - Dynamic properties: `spring.datasource.username`, `spring.datasource.password`
 - JDBC URL: `POSTGRES_URL` / `SPRING_DATASOURCE_URL` (not from Vault KV)
+- Phase 2: `VaultDatabaseCredentialRotation` rotates HikariCP credentials when `max_lease_ttl` is reached (metric: `vaultspring.vault.database.rotation.total`)
 - Seed dev: `bash scripts/vault-seed-database-dev.sh` (after `vault-init-dev.sh`)
 
 ### Optional local tooling

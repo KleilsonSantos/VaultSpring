@@ -142,7 +142,7 @@ flowchart TB
 Two supported paths:
 
 1. **Environment** — profile `prod` / `dev`: `SPRING_DATASOURCE_*` or `POSTGRES_*` (see [configuration.md](./configuration.md)).
-2. **Vault** — profiles `vault` or group `prod-vault`: Spring Cloud Vault Database Secrets Engine role `vaultspring-app` (seed via `scripts/vault-seed-database-dev.sh`); JDBC URL from env/YAML ([ADR-0005](./adr/0005-dynamic-postgresql-credentials-vault.md)).
+2. **Vault** — profiles `vault` or group `prod-vault`: Spring Cloud Vault Database Secrets Engine role `vaultspring-app` (seed via `scripts/vault-seed-database-dev.sh`); JDBC URL from env/YAML ([ADR-0005](./adr/0005-dynamic-postgresql-credentials-vault.md)). When `max_lease_ttl` is reached, `VaultDatabaseCredentialRotation` requests new credentials and soft-evicts the HikariCP pool without restart.
 
 ADR: [0002-datasource-via-vault-or-env.md](./adr/0002-datasource-via-vault-or-env.md)
 
