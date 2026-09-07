@@ -30,6 +30,11 @@ public final class ObservabilityConstants {
      */
     public static final String METRIC_AUTH_LOGIN_DURATION = "vaultspring.auth.login.duration";
 
+    /**
+     * Micrometer counter for Vault database credential rotations.
+     */
+    public static final String METRIC_VAULT_DB_ROTATION_TOTAL = "vaultspring.vault.database.rotation.total";
+
     private ObservabilityConstants() {
     }
 }

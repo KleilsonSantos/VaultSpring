@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (Phase 1 — 2026-09-07). Phase 2 (runtime DataSource rotation on `max_lease_ttl`) remains open.
+Accepted (Phase 1 — 2026-09-07; Phase 2 — 2026-09-07). Runtime DataSource rotation on `max_lease_ttl` implemented in Phase 2.
 
 ## Context
 
