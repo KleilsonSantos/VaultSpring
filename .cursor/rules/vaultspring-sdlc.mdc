@@ -39,14 +39,16 @@ Use this file as a short delivery bridge. Details: [`docs/README.md`](../../docs
 ## Checklist
 
 - Issue linked in PR?
+- `bash scripts/pre-push-check.sh` before push (delivery gate + CI parity)?
 - Does the change match actual code, not README marketing?
 - Tests green (`./mvnw -B test`) when Java is touched?
+- After push: `gh pr checks --watch` — never merge on red **`issue-link`**?
 - CI workflow still uses current GitHub Actions majors?
 - Agent starting local Docker/JVM? Owner gave **`ok infra`** per [`docs/guides/local-runtime-authorization.md`](../../docs/guides/local-runtime-authorization.md)
 
 ## Local runtime (MacBook)
 
-Canonical order: inspect → audit → unit tests green → **`ok infra`** (if live needed) → live proof → commit-ready → commit when owner asks. Three gates: task / infra / commit. Guide: [`docs/guides/local-runtime-authorization.md`](../../docs/guides/local-runtime-authorization.md) · rule: [`.cursor/rules/local-runtime-gate.mdc`](local-runtime-gate.mdc)
+Canonical order: inspect → audit → unit tests green → **`bash scripts/pre-push-check.sh`** → **`ok infra`** (if live needed) → live proof → commit-ready → commit when owner asks → **`gh pr checks --watch`**. Three gates: task / infra / commit. Guide: [`docs/guides/local-runtime-authorization.md`](../../docs/guides/local-runtime-authorization.md) · rule: [`.cursor/rules/local-runtime-gate.mdc`](local-runtime-gate.mdc)
 
 ## PKB (prompt catalog)
 

@@ -128,6 +128,9 @@ Details: [configuration.md](./configuration.md).
 | `scripts/task-kickoff.sh <issue> <branch>` | Branch from `sandbox` + issue comment |
 | `scripts/bootstrap-sandbox.sh` | One-time create remote `sandbox` from `main` |
 | `scripts/check-pr-issue-link.sh` | CI: require `Refs #N` on PRs → `sandbox` |
+| `scripts/check-pr-delivery-gate.sh` | **Local** parity for `issue-link` — run before push |
+| `scripts/pre-push-check.sh` | **Local** full gate: delivery + observability configs + Maven `quality` |
+| `scripts/check-pr-delivery-gate-selftest.sh` | Regression tests for delivery gate |
 | `scripts/install-hooks.sh` | Enable `.githooks/` (Conventional Commits) |
 | `scripts/check-semver-alignment.sh` | Release gate (CI on `main`) |
 | `scripts/vault-seed-dev.sh` | Seed Vault KV for local JDBC |
