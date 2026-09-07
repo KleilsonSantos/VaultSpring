@@ -10,6 +10,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Vault Database Secrets Engine integration (ADR-0005 Phase 1): dynamic JDBC credentials in `vault` / `prod-vault` profiles; `scripts/vault-seed-database-dev.sh`; `VaultDatabaseSecretsIT`
+- ADR-0005 Phase 2: runtime HikariCP credential rotation on Vault `max_lease_ttl` (`VaultDatabaseCredentialRotation`, `VaultDatabaseCredentialRotationIT`, metric `vaultspring.vault.database.rotation.total`)
 - Local delivery gate: `scripts/check-pr-delivery-gate.sh` + expanded `pre-push-check.sh` (issue-link parity before push); `main` → `sandbox` sync PRs skip issue-link; selftest in CI
 - PKB: `prompt.security.comprehensive-appsec-audit` cataloged
 

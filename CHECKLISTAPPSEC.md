@@ -73,7 +73,7 @@ Style: no emoji in section titles — see [`docs/guides/writing-style.md`](docs/
 
 - [x] Dynamic JDBC credentials via `vault` / `prod-vault` profiles ([ADR-0005](docs/adr/0005-dynamic-postgresql-credentials-vault.md))
 - [ ] Vault AppRole / Kubernetes auth (today: `TOKEN` in dev Compose)
-- [ ] Lease rotation at `max_ttl` validated in staging (Phase 2 — when deployed)
+- [ ] Lease rotation at `max_ttl` validated in staging (`VaultDatabaseCredentialRotation`, metric `vaultspring.vault.database.rotation.total`)
 
 ---
 

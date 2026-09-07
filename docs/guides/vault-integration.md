@@ -80,7 +80,9 @@ Spring Cloud Vault populates `spring.datasource.username` and `spring.datasource
 
 ## Lease lifecycle
 
-`application-vault.yml` enables lease renewal (`spring.cloud.vault.config.lifecycle`). Vault renews credentials until `max_ttl`; at terminal expiry Spring Cloud Vault does **not** rotate the pool automatically — see Phase 2 in [ADR-0005](../adr/0005-dynamic-postgresql-credentials-vault.md) when merged.
+`application-vault.yml` enables lease renewal (`spring.cloud.vault.config.lifecycle`). Vault renews credentials until `max_ttl`. At terminal expiry, `VaultDatabaseCredentialRotation` requests new credentials and soft-evicts the HikariCP pool without restart (ADR-0005 Phase 2).
+
+Metric: `vaultspring.vault.database.rotation.total` (`result=success|failure`).
 
 ## Verify
 
@@ -90,7 +92,7 @@ curl -s http://localhost:8080/actuator/health
 bash scripts/api-live-smoke.sh
 ```
 
-Integration tests (CI): `VaultDatabaseSecretsIT` (create → use → renew).
+Integration tests (CI): `VaultDatabaseSecretsIT` (create → use → renew), `VaultDatabaseCredentialRotationIT` (rotation after short `max_ttl`).
 
 ## Troubleshooting
 
@@ -99,7 +101,7 @@ Integration tests (CI): `VaultDatabaseSecretsIT` (create → use → renew).
 | `fail-fast` on startup | `VAULT_TOKEN` set, Vault unsealed, seed script ran |
 | `permission denied` on DB | Re-run `vault-seed-database-dev.sh`; confirm Postgres admin credentials in `.env` |
 | App uses static admin user | Wrong profile — need `vault` or `prod-vault`, not `dev` alone |
-| Lease expired / auth failures | Restart app or wait for Phase 2 rotation component; check Vault role TTL |
+| Lease expired / auth failures | Check metric `vaultspring.vault.database.rotation.total`; verify `VaultDatabaseCredentialRotation` logs; confirm Vault role TTL |
 
 Never commit `.env`, root tokens, or unseal keys. Compose Vault is **local infrastructure only**.
 
