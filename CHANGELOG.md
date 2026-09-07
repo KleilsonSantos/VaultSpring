@@ -7,6 +7,8 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.5] - 2026-09-06
+
 ### Added
 
 - Observability platform: structured JSON logging (prod), `X-Correlation-ID` filter, OpenTelemetry OTLP tracing (Micrometer bridge), auth metrics, local stack under `docker/observability/`, Grafana dashboard provisioning, `docs/observability/`, Makefile `observability-*` targets, CI config validation
