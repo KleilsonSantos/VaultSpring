@@ -1,0 +1,33 @@
+server:
+  port: 0
+
+spring:
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  cloud:
+    vault:
+      enabled: true
+
+vaultspring:
+  jwt:
+    secret: vault-db-it-jwt-secret-at-least-32-chars!!
+    expiration-seconds: 3600
+
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
