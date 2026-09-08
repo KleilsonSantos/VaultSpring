@@ -14,7 +14,7 @@ Style: no emoji in section titles — see [`docs/guides/writing-style.md`](docs/
 - [x] CSRF disabled with documented rationale (stateless API baseline)
 - [ ] AuthN/AuthZ audit logging enabled
 - [x] JWT login at `POST /api/v1/auth/login` (HS256 Bearer — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6))
-- [ ] Per-resource authorization / RBAC (any valid JWT can access all users today)
+- [x] Per-resource authorization / RBAC on `/api/v1/users` (`USER` → `/me`; `ADMIN` → list/create) — [#103](https://github.com/KleilsonSantos/VaultSpring/issues/103)
 - [ ] Rate limiting on login and sensitive endpoints
 
 ---

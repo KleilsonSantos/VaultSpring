@@ -12,12 +12,14 @@ flowchart LR
     SWAG["GET /swagger-ui dev"]
   end
   subgraph auth [Bearer JWT required]
-    GET["GET /api/v1/users"]
-    POST["POST /api/v1/users"]
+    ME["GET /api/v1/users/me — any authenticated user"]
+    GET["GET /api/v1/users — ADMIN"]
+    POST["POST /api/v1/users — ADMIN"]
     PROM["GET /actuator/prometheus"]
     INFO["GET /actuator/info"]
   end
   CLIENT((Client)) --> LOGIN
+  CLIENT --> ME
   CLIENT --> GET
   CLIENT --> POST
   CLIENT --> HEALTH
@@ -31,7 +33,18 @@ flowchart LR
 1. `POST /api/v1/auth/login` with email + password (public).
 2. Use `Authorization: Bearer <accessToken>` on protected routes.
 
-Dev seed users (after Flyway): `john@example.com` / `secret123` — see [`development.md`](./development.md).
+Dev seed users (after Flyway): `john@example.com` / `secret123` (**ADMIN**) — see [`development.md`](./development.md).
+
+## Authorization (RBAC)
+
+| Role | Routes |
+| ---- | ------ |
+| **USER** | `GET /api/v1/users/me`, actuator (when authenticated) |
+| **ADMIN** | All USER routes plus `GET /api/v1/users`, `POST /api/v1/users` |
+
+Roles are stored on the user record, embedded in the JWT `roles` claim, and enforced by Spring Security (`hasRole("ADMIN")`). New users created via the API receive role **USER** by default.
+
+**Errors:** `403 Forbidden` when a valid JWT lacks the required role.
 
 ## OpenAPI / Swagger
 
@@ -70,9 +83,20 @@ Content-Type: application/json
 
 ## Users
 
-All user routes require a valid JWT.
+All user routes require a valid JWT. List and create require role **ADMIN**; any authenticated user may read their own profile.
 
-### List users
+### Current user profile
+
+```http
+GET /api/v1/users/me
+Authorization: Bearer <accessToken>
+```
+
+**Response** `200 OK` — `UserResponse` for the JWT subject (email).
+
+**Errors:** `401` missing/invalid JWT.
+
+### List users (admin)
 
 ```http
 GET /api/v1/users
@@ -81,9 +105,9 @@ Authorization: Bearer <accessToken>
 
 **Response** `200 OK` — array of `UserResponse` (no password field).
 
-**Errors:** `401` with JSON body (`Bearer token required` or `invalid or expired bearer token`).
+**Errors:** `401` with JSON body (`Bearer token required` or `invalid or expired bearer token`) · `403` when JWT is valid but caller is not ADMIN.
 
-### Create user
+### Create user (admin)
 
 ```http
 POST /api/v1/users
@@ -97,13 +121,15 @@ Content-Type: application/json
 }
 ```
 
-**Response** `201 Created` — body is `UserResponse`.
+**Response** `201 Created` — body is `UserResponse` (role **USER**).
 
 Validation (`UserRequest`):
 
 - `name`: required, 3–50 characters  
 - `email`: required, valid email, max 100  
 - `password`: required, 8–72 characters (stored as BCrypt hash)  
+
+**Errors:** `403` when caller is not ADMIN.
 
 ### Create user (sequence)
 
@@ -149,6 +175,19 @@ sequenceDiagram
 }
 ```
 
+### Forbidden (403)
+
+Valid JWT but insufficient role (e.g. USER calling admin-only routes):
+
+```json
+{
+  "type": "about:blank",
+  "title": "Forbidden",
+  "status": 403,
+  "detail": "Access Denied"
+}
+```
+
 ### Unauthorized (401)
 
 Missing or invalid JWT:
@@ -183,15 +222,18 @@ Login failure: `"detail": "invalid credentials"`.
 # Health (public)
 curl -s http://localhost:8080/actuator/health | jq .
 
-# Login
+# Login (admin seed user)
 TOKEN=$(curl -s -X POST http://localhost:8080/api/v1/auth/login \
   -H 'Content-Type: application/json' \
   -d '{"email":"john@example.com","password":"secret123"}' | jq -r .accessToken)
 
-# List users (authenticated)
+# Current user profile (any authenticated user)
+curl -s http://localhost:8080/api/v1/users/me -H "Authorization: Bearer $TOKEN" | jq .
+
+# List users (admin)
 curl -s http://localhost:8080/api/v1/users -H "Authorization: Bearer $TOKEN" | jq .
 
-# Create user (authenticated)
+# Create user (admin)
 curl -s -X POST http://localhost:8080/api/v1/users \
   -H "Authorization: Bearer $TOKEN" \
   -H 'Content-Type: application/json' \

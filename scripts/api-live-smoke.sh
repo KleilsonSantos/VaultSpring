@@ -32,7 +32,10 @@ TOKEN=$(echo "$BODY" | python3 -c "import sys,json; print(json.load(sys.stdin)['
 section "GET /api/v1/users (sem token — esperado 401 JSON)"
 curl -s -w "\nHTTP %{http_code}\n" "$BASE/api/v1/users"
 
-section "GET /api/v1/users (com Bearer)"
+section "GET /api/v1/users/me (com Bearer)"
+curl -s -w "\nHTTP %{http_code}\n" "$BASE/api/v1/users/me" -H "Authorization: Bearer $TOKEN"
+
+section "GET /api/v1/users (com Bearer admin — esperado 200)"
 curl -s -w "\nHTTP %{http_code}\n" "$BASE/api/v1/users" -H "Authorization: Bearer $TOKEN"
 
 section "GET /v3/api-docs (login publico)"
