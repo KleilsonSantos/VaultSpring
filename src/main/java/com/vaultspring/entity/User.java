@@ -4,6 +4,8 @@ package com.vaultspring.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.GeneratedValue;
@@ -80,6 +82,13 @@ public class User implements Serializable {
     @NotBlank
     @Column(name = "user_password", nullable = false)
     private String password;
+
+    /**
+     * Authorization role for API access.
+     */
+    @Enumerated(EnumType.STRING)
+    @Column(name = "user_role", nullable = false)
+    private UserRole role = UserRole.USER;
 
     /**
      * The timestamp when the user was created.
