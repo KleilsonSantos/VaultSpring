@@ -7,6 +7,14 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- User API RBAC (SEC-001, [#103](https://github.com/KleilsonSantos/VaultSpring/issues/103)): `UserRole` (`USER`, `ADMIN`), Flyway `V4__add_user_roles.sql`, JWT `roles` claim, `GET /api/v1/users/me`, admin-only list/create on `/api/v1/users`
+
+### Changed
+
+- Dev seed `john@example.com` promoted to **ADMIN**; new API-created users default to **USER**
+
 ## [0.1.6] - 2026-09-07
 
 ### Added

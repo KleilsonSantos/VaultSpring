@@ -3,6 +3,7 @@ package com.vaultspring;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vaultspring.entity.User;
+import com.vaultspring.entity.UserRole;
 import com.vaultspring.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -66,6 +67,8 @@ class ApiFunctionalAuditTest {
 
     private String accessToken;
 
+    private String adminAccessToken;
+
     private int testNumber;
 
     @BeforeEach
@@ -76,6 +79,7 @@ class ApiFunctionalAuditTest {
             user.setName("Audit User");
             user.setEmail(AUDIT_EMAIL);
             user.setPassword(passwordEncoder.encode(AUDIT_PASSWORD));
+            user.setRole(UserRole.USER);
             return userRepository.save(user);
         });
     }
@@ -139,46 +143,53 @@ class ApiFunctionalAuditTest {
 
     @Test
     @Order(9)
-    void audit09ListUsersWithBearer() throws Exception {
+    void audit09CurrentUserWithBearer() throws Exception {
         ensureToken();
-        callAndPrint("GET", "/api/v1/users", null, bearerHeaders(), HttpStatus.OK);
+        callAndPrint("GET", "/api/v1/users/me", null, bearerHeaders(), HttpStatus.OK);
     }
 
     @Test
     @Order(10)
-    void audit10CreateUserWithBearer() throws Exception {
+    void audit10ListUsersForbiddenForStandardUser() throws Exception {
         ensureToken();
-        String body = "{\"name\":\"Audit Created\",\"email\":\"audit-created@example.com\","
-                + "\"password\":\"secret123\"}";
-        callAndPrint("POST", "/api/v1/users", body, bearerHeaders(), HttpStatus.CREATED);
+        callAndPrint("GET", "/api/v1/users", null, bearerHeaders(), HttpStatus.FORBIDDEN);
     }
 
     @Test
     @Order(11)
-    void audit11CreateUserDuplicateEmail() throws Exception {
+    void audit11CreateUserForbiddenForStandardUser() throws Exception {
         ensureToken();
-        String body = "{\"name\":\"Duplicate\",\"email\":\"" + AUDIT_EMAIL + "\",\"password\":\"secret123\"}";
-        callAndPrint("POST", "/api/v1/users", body, bearerHeaders(), HttpStatus.CONFLICT);
+        String body = "{\"name\":\"Audit Created\",\"email\":\"audit-created@example.com\","
+                + "\"password\":\"secret123\"}";
+        callAndPrint("POST", "/api/v1/users", body, bearerHeaders(), HttpStatus.FORBIDDEN);
     }
 
     @Test
     @Order(12)
-    void audit12CreateUserWithoutAuth() throws Exception {
+    void audit12CreateUserDuplicateEmailRequiresAdmin() throws Exception {
+        ensureAdminToken();
+        String body = "{\"name\":\"Duplicate\",\"email\":\"" + AUDIT_EMAIL + "\",\"password\":\"secret123\"}";
+        callAndPrint("POST", "/api/v1/users", body, adminBearerHeaders(), HttpStatus.CONFLICT);
+    }
+
+    @Test
+    @Order(13)
+    void audit13CreateUserWithoutAuth() throws Exception {
         String body = "{\"name\":\"No Auth\",\"email\":\"noauth@example.com\",\"password\":\"secret123\"}";
         callAndPrint("POST", "/api/v1/users", body, null, HttpStatus.UNAUTHORIZED);
     }
 
     @Test
-    @Order(13)
-    void audit13CreateUserInvalidPayload() throws Exception {
-        ensureToken();
+    @Order(14)
+    void audit14CreateUserInvalidPayloadRequiresAdmin() throws Exception {
+        ensureAdminToken();
         String body = "{\"name\":\"\",\"email\":\"bad\",\"password\":\"short\"}";
-        callAndPrint("POST", "/api/v1/users", body, bearerHeaders(), HttpStatus.BAD_REQUEST);
+        callAndPrint("POST", "/api/v1/users", body, adminBearerHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    @Order(14)
-    void audit14ListUsersInvalidToken() throws Exception {
+    @Order(15)
+    void audit15ListUsersInvalidToken() throws Exception {
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth("invalid.jwt.token");
         ResponseEntity<String> response = callAndPrint(
@@ -189,21 +200,21 @@ class ApiFunctionalAuditTest {
     }
 
     @Test
-    @Order(15)
-    void audit15PrometheusWithBearer() throws Exception {
+    @Order(16)
+    void audit16PrometheusWithBearer() throws Exception {
         ensureToken();
         callAndPrint("GET", "/actuator/prometheus", null, bearerHeaders(), HttpStatus.OK);
     }
 
     @Test
-    @Order(16)
-    void audit16SwaggerUiAvailable() throws Exception {
+    @Order(17)
+    void audit17SwaggerUiAvailable() throws Exception {
         callAndPrint("GET", "/swagger-ui.html", null, null, HttpStatus.OK);
     }
 
     @Test
-    @Order(17)
-    void audit17OpenApiDocsAvailable() throws Exception {
+    @Order(18)
+    void audit18OpenApiDocsAvailable() throws Exception {
         ResponseEntity<String> response = callAndPrint("GET", "/v3/api-docs", null, null, HttpStatus.OK);
         JsonNode json = objectMapper.readTree(response.getBody());
         printField("openapi version", json.get("openapi").asText());
@@ -228,6 +239,33 @@ class ApiFunctionalAuditTest {
         ResponseEntity<String> login = restTemplate.postForEntity(
                 baseUrl + "/api/v1/auth/login", new HttpEntity<>(body, headers), String.class);
         accessToken = objectMapper.readTree(login.getBody()).get("accessToken").asText();
+    }
+
+    private void ensureAdminToken() throws Exception {
+        if (adminAccessToken != null) {
+            return;
+        }
+        userRepository.findByEmail("audit-admin@example.com").orElseGet(() -> {
+            User admin = new User();
+            admin.setName("Audit Admin");
+            admin.setEmail("audit-admin@example.com");
+            admin.setPassword(passwordEncoder.encode(AUDIT_PASSWORD));
+            admin.setRole(UserRole.ADMIN);
+            return userRepository.save(admin);
+        });
+        String body = "{\"email\":\"audit-admin@example.com\",\"password\":\"" + AUDIT_PASSWORD + "\"}";
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        ResponseEntity<String> login = restTemplate.postForEntity(
+                baseUrl + "/api/v1/auth/login", new HttpEntity<>(body, headers), String.class);
+        adminAccessToken = objectMapper.readTree(login.getBody()).get("accessToken").asText();
+    }
+
+    private HttpHeaders adminBearerHeaders() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(adminAccessToken);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 
     private HttpHeaders bearerHeaders() {

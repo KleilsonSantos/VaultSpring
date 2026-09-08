@@ -10,12 +10,14 @@ import org.springframework.boot.actuate.metrics.export.prometheus.PrometheusScra
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -41,14 +43,22 @@ public class SecurityConfig {
     private final ProblemDetailAccessDeniedHandler accessDeniedHandler;
 
     /**
+     * Maps JWT roles claim to authorities.
+     */
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
+
+    /**
      * @param authenticationEntryPoint RFC 7807 401 handler
      * @param accessDeniedHandler      RFC 7807 403 handler
+     * @param jwtAuthenticationConverter JWT role mapping
      */
     public SecurityConfig(
             final ProblemDetailAuthenticationEntryPoint authenticationEntryPoint,
-            final ProblemDetailAccessDeniedHandler accessDeniedHandler) {
+            final ProblemDetailAccessDeniedHandler accessDeniedHandler,
+            final JwtAuthenticationConverter jwtAuthenticationConverter) {
         this.authenticationEntryPoint = authenticationEntryPoint;
         this.accessDeniedHandler = accessDeniedHandler;
+        this.jwtAuthenticationConverter = jwtAuthenticationConverter;
     }
 
     /**
@@ -104,6 +114,9 @@ public class SecurityConfig {
                         .requestMatchers(EndpointRequest.to(InfoEndpoint.class)).authenticated()
                         .requestMatchers("/actuator/info").authenticated()
                         .requestMatchers(DOCS_PATHS).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users").hasRole("ADMIN")
                         .requestMatchers("/api/v1/**").authenticated()
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex
@@ -112,7 +125,7 @@ public class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .authenticationEntryPoint(authenticationEntryPoint)
                         .accessDeniedHandler(accessDeniedHandler)
-                        .jwt(Customizer.withDefaults()));
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)));
 
         return http.build();
     }

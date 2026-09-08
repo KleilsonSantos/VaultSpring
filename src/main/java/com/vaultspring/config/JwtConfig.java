@@ -13,6 +13,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -48,6 +50,22 @@ public class JwtConfig {
         return NimbusJwtDecoder.withSecretKey(secretKey(properties))
                 .macAlgorithm(MacAlgorithm.HS256)
                 .build();
+    }
+
+    /**
+     * Maps JWT {@code roles} claim to Spring Security authorities.
+     *
+     * @return JWT authentication converter for the resource server
+     */
+    @Bean
+    public JwtAuthenticationConverter jwtAuthenticationConverter() {
+        JwtGrantedAuthoritiesConverter authoritiesConverter = new JwtGrantedAuthoritiesConverter();
+        authoritiesConverter.setAuthoritiesClaimName("roles");
+        authoritiesConverter.setAuthorityPrefix("");
+
+        JwtAuthenticationConverter converter = new JwtAuthenticationConverter();
+        converter.setJwtGrantedAuthoritiesConverter(authoritiesConverter);
+        return converter;
     }
 
     /**

@@ -11,6 +11,7 @@ import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
+import java.util.List;
 
 /**
  * Issues signed access tokens for authenticated users.
@@ -53,6 +54,7 @@ public class JwtService {
                 .expiresAt(expiresAt)
                 .claim("uid", user.getId())
                 .claim("name", user.getName())
+                .claim("roles", List.of(user.getRole().toAuthority()))
                 .build();
 
         JwsHeader header = JwsHeader.with(MacAlgorithm.HS256).build();
