@@ -12,7 +12,7 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.vaultspring</groupId>
+    <groupId>io.github.kleilsonsantos.security</groupId>
     <artifactId>vaultspring</artifactId>
     <version>0.1.7</version>
     <name>VaultSpring</name>
@@ -245,7 +245,7 @@
                         </goals>
                         <configuration>
                             <excludes>
-                                <exclude>com/vaultspring/VaultSpringApplication*</exclude>
+                                <exclude>io/github/kleilsonsantos/security/vaultspring/VaultSpringApplication*</exclude>
                             </excludes>
                         </configuration>
                     </execution>
