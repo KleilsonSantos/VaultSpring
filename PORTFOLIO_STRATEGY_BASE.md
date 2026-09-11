@@ -4,7 +4,7 @@
 **Canonical Maven/Java namespace:** `io.github.kleilsonsantos`  
 **Portfolio site:** https://kleilson-portfolio.pages.dev  
 **Document purpose:** Single source of context to reopen work **inside each real repo** (not this IdeaProjects folder).  
-**Last updated:** 2026-09-10 (America/Sao_Paulo) — §6.2 synced with VaultSpring `main`
+**Last updated:** 2026-09-11 (America/Sao_Paulo) — §6.2 synced with VaultSpring `main`
 
 ---
 
