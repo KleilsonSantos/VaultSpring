@@ -43,5 +43,5 @@ springdoc:
 
 vaultspring:
   jwt:
-    secret: ${VAULTSPRING_JWT_SECRET:prod-jwt-secret-must-be-set-via-env-var-32c}
+    secret: ${VAULTSPRING_JWT_SECRET:}
     expiration-seconds: ${VAULTSPRING_JWT_EXPIRATION_SECONDS:3600}

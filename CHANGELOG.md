@@ -7,6 +7,15 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- JWT secret fail-fast for `prod`/`hom` profiles (`JwtSecretGuard`, `JwtSecretStartupValidator`) — rejects missing, short, or template placeholders
+
+### Changed
+
+- `application-prod.yml`: remove default JWT secret; require `VAULTSPRING_JWT_SECRET` via env
+- `.env.example`: clarify local-only placeholders and prod JWT requirement
+
 ## [0.1.7] - 2026-09-08
 
 ### Added

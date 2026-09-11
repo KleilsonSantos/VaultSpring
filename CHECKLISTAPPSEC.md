@@ -63,6 +63,7 @@ Style: no emoji in section titles — see [`docs/guides/writing-style.md`](docs/
 ## JWT
 
 - [x] Token expiry configured (`vaultspring.jwt.expiration-seconds`)
+- [x] Prod/hom fail-fast when JWT secret missing or template placeholder (`JwtSecretGuard`)
 - [ ] Malformed / expired token rejected (covered by unit/IT — verify manually on staging)
 - [ ] `iss` / `aud` / `jti` claims and revocation strategy
 - [ ] RS256 or asymmetric keys for production (today: HS256 symmetric)
