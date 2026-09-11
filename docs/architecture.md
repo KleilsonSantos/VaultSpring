@@ -84,7 +84,7 @@ flowchart TB
   SC --> ACT
 ```
 
-## Java packages (`com.vaultspring`)
+## Java packages (`io.github.kleilsonsantos.security.vaultspring`)
 
 | Package | Responsibility |
 | ------- | -------------- |
