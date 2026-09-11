@@ -10,7 +10,7 @@ language: pt-BR
 ai_ready: true
 related_docs:
   - docs/development.md
-  - src/test/java/com/vaultspring/UserApiIT.java
+  - src/test/java/io/github/kleilsonsantos/security/vaultspring/UserApiIT.java
   - .github/workflows/maven.yml
 related_prompts: []
 created_at: 2026-09-06

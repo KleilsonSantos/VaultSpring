@@ -1,0 +1,166 @@
+package io.github.kleilsonsantos.security.vaultspring.config;
+
+import io.github.kleilsonsantos.security.vaultspring.security.ProblemDetailAccessDeniedHandler;
+import io.github.kleilsonsantos.security.vaultspring.security.ProblemDetailAuthenticationEntryPoint;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
+import org.springframework.boot.actuate.health.HealthEndpoint;
+import org.springframework.boot.actuate.info.InfoEndpoint;
+import org.springframework.boot.actuate.metrics.MetricsEndpoint;
+import org.springframework.boot.actuate.metrics.export.prometheus.PrometheusScrapeEndpoint;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * HTTP security for the API and Actuator with JWT bearer authentication.
+ */
+@Configuration
+public class SecurityConfig {
+
+    /**
+     * JSON 401 responses for unauthenticated callers.
+     */
+    private final ProblemDetailAuthenticationEntryPoint authenticationEntryPoint;
+
+    /**
+     * JSON 403 responses for forbidden callers.
+     */
+    private final ProblemDetailAccessDeniedHandler accessDeniedHandler;
+
+    /**
+     * Maps JWT roles claim to authorities.
+     */
+    private final JwtAuthenticationConverter jwtAuthenticationConverter;
+
+    /**
+     * @param authenticationEntryPoint RFC 7807 401 handler
+     * @param accessDeniedHandler      RFC 7807 403 handler
+     * @param jwtAuthenticationConverter JWT role mapping
+     */
+    public SecurityConfig(
+            final ProblemDetailAuthenticationEntryPoint authenticationEntryPoint,
+            final ProblemDetailAccessDeniedHandler accessDeniedHandler,
+            final JwtAuthenticationConverter jwtAuthenticationConverter) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
+        this.accessDeniedHandler = accessDeniedHandler;
+        this.jwtAuthenticationConverter = jwtAuthenticationConverter;
+    }
+
+    /**
+     * API CORS paths.
+     */
+    private static final String API_CORS_PATTERN = "/api/**";
+
+    /**
+     * Public authentication endpoint.
+     */
+    private static final String LOGIN_PATH = "/api/v1/auth/login";
+
+    /**
+     * OpenAPI / Swagger UI paths (dev).
+     */
+    private static final String[] DOCS_PATHS = {
+            "/swagger-ui.html",
+            "/swagger-ui/**",
+            "/v3/api-docs",
+            "/v3/api-docs/**"
+    };
+
+    /**
+     * @param http security builder
+     * @param environment active profiles for HSTS
+     * @return configured filter chain
+     * @throws Exception on configuration errors
+     */
+    @Bean
+    public SecurityFilterChain securityFilterChain(final HttpSecurity http, final Environment environment)
+            throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .headers(headers -> {
+                    headers.contentTypeOptions(Customizer.withDefaults());
+                    headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
+                    if (isProdProfile(environment)) {
+                        headers.httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .maxAgeInSeconds(31_536_000));
+                    }
+                })
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(EndpointRequest.to(HealthEndpoint.class)).permitAll()
+                        .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
+                        .requestMatchers(LOGIN_PATH).permitAll()
+                        .requestMatchers(EndpointRequest.to(PrometheusScrapeEndpoint.class)).authenticated()
+                        .requestMatchers("/actuator/prometheus").authenticated()
+                        .requestMatchers(EndpointRequest.to(MetricsEndpoint.class)).authenticated()
+                        .requestMatchers("/actuator/metrics", "/actuator/metrics/**").authenticated()
+                        .requestMatchers(EndpointRequest.to(InfoEndpoint.class)).authenticated()
+                        .requestMatchers("/actuator/info").authenticated()
+                        .requestMatchers(DOCS_PATHS).permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/me").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/users").hasRole("ADMIN")
+                        .requestMatchers("/api/v1/**").authenticated()
+                        .anyRequest().authenticated())
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler))
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                        .accessDeniedHandler(accessDeniedHandler)
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)));
+
+        return http.build();
+    }
+
+    /**
+     * BCrypt encoder (strength 10). Satisfies Flyway's {@code CHAR_LENGTH(user_password) >= 60} check.
+     *
+     * @return shared password encoder
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * @return CORS rules for the public API
+     */
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:8080", "http://127.0.0.1:8080"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setMaxAge(3600L);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration(API_CORS_PATTERN, configuration);
+        return source;
+    }
+
+    /**
+     * @param environment Spring environment
+     * @return true when prod or prod-vault group is active
+     */
+    private static boolean isProdProfile(final Environment environment) {
+        return Arrays.asList(environment.getActiveProfiles()).contains("prod");
+    }
+}

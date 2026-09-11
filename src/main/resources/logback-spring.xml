@@ -3,7 +3,7 @@
     <springProperty scope="context" name="appName" source="spring.application.name" defaultValue="vaultspring"/>
     <springProperty scope="context" name="appEnv" source="APP_ENV" defaultValue="dev"/>
 
-    <conversionRule conversionWord="sanitize" converterClass="com.vaultspring.observability.SensitiveDataConverter"/>
+    <conversionRule conversionWord="sanitize" converterClass="io.github.kleilsonsantos.security.vaultspring.observability.SensitiveDataConverter"/>
 
     <springProfile name="prod | prod-vault | hom">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">

@@ -60,6 +60,7 @@ bash scripts/check-semver-alignment.sh
 
 | Tag | Description |
 | --- | ----------- |
+| `v0.1.7` | User API RBAC (SEC-001): roles, `/users/me`, admin-only list/create |
 | `v0.1.6` | Vault Database Secrets Engine (ADR-0005 Phase 1/2), delivery gate, doc audit |
 | `v0.1.5` | Observability platform, sandbox branching (ADR-0004), JWT login |
 | `v0.1.4` | API quality, Vault, SecurityFilterChain, CI hardening, technical docs hub |

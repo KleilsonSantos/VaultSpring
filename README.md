@@ -29,7 +29,7 @@ Spring Boot service for **secure credential handling**: user API with BCrypt, Po
 
 ## Overview
 
-Packages under `src/main/java/com/vaultspring`:
+Packages under `src/main/java/io/github/kleilsonsantos/security/vaultspring`:
 
 | Package | Role |
 | ------- | ---- |

@@ -12,9 +12,9 @@
         <relativePath/>
     </parent>
 
-    <groupId>com.vaultspring</groupId>
+    <groupId>io.github.kleilsonsantos.security</groupId>
     <artifactId>vaultspring</artifactId>
-    <version>0.1.7-SNAPSHOT</version>
+    <version>0.1.8-SNAPSHOT</version>
     <name>VaultSpring</name>
     <description>Spring Boot project for Vault-based secure secret management</description>
     <url>https://github.com/KleilsonSantos/VaultSpring</url>
@@ -245,7 +245,7 @@
                         </goals>
                         <configuration>
                             <excludes>
-                                <exclude>com/vaultspring/VaultSpringApplication*</exclude>
+                                <exclude>io/github/kleilsonsantos/security/vaultspring/VaultSpringApplication*</exclude>
                             </excludes>
                         </configuration>
                     </execution>
