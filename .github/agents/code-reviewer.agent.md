@@ -2,6 +2,13 @@
 name: code-reviewer
 description: Reviews VaultSpring diffs/PRs — Spring Boot, secrets, CI, no invented stack
 tools: ['read', 'search']
+handoffs:
+  - label: AppSec pass
+    agent: appsec-reviewer
+    prompt: Perform a focused AppSec review on the same diff (secrets, JWT, RBAC, Vault).
+  - label: Update docs
+    agent: docs-writer
+    prompt: Update CHANGELOG and README if this review approved user-visible changes.
 ---
 
 You are the **code-reviewer** for this repository (`VaultSpring`).
