@@ -7,11 +7,13 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.8] - 2026-09-11
+
 ### Added
 
-- GitHub Copilot custom agents (`.github/agents/`, `.github/copilot-instructions.md`) with handoffs between task-planner, code-reviewer, appsec-reviewer, docs-writer, release-coordinator
+- GitHub Copilot custom agents (`.github/agents/`, `.github/copilot-instructions.md`) with handoffs between task-planner, code-reviewer, appsec-reviewer, docs-writer, release-coordinator ([#115](https://github.com/KleilsonSantos/VaultSpring/issues/115))
 - Guides: `docs/guides/github-agents.md`, `github-projects.md`, `github-wiki-policy.md`; release-train template; wiki stub `docs/wiki/Home.md`
-- `docs/guides/portfolio-ecosystem.md` — centralize AIOS origin links; local SSOT table and adaptation notes
+- `docs/guides/portfolio-ecosystem.md` — centralize AIOS origin links; local SSOT table and adaptation notes ([#116](https://github.com/KleilsonSantos/VaultSpring/issues/116))
 - JWT secret fail-fast for `prod`/`hom` profiles (`JwtSecretGuard`, `JwtSecretStartupValidator`) — rejects missing, short, or template placeholders
 
 ### Changed
