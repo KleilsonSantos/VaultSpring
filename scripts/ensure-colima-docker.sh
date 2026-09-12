@@ -10,7 +10,8 @@ if [ -S "${HOME}/.colima/default/docker.sock" ]; then
 fi
 
 if ! command -v docker >/dev/null 2>&1; then
-  _docker_bin="$(find /usr/local/Cellar/docker /opt/homebrew/Cellar/docker -name docker -type f 2>/dev/null | sort -V | tail -1)"
+  # find exits 1 when a Cellar path is missing; do not fail callers using set -o pipefail.
+  _docker_bin="$(find /usr/local/Cellar/docker /opt/homebrew/Cellar/docker -path '*/bin/docker' -type f 2>/dev/null | sort -V | tail -1 || true)"
   if [ -n "${_docker_bin}" ]; then
     _docker_dir="$(dirname "${_docker_bin}")"
     export PATH="${_docker_dir}:${PATH}"
