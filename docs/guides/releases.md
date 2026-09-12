@@ -60,6 +60,7 @@ bash scripts/check-semver-alignment.sh
 
 | Tag | Description |
 | --- | ----------- |
+| `v0.1.8` | JWT fail-fast (prod/hom), GitHub Copilot agents and Projects guides, portfolio ecosystem hub |
 | `v0.1.7` | User API RBAC (SEC-001): roles, `/users/me`, admin-only list/create |
 | `v0.1.6` | Vault Database Secrets Engine (ADR-0005 Phase 1/2), delivery gate, doc audit |
 | `v0.1.5` | Observability platform, sandbox branching (ADR-0004), JWT login |
