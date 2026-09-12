@@ -1,6 +1,6 @@
 # Git Workflow — Branches, PRs, and Releases
 
-Official delivery flow for **VaultSpring**, aligned with [AI Operating System](https://github.com/KleilsonSantos/ai-operating-system) governance — including the permanent **`sandbox`** integration branch ([ADR-0004](../adr/0004-git-branching-strategy-sandbox.md)).
+Official delivery flow for **VaultSpring** — permanent **`sandbox`** integration branch, promotion to `main` ([ADR-0004](../adr/0004-git-branching-strategy-sandbox.md)). Portfolio context: [portfolio-ecosystem.md](./portfolio-ecosystem.md).
 
 ## Overview
 
@@ -44,7 +44,7 @@ Full checklist: [`task-kickoff.md`](./task-kickoff.md).
 7. Merge when CI green + review → **PR #2 `sandbox` → `main`** (`Closes #N`)
 8. **After merge to `main`:** SemVer gate — if releaseable commits accumulated, open **`chore: release vX.Y.Z`** PR then push tag (see [`delivery-automation.md`](./delivery-automation.md), [`releases.md`](./releases.md))
 
-Author and Committer: **`Kleilson Santos <kleilson@icloud.com>`** — same as `pom.xml` and AIOS governance.
+Author and Committer: **`Kleilson Santos <kleilson@icloud.com>`** — same as `pom.xml` ([attribution.md](./attribution.md)).
 
 **Forbidden:** `Co-authored-by: Cursor` / Copilot / `cursoragent@cursor.com`; PR footers such as “Made with Cursor”. See [`attribution.md`](./attribution.md).
 
@@ -180,4 +180,4 @@ Configured in [`.github/dependabot.yml`](../../.github/dependabot.yml).
 - [`task-kickoff.md`](./task-kickoff.md)
 - [`releases.md`](./releases.md)
 - [`CONTRIBUTING.md`](../../CONTRIBUTING.md)
-- AIOS reference: [git-workflow](https://github.com/KleilsonSantos/ai-operating-system/blob/main/docs/guides/git-workflow.md)
+- [portfolio-ecosystem.md](./portfolio-ecosystem.md) — AIOS origin links

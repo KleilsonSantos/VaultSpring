@@ -11,10 +11,12 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 - GitHub Copilot custom agents (`.github/agents/`, `.github/copilot-instructions.md`) with handoffs between task-planner, code-reviewer, appsec-reviewer, docs-writer, release-coordinator
 - Guides: `docs/guides/github-agents.md`, `github-projects.md`, `github-wiki-policy.md`; release-train template; wiki stub `docs/wiki/Home.md`
+- `docs/guides/portfolio-ecosystem.md` — centralize AIOS origin links; local SSOT table and adaptation notes
 - JWT secret fail-fast for `prod`/`hom` profiles (`JwtSecretGuard`, `JwtSecretStartupValidator`) — rejects missing, short, or template placeholders
 
 ### Changed
 
+- README delivery bullet and guide titles focus on VaultSpring SSOT; scattered `AIOS reference:` footers point to `portfolio-ecosystem.md`
 - `application-prod.yml`: remove default JWT secret; require `VAULTSPRING_JWT_SECRET` via env
 - `.env.example`: clarify local-only placeholders and prod JWT requirement
 

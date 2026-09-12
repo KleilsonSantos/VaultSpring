@@ -34,6 +34,7 @@ flowchart TD
 | [guides/local-runtime-authorization.md](./guides/local-runtime-authorization.md) | All | **MacBook gate** — task vs infra owner approval |
 | [guides/vault-integration.md](./guides/vault-integration.md) | DevOps, developers | Vault init, Database Engine seed, Compose flow |
 | [guides/releases.md](./guides/releases.md) | Maintainers | SemVer, tags, CHANGELOG |
+| [guides/portfolio-ecosystem.md](./guides/portfolio-ecosystem.md) | All | Portfolio context — AIOS reference, local SSOT |
 | [guides/github-agents.md](./guides/github-agents.md) | Contributors | Copilot custom agents catalog |
 | [guides/github-projects.md](./guides/github-projects.md) | Maintainers | Projects v2 schema and release train |
 | [guides/github-wiki-policy.md](./guides/github-wiki-policy.md) | All | Wiki disabled / stub — docs in Git are SSOT |

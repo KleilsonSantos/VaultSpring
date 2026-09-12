@@ -2,7 +2,7 @@
 
 Thanks for considering a contribution to **VaultSpring**.
 
-Delivery governance follows patterns from [AI Operating System](https://github.com/KleilsonSantos/ai-operating-system), including the permanent **`sandbox`** integration branch ([ADR-0004](./docs/adr/0004-git-branching-strategy-sandbox.md)).
+Delivery governance uses a permanent **`sandbox`** integration branch ([ADR-0004](./docs/adr/0004-git-branching-strategy-sandbox.md)). Portfolio context (AIOS reference platform, what was adapted): [`docs/guides/portfolio-ecosystem.md`](./docs/guides/portfolio-ecosystem.md).
 
 ## Guides
 
@@ -11,7 +11,8 @@ Delivery governance follows patterns from [AI Operating System](https://github.c
 | [`docs/README.md`](./docs/README.md) | Technical doc index (architecture, config, API, dev) |
 | [`docs/guides/writing-style.md`](./docs/guides/writing-style.md) | Commits, issues, docs — no gitmoji (with references) |
 | [`docs/guides/attribution.md`](./docs/guides/attribution.md) | Author identity — Kleilson Santos; no IDE trailers |
-| [`docs/guides/delivery-automation.md`](./docs/guides/delivery-automation.md) | Push / PR / tag triggers (AIOS-aligned) |
+| [`docs/guides/delivery-automation.md`](./docs/guides/delivery-automation.md) | Push / PR / tag triggers |
+| [`docs/guides/portfolio-ecosystem.md`](./docs/guides/portfolio-ecosystem.md) | Related repos — AIOS reference, local SSOT |
 | [`docs/guides/git-workflow.md`](./docs/guides/git-workflow.md) | Branches, PRs, commits |
 | [`docs/guides/task-kickoff.md`](./docs/guides/task-kickoff.md) | Issue → branch → traceability |
 | [`docs/guides/releases.md`](./docs/guides/releases.md) | SemVer, tags, CHANGELOG |

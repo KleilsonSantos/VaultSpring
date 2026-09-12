@@ -7,7 +7,7 @@ alwaysApply: true
 
 Use this file as a short delivery bridge. Details: [`docs/README.md`](../../docs/README.md), `docs/guides/`, `CONTRIBUTING.md`, `AGENTS.md`, `.github/pull_request_template.md`.
 
-## Traceability (AIOS-aligned)
+## Traceability
 
 1. **Issue** with acceptance criteria (`.github/ISSUE_TEMPLATE/implementation.md`)
 2. **Kickoff**: `bash scripts/task-kickoff.sh <issue> <type>/<slug>`

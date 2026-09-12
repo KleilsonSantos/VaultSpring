@@ -11,7 +11,7 @@ This is **not** a second product SSOT. Canonical truth remains:
 
 **MacBook infra gate (canonical):** [`../guides/local-runtime-authorization.md`](../guides/local-runtime-authorization.md) — order: unit tests green → `ok infra` → live proof → commit-ready → commit when owner asks. Task gate alone is not enough for infra or commit.
 
-Reference platform: [AI Operating System](https://github.com/KleilsonSantos/ai-operating-system) (`docs/prompts/`). VaultSpring adapts the PKB pattern without AIOS runtime engines (no `compilePrompt`, no vector index in MVP).
+PKB layout adapted from the portfolio reference platform — see [portfolio-ecosystem.md](../guides/portfolio-ecosystem.md). VaultSpring has no AIOS runtime engines (no `compilePrompt`, no vector index in MVP).
 
 Long-term ladder: [`pkb-evolution.md`](./pkb-evolution.md).
 

@@ -1,4 +1,4 @@
-# Attribution and authorship (AIOS-aligned)
+# Attribution and authorship
 
 All delivery artifacts attribute **Kleilson Santos**, not IDE or AI tools.
 
@@ -40,4 +40,4 @@ Before push or PR:
 
 - [`git-workflow.md`](./git-workflow.md)
 - [`CONTRIBUTING.md`](../../CONTRIBUTING.md)
-- AIOS reference: [git-workflow — merges and author](https://github.com/KleilsonSantos/ai-operating-system/blob/main/docs/guides/git-workflow.md)
+- [portfolio-ecosystem.md](./portfolio-ecosystem.md) — AIOS origin links

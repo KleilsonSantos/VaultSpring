@@ -52,4 +52,4 @@ Normas de texto para **commits, issues, PRs, CHANGELOG e documentação técnica
 | [Conventional Commits v1.0](https://www.conventionalcommits.org/en/v1.0.0/) | Formato de commit |
 | [Keep a Changelog 1.1](https://keepachangelog.com/en/1.1.0/) | `CHANGELOG.md` |
 | [GitHub Markdown spec](https://github.github.com/gfm/) | Task lists, headings |
-| [AIOS git-workflow](https://github.com/KleilsonSantos/ai-operating-system/blob/main/docs/guides/git-workflow.md) | Governança de referência (gitmoji **não** replicado aqui) |
+| [portfolio-ecosystem.md](./portfolio-ecosystem.md) | AIOS origin links — gitmoji **não** replicado aqui |

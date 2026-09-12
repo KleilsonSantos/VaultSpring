@@ -32,7 +32,7 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 - **Local runtime (MacBook)**: [`docs/guides/local-runtime-authorization.md`](docs/guides/local-runtime-authorization.md), `.cursor/rules/local-runtime-gate.mdc` — **order:** inspect → audit → unit tests green → **`ok infra`** (if live needed) → live proof → commit-ready → commit only when you ask
 - **PKB intake** (`PKB intake` / `catalogar prompt` / `guardar prompt`): catalog into `docs/prompts/` per [`docs/prompts/README.md`](docs/prompts/README.md). Do **not** run the prompt unless the owner also says `ok` / `prossegue`. Validate with `bash scripts/check-pkb-inventory.sh`.
 - **GitHub Copilot agents / Projects / Wiki**: [`.github/copilot-instructions.md`](.github/copilot-instructions.md), [`.github/agents/`](.github/agents/), [`docs/guides/github-agents.md`](docs/guides/github-agents.md), [`docs/guides/github-projects.md`](docs/guides/github-projects.md), [`docs/guides/github-wiki-policy.md`](docs/guides/github-wiki-policy.md)
-- **AIOS reference platform**: [ai-operating-system](https://github.com/KleilsonSantos/ai-operating-system) (governance patterns; **`sandbox` + `main`** — [ADR-0004](docs/adr/0004-git-branching-strategy-sandbox.md))
+- **Portfolio ecosystem**: [`docs/guides/portfolio-ecosystem.md`](docs/guides/portfolio-ecosystem.md) — AIOS reference platform, local SSOT, what was adapted ([ADR-0004](docs/adr/0004-git-branching-strategy-sandbox.md))
 
 ## Hard constraints
 
