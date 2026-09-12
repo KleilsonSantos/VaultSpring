@@ -9,6 +9,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- Local GitGuardian parity: `.gitguardian.yml` + `scripts/check-secrets.sh` (wired into `pre-push-check.sh`)
 - GitHub Copilot custom agents (`.github/agents/`, `.github/copilot-instructions.md`) with handoffs between task-planner, code-reviewer, appsec-reviewer, docs-writer, release-coordinator
 - Guides: `docs/guides/github-agents.md`, `github-projects.md`, `github-wiki-policy.md`; release-train template; wiki stub `docs/wiki/Home.md`
 - `docs/guides/portfolio-ecosystem.md` — centralize AIOS origin links; local SSOT table and adaptation notes
