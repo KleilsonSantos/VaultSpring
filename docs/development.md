@@ -49,7 +49,10 @@ Also: SonarCloud Automatic Analysis, GitGuardian (PR checks).
 GitGuardian runs on every pull request. Catch the same class of findings **before push**:
 
 ```bash
-brew install gitguardian/tap/ggshield   # or: pipx install ggshield
+brew trust gitguardian/tap && brew install gitguardian/tap/ggshield   # preferred
+# Fallback (no brew/Xcode CLT): venv → ~/.local/ggshield-venv; symlink ggshield to ~/.local/bin
+export PATH="$HOME/.local/bin:$PATH"
+ggshield auth login                   # once — free GitGuardian account / dashboard API key
 bash scripts/check-secrets.sh           # uses .gitguardian.yml
 ```
 
@@ -136,6 +139,8 @@ Details: [configuration.md](./configuration.md) · Vault guide: [guides/vault-in
 | `make check-sec` | OWASP Dependency-Check Maven profile |
 
 ### Scripts
+
+Governance (tiers, threat model, change control): [`guides/scripts-governance.md`](./guides/scripts-governance.md).
 
 | Script | Purpose |
 | ------ | ------- |

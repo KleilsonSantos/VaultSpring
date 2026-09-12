@@ -3,7 +3,8 @@
 #
 # Usage:
 #   bash scripts/check-secrets.sh
-#   GGSHIELD_CMD="pipx run ggshield" bash scripts/check-secrets.sh
+#   GGSHIELD_CMD="/opt/homebrew/bin/ggshield" bash scripts/check-secrets.sh
+#   Allowed GGSHIELD_CMD values: absolute path to ggshield, or whitelisted: pipx run ggshield | python3 -m ggshield
 #
 # Install ggshield (pick one):
 #   brew install gitguardian/tap/ggshield
@@ -41,9 +42,32 @@ echo "check-secrets: OK — .gitguardian.yml syntax valid"
 
 run_ggshield() {
   if [[ -n "${GGSHIELD_CMD:-}" ]]; then
-    # shellcheck disable=SC2086
-    eval "$GGSHIELD_CMD" "$@"
-    return $?
+    case "$GGSHIELD_CMD" in
+      pipx\ run\ ggshield)
+        pipx run ggshield "$@"
+        return $?
+        ;;
+      python3\ -m\ ggshield)
+        python3 -m ggshield "$@"
+        return $?
+        ;;
+      ggshield)
+        ggshield "$@"
+        return $?
+        ;;
+      /*)
+        if [[ -x "$GGSHIELD_CMD" ]]; then
+          "$GGSHIELD_CMD" "$@"
+          return $?
+        fi
+        echo "check-secrets: FAIL — GGSHIELD_CMD not executable: $GGSHIELD_CMD" >&2
+        return 1
+        ;;
+      *)
+        echo "check-secrets: FAIL — unsupported GGSHIELD_CMD (use absolute path or whitelisted alias)" >&2
+        return 1
+        ;;
+    esac
   fi
   if command -v ggshield >/dev/null 2>&1; then
     ggshield "$@"
@@ -65,8 +89,9 @@ if ! run_ggshield --version >/dev/null 2>&1; then
 check-secrets: FAIL — ggshield not installed (GitGuardian local parity).
 
 Install (pick one):
-  brew install gitguardian/tap/ggshield
-  pipx install ggshield
+  brew trust gitguardian/tap && brew install gitguardian/tap/ggshield
+  python3 -m venv ~/.local/ggshield-venv && ~/.local/ggshield-venv/bin/pip install ggshield
+  ln -sf ~/.local/ggshield-venv/bin/ggshield ~/.local/bin/ggshield  # add ~/.local/bin to PATH
 
 Then re-run: bash scripts/pre-push-check.sh
 Docs: docs/development.md#secret-scanning
@@ -81,7 +106,12 @@ scan_range() {
     return 1
   fi
   echo "check-secrets: scanning commit range ${base}..${head}"
-  run_ggshield secret scan commit-range "${base}..${head}" --config-path "$CONFIG"
+  if run_ggshield --config-path "$CONFIG" secret scan commit-range "${base}..${head}"; then
+    return 0
+  fi
+  local rc=$?
+  echo "check-secrets: FAIL — ggshield scan failed (exit ${rc}). Run: ggshield auth login" >&2
+  exit "$rc"
 }
 
 # Prefer commits not yet on upstream (pre-push parity).
@@ -109,9 +139,12 @@ done
 # Staged changes (pre-commit parity).
 if ! git diff --cached --quiet; then
   echo "check-secrets: scanning staged changes (pre-commit mode)"
-  run_ggshield secret scan pre-commit --config-path "$CONFIG"
-  echo "check-secrets: OK"
-  exit 0
+  if run_ggshield --config-path "$CONFIG" secret scan pre-commit; then
+    echo "check-secrets: OK"
+    exit 0
+  fi
+  echo "check-secrets: FAIL — ggshield pre-commit scan failed. Run: ggshield auth login" >&2
+  exit 1
 fi
 
 echo "check-secrets: OK — nothing to scan (no unpushed commits or staged changes)"
