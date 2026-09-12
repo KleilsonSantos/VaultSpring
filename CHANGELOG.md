@@ -9,6 +9,8 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- GitHub Copilot custom agents (`.github/agents/`, `.github/copilot-instructions.md`) with handoffs between task-planner, code-reviewer, appsec-reviewer, docs-writer, release-coordinator
+- Guides: `docs/guides/github-agents.md`, `github-projects.md`, `github-wiki-policy.md`; release-train template; wiki stub `docs/wiki/Home.md`
 - JWT secret fail-fast for `prod`/`hom` profiles (`JwtSecretGuard`, `JwtSecretStartupValidator`) — rejects missing, short, or template placeholders
 
 ### Changed

@@ -54,12 +54,6 @@ Configuration: `src/main/resources/` (`dev`, `prod`, `hom`, `vault`, Flyway migr
 - CI: Checkstyle, unit verify, integration-tests (Testcontainers), dependency-review, docker-build, CodeQL, SonarCloud
 - Delivery governance: [`CONTRIBUTING.md`](./CONTRIBUTING.md), [`docs/guides/`](./docs/guides/)
 
-## Planned (not shipped)
-
-| Item | Issue |
-| ---- | ----- |
-| Spring Boot 4.x | [#33](https://github.com/KleilsonSantos/VaultSpring/issues/33) (epic) |
-
 ## Stack
 
 Java 17 · Spring Boot 3.5.16 · Spring Cloud 2025.0.x · Docker Compose · Maven Wrapper · OWASP Dependency-Check (Maven profile)
@@ -76,6 +70,9 @@ Java 17 · Spring Boot 3.5.16 · Spring Cloud 2025.0.x · Docker Compose · Mave
 | [`docs/guides/vault-integration.md`](./docs/guides/vault-integration.md) | Vault init, Database Engine, Compose |
 | [`CHANGELOG.md`](./CHANGELOG.md) | Releases |
 | [`SECURITY.md`](./SECURITY.md) | Vulnerability reporting |
+| [`docs/guides/github-agents.md`](./docs/guides/github-agents.md) | Copilot custom agents |
+| [`docs/guides/github-projects.md`](./docs/guides/github-projects.md) | GitHub Projects delivery board |
+| [`docs/guides/github-wiki-policy.md`](./docs/guides/github-wiki-policy.md) | Wiki policy (docs in Git are SSOT) |
 
 ## Observability
 

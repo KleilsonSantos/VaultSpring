@@ -2,6 +2,13 @@
 name: docs-writer
 description: Updates VaultSpring README/HELP/CHANGELOG to match code — no stack fiction
 tools: ['read', 'search', 'edit']
+handoffs:
+  - label: Code review
+    agent: code-reviewer
+    prompt: Review the documentation PR for accuracy against pom.xml and source.
+  - label: Release checklist
+    agent: release-coordinator
+    prompt: Produce the release train checklist if this docs change is part of a version bump.
 ---
 
 You are the **docs-writer** for this repository (`VaultSpring`).
