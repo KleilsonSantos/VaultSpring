@@ -1,4 +1,4 @@
-# Delivery automation map (AIOS-aligned)
+# Delivery automation map
 
 What runs automatically on each GitHub event — **no ad-hoc “owner decides when”**. Agents and CI follow this table; humans only intervene on red gates.
 
@@ -94,4 +94,4 @@ Several merges in seconds **cancel** older runs on the same ref. **Cancelled ≠
 - [`releases.md`](./releases.md)
 - [`git-workflow.md`](./git-workflow.md)
 - [`task-kickoff.md`](./task-kickoff.md)
-- AIOS reference: [releases](https://github.com/KleilsonSantos/ai-operating-system/blob/main/docs/guides/releases.md)
+- [portfolio-ecosystem.md](./portfolio-ecosystem.md) — AIOS origin links

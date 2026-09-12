@@ -102,7 +102,7 @@ Details: [`docs/development.md`](./docs/development.md).
 - Modular API, RFC 7807 errors, OpenAPI, Testcontainers IT
 - Spring Cloud Vault (Database Engine), Security filter chain
 - Technical docs hub under `docs/`
-- AIOS-aligned Git flow (issue → PR → `sandbox` → PR → `main` → tag)
+- Two-stage delivery: issue → PR → `sandbox` → PR → `main` → tag ([ADR-0004](./docs/adr/0004-git-branching-strategy-sandbox.md))
 
 ## Contributing
 

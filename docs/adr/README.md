@@ -7,7 +7,7 @@ Lightweight **MADR-style** records: one decision per file, versioned in Git, rev
 | [0001](./0001-record-architecture-decisions.md) | Use ADRs in this repo | Accepted |
 | [0002](./0002-datasource-via-vault-or-env.md) | Datasource: env vars **or** Vault Database Engine | Accepted |
 | [0003](./0003-security-filter-chain-before-jwt.md) | SecurityFilterChain baseline; extended by JWT (#6) | Accepted |
-| [0004](./0004-git-branching-strategy-sandbox.md) | Branch strategy: `sandbox` + `main` (AIOS-aligned) | Accepted |
+| [0004](./0004-git-branching-strategy-sandbox.md) | Branch strategy: `sandbox` + `main` | Accepted |
 | [0005](./0005-dynamic-postgresql-credentials-vault.md) | Dynamic PostgreSQL via Vault Database Secrets Engine | Accepted |
 
 When a decision is superseded, add a new ADR and mark the old one **Superseded by ADR-NNNN** — do not delete history.
