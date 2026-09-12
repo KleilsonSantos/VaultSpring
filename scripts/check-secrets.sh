@@ -3,7 +3,8 @@
 #
 # Usage:
 #   bash scripts/check-secrets.sh
-#   GGSHIELD_CMD="pipx run ggshield" bash scripts/check-secrets.sh
+#   GGSHIELD_CMD="/opt/homebrew/bin/ggshield" bash scripts/check-secrets.sh
+#   Allowed GGSHIELD_CMD values: absolute path to ggshield, or whitelisted: pipx run ggshield | python3 -m ggshield
 #
 # Install ggshield (pick one):
 #   brew install gitguardian/tap/ggshield
@@ -41,9 +42,32 @@ echo "check-secrets: OK — .gitguardian.yml syntax valid"
 
 run_ggshield() {
   if [[ -n "${GGSHIELD_CMD:-}" ]]; then
-    # shellcheck disable=SC2086
-    eval "$GGSHIELD_CMD" "$@"
-    return $?
+    case "$GGSHIELD_CMD" in
+      pipx\ run\ ggshield)
+        pipx run ggshield "$@"
+        return $?
+        ;;
+      python3\ -m\ ggshield)
+        python3 -m ggshield "$@"
+        return $?
+        ;;
+      ggshield)
+        ggshield "$@"
+        return $?
+        ;;
+      /*)
+        if [[ -x "$GGSHIELD_CMD" ]]; then
+          "$GGSHIELD_CMD" "$@"
+          return $?
+        fi
+        echo "check-secrets: FAIL — GGSHIELD_CMD not executable: $GGSHIELD_CMD" >&2
+        return 1
+        ;;
+      *)
+        echo "check-secrets: FAIL — unsupported GGSHIELD_CMD (use absolute path or whitelisted alias)" >&2
+        return 1
+        ;;
+    esac
   fi
   if command -v ggshield >/dev/null 2>&1; then
     ggshield "$@"

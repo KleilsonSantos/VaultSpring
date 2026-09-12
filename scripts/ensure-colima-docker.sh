@@ -12,7 +12,9 @@ fi
 if ! command -v docker >/dev/null 2>&1; then
   _docker_bin="$(find /usr/local/Cellar/docker /opt/homebrew/Cellar/docker -name docker -type f 2>/dev/null | sort -V | tail -1)"
   if [ -n "${_docker_bin}" ]; then
-    export PATH="$(dirname "${_docker_bin}"):${PATH}"
+    _docker_dir="$(dirname "${_docker_bin}")"
+    export PATH="${_docker_dir}:${PATH}"
+    unset _docker_dir
   fi
   unset _docker_bin
 fi

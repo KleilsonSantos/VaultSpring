@@ -137,6 +137,8 @@ Details: [configuration.md](./configuration.md) · Vault guide: [guides/vault-in
 
 ### Scripts
 
+Governance (tiers, threat model, change control): [`guides/scripts-governance.md`](./guides/scripts-governance.md).
+
 | Script | Purpose |
 | ------ | ------- |
 | `scripts/task-kickoff.sh <issue> <branch>` | Branch from `sandbox` + issue comment |

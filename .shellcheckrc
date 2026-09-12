@@ -1,0 +1,7 @@
+# ShellCheck policy for VaultSpring scripts (CI quality job).
+# See docs/guides/scripts-governance.md
+
+external-sources=true
+# SC1091: intentional source of sibling scripts (e.g. ensure-colima-docker.sh)
+# SC2295: nested ${var#prefix} style in echo paths — low risk, noisy at info level
+disable=SC1091,SC2295

@@ -32,6 +32,7 @@ flowchart TD
 | [guides/git-workflow.md](./guides/git-workflow.md) | Contributors | Issue → `sandbox` → `main` → release ([ADR-0004](./adr/0004-git-branching-strategy-sandbox.md)) |
 | [guides/task-kickoff.md](./guides/task-kickoff.md) | Contributors | Issue → branch traceability |
 | [guides/local-runtime-authorization.md](./guides/local-runtime-authorization.md) | All | **MacBook gate** — task vs infra owner approval |
+| [guides/scripts-governance.md](./guides/scripts-governance.md) | All | Script tiers, PPE threat model, CI supply chain |
 | [guides/vault-integration.md](./guides/vault-integration.md) | DevOps, developers | Vault init, Database Engine seed, Compose flow |
 | [guides/releases.md](./guides/releases.md) | Maintainers | SemVer, tags, CHANGELOG |
 | [guides/portfolio-ecosystem.md](./guides/portfolio-ecosystem.md) | All | Portfolio context — AIOS reference, local SSOT |
@@ -49,7 +50,7 @@ Reusable analysis prompts (Docs-as-Code). Intake triggers: `PKB intake` · `cata
 | `documentation` | README/hub audit, docs ↔ code alignment |
 | `security` | JWT review (#6), AppSec checklist |
 | `spring-boot` | Integration tests, Flyway |
-| `delivery` | Release readiness, SemVer gate |
+| `delivery` | Release readiness, SemVer gate; cross-repo AIOS prompts (Postman suite, harness audit) |
 
 Catalog: [`prompts/index.yaml`](./prompts/index.yaml) · Drift check: `bash scripts/check-pkb-inventory.sh`
 
