@@ -62,6 +62,7 @@ Copy [`.env.example`](../.env.example) to `.env` (never commit `.env`).
 | `SPRING_DATASOURCE_URL` | JDBC URL (required in prod) |
 | `SPRING_DATASOURCE_USERNAME` | DB user |
 | `SPRING_DATASOURCE_PASSWORD` | DB password |
+| `VAULTSPRING_JWT_SECRET` | **Required** — min 32 chars; app fails fast if missing or a template placeholder |
 | `SPRING_PROFILES_ACTIVE` | `prod` on Render (`render.yml`) |
 
 ### HashiCorp Vault

@@ -72,4 +72,4 @@ In the IDE: **Settings → Agents → Auto Run → Network Access** → `sandbox
 - [ADR-0004](../adr/0004-git-branching-strategy-sandbox.md)
 - [`git-workflow.md`](./git-workflow.md)
 - [`releases.md`](./releases.md)
-- AIOS reference: [task-kickoff](https://github.com/KleilsonSantos/ai-operating-system/blob/main/docs/guides/task-kickoff.md)
+- [portfolio-ecosystem.md](./portfolio-ecosystem.md) — AIOS origin links

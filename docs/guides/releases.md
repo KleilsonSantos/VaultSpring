@@ -72,4 +72,4 @@ After tagging `vX.Y.Z`, bump `pom.xml` to `(X.Y.(Z+1))-SNAPSHOT` on `main` for t
 
 - [`git-workflow.md`](./git-workflow.md)
 - [`CHANGELOG.md`](../../CHANGELOG.md)
-- AIOS reference: [releases](https://github.com/KleilsonSantos/ai-operating-system/blob/main/docs/guides/releases.md)
+- [portfolio-ecosystem.md](./portfolio-ecosystem.md) — AIOS origin links

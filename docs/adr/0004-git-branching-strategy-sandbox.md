@@ -51,7 +51,7 @@ Historical work on `feature/*` cut from `main` before this ADR may merge to `san
 
 ### Positive
 
-- Consistent flow across AIOS-aligned repositories.
+- Consistent flow across portfolio repositories ([portfolio-ecosystem.md](../guides/portfolio-ecosystem.md)).
 - Integration buffer on `sandbox` before production line `main`.
 - Dependabot and feature work land on the same integration branch.
 
@@ -62,6 +62,6 @@ Historical work on `feature/*` cut from `main` before this ADR may merge to `san
 
 ## References
 
-- [AIOS ADR-0002 — git branching](https://github.com/KleilsonSantos/ai-operating-system/blob/main/docs/adr/0002-git-branching-strategy.md)
+- [`docs/guides/portfolio-ecosystem.md`](../guides/portfolio-ecosystem.md) — AIOS origin links (ADR-0002 and related guides)
 - [`docs/guides/git-workflow.md`](../guides/git-workflow.md)
 - [`docs/guides/delivery-automation.md`](../guides/delivery-automation.md)

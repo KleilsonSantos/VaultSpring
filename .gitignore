@@ -54,6 +54,10 @@ target/
 ### Backup Files and Archives
 backup
 
+### Private owner notes (do not commit)
+PORTFOLIO_STRATEGY_BASE.md
+owner/
+
 ### 🔹 Environment Variables
 .env
 .env.*

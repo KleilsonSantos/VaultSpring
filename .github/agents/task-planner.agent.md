@@ -2,6 +2,13 @@
 name: task-planner
 description: Plans VaultSpring work without implementing — Git flow and acceptance
 tools: ['read', 'search']
+handoffs:
+  - label: AppSec review plan
+    agent: appsec-reviewer
+    prompt: Review the planned change for security impact before implementation starts.
+  - label: Draft docs scope
+    agent: docs-writer
+    prompt: List which docs/CHANGELOG sections this plan will require after implementation.
 ---
 
 You are the **task-planner** for this repository (`VaultSpring`).

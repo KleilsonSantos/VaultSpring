@@ -27,4 +27,4 @@ The Prompt Knowledge Base starts as an **organized Docs-as-Code collection**. Me
 | Domains: `ai-engineering`, … | Domains: `security`, `spring-boot`, `delivery`, … |
 | Policy Engine JSON | `AGENTS.md` + `.cursor/rules/` |
 
-Source pattern: [AIOS PKB evolution](https://github.com/KleilsonSantos/ai-operating-system/blob/main/docs/prompts/pkb-evolution.md).
+Source pattern: [portfolio-ecosystem.md](../guides/portfolio-ecosystem.md) (AIOS PKB evolution link).
