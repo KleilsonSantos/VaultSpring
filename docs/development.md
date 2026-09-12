@@ -44,6 +44,22 @@ flowchart TB
 
 Also: SonarCloud Automatic Analysis, GitGuardian (PR checks).
 
+## Secret scanning
+
+GitGuardian runs on every pull request. Catch the same class of findings **before push**:
+
+```bash
+brew trust gitguardian/tap && brew install gitguardian/tap/ggshield   # preferred
+# Fallback (no brew/Xcode CLT): venv → ~/.local/ggshield-venv; symlink ggshield to ~/.local/bin
+export PATH="$HOME/.local/bin:$PATH"
+ggshield auth login                   # once — free GitGuardian account / dashboard API key
+bash scripts/check-secrets.sh           # uses .gitguardian.yml
+```
+
+`bash scripts/pre-push-check.sh` includes `check-secrets.sh` (step 4b).
+
+Repository config: [`.gitguardian.yml`](../.gitguardian.yml) — documents intentional JWT placeholders (`JwtSecretGuard`) and excludes test/doc fixtures. Enable **Use repository configuration file** in the GitGuardian dashboard so PR checks honor the same rules.
+
 ## Quick start (dev, Postgres only)
 
 ```bash
@@ -124,13 +140,16 @@ Details: [configuration.md](./configuration.md) · Vault guide: [guides/vault-in
 
 ### Scripts
 
+Governance (tiers, threat model, change control): [`guides/scripts-governance.md`](./guides/scripts-governance.md).
+
 | Script | Purpose |
 | ------ | ------- |
 | `scripts/task-kickoff.sh <issue> <branch>` | Branch from `sandbox` + issue comment |
 | `scripts/bootstrap-sandbox.sh` | One-time create remote `sandbox` from `main` |
 | `scripts/check-pr-issue-link.sh` | CI: require `Refs #N` on PRs → `sandbox` |
 | `scripts/check-pr-delivery-gate.sh` | **Local** parity for `issue-link` — run before push |
-| `scripts/pre-push-check.sh` | **Local** full gate: delivery + observability configs + Maven `quality` |
+| `scripts/check-secrets.sh` | **Local** GitGuardian parity (`ggshield` + `.gitguardian.yml`) |
+| `scripts/pre-push-check.sh` | **Local** full gate: delivery + secret scan + observability + Maven `quality` |
 | `scripts/check-pr-delivery-gate-selftest.sh` | Regression tests for delivery gate |
 | `scripts/install-hooks.sh` | Enable `.githooks/` (Conventional Commits) |
 | `scripts/check-semver-alignment.sh` | Release gate (CI on `main`) |

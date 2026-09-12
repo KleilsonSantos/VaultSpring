@@ -7,6 +7,15 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Scripts governance P0: `docs/guides/scripts-governance.md`, `.github/CODEOWNERS`, ShellCheck in CI, GitHub Actions SHA pins ([#126](https://github.com/KleilsonSantos/VaultSpring/issues/126))
+- Local GitGuardian parity: `.gitguardian.yml` + `scripts/check-secrets.sh` (wired into `pre-push-check.sh`) ([#123](https://github.com/KleilsonSantos/VaultSpring/issues/123))
+
+### Changed
+
+- `check-secrets.sh`: remove `eval` for `GGSHIELD_CMD`; whitelist safe dispatch ([#126](https://github.com/KleilsonSantos/VaultSpring/issues/126))
+
 ## [0.1.8] - 2026-09-11
 
 ### Added

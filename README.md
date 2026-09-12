@@ -33,7 +33,7 @@ Packages under `src/main/java/io/github/kleilsonsantos/security/vaultspring`:
 
 | Package | Role |
 | ------- | ---- |
-| `controller` | REST `/api/v1/users`, `/api/v1/auth/login` |
+| `controller` | REST `/api/v1/users`, `/api/v1/users/me`, `/api/v1/auth/login` |
 | `dto` / `service` | DTOs; `UserService`, `AuthService`; BCrypt via `PasswordEncoder` |
 | `security` | `JwtService`; RFC 7807 security entry points |
 | `entity` / `repository` | JPA |
@@ -49,9 +49,10 @@ Configuration: `src/main/resources/` (`dev`, `prod`, `hom`, `vault`, Flyway migr
 - Actuator: health (public), info/prometheus (authenticated)
 - OpenAPI / Swagger UI in `dev` (springdoc 2.9.0)
 - JWT login (`POST /api/v1/auth/login`, HS256 Bearer) — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6)
+- RBAC (`USER` / `ADMIN`): `GET /api/v1/users/me`; admin-only user list/create — since 0.1.7
 - `/api/v1/**` protected except login; Actuator prometheus/info/metrics require JWT
 - **Observability:** structured JSON logs (prod), `X-Correlation-ID`, OpenTelemetry OTLP tracing, custom auth metrics, local Grafana/Prometheus/Loki/Tempo stack — [`docs/observability/`](./docs/observability/)
-- CI: Checkstyle, unit verify, integration-tests (Testcontainers), dependency-review, docker-build, CodeQL, SonarCloud
+- CI (`maven.yml`): Checkstyle, unit verify, integration-tests (Testcontainers), dependency-review, docker-build, CodeQL; SonarCloud via GitHub Automatic Analysis (see `CONTRIBUTING.md`)
 - Delivery governance: [`CONTRIBUTING.md`](./CONTRIBUTING.md), [`docs/guides/`](./docs/guides/)
 
 ## Stack
