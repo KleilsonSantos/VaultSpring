@@ -18,6 +18,9 @@ cd "$ROOT"
 echo "==> PR delivery gate (issue-link parity — diagnose locally)"
 bash scripts/check-pr-delivery-gate.sh
 
+echo "==> secret scan (GitGuardian / ggshield parity)"
+bash scripts/check-secrets.sh
+
 echo "==> observability config validation (CI parity)"
 bash scripts/validate-observability-config.sh
 

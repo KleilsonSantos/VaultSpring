@@ -1,0 +1,35 @@
+# GitGuardian / ggshield repository config (v2).
+# Used by: ggshield locally (scripts/check-secrets.sh) and GitGuardian GitHub checks
+# when "Use repository configuration file" is enabled in the dashboard.
+#
+# See docs/development.md#secret-scanning
+
+version: 2
+
+secret:
+  show_secrets: false
+
+  # Test fixtures, Postman, and documented dev seed data — not production secrets.
+  ignored_paths:
+    - 'src/test/**'
+    - 'src/test/resources/**'
+    - 'tests/**'
+    - 'docs/**'
+    - 'HELP.md'
+    - '.env.example'
+    - 'scripts/observability-prometheus-token.sh'
+
+  # Intentional JWT placeholders for prod/hom fail-fast (JwtSecretGuard) and dev profile defaults.
+  ignored_matches:
+    - name: dev jwt default placeholder
+      match: dev-only-change-me-use-at-least-32-chars
+    - name: prod template placeholder blocked by guard
+      match: prod-jwt-secret-must-be-set-via-env-var-32c
+    - name: unit test jwt placeholder
+      match: test-jwt-secret-at-least-32-characters-long
+    - name: integration test jwt placeholder
+      match: it-jwt-secret-at-least-32-characters-long!!
+    - name: vault db it jwt placeholder
+      match: vault-db-it-jwt-secret-at-least-32-chars!!
+    - name: flyway dev seed password
+      match: secret123

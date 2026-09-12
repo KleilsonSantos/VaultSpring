@@ -112,7 +112,7 @@ After `git push` opens or updates a PR:
 1. `gh pr checks --watch` until **`quality`**, **`integration-tests`**, and **`issue-link`** complete (when PR → `sandbox`)
 2. On **FAIL**: read logs (`gh run view --log-failed`), fix locally, re-run `bash scripts/pre-push-check.sh`, push again
 3. Do **not** merge or declare the PR green until required checks pass — **never merge on red `issue-link`**
-4. External checks (SonarCloud, GitGuardian) — report status; distinguish from Maven `quality` failures
+4. External checks: run `bash scripts/check-secrets.sh` locally (GitGuardian parity via `ggshield` + `.gitguardian.yml`); SonarCloud — report status; distinguish from Maven `quality` failures
 
 Agents must not end the turn after push without checking CI status at least once.
 
