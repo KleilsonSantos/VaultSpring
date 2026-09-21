@@ -7,6 +7,8 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.1.9] - 2026-09-21
+
 ### Added
 
 - Scripts governance P0: `docs/guides/scripts-governance.md`, `.github/CODEOWNERS`, ShellCheck in CI, GitHub Actions SHA pins ([#126](https://github.com/KleilsonSantos/VaultSpring/issues/126))
