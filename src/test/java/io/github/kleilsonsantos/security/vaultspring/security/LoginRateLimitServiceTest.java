@@ -45,6 +45,23 @@ class LoginRateLimitServiceTest {
     }
 
     @Test
+    void resolveClientKeyUsesRemoteAddressWhenForwardedHeaderBlank() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getHeader("X-Forwarded-For")).thenReturn("   ");
+        when(request.getRemoteAddr()).thenReturn("10.0.0.9");
+
+        assertThat(LoginRateLimitService.resolveClientKey(request)).isEqualTo("10.0.0.9");
+    }
+
+    @Test
+    void resolveClientKeyUsesSingleForwardedForValue() {
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getHeader("X-Forwarded-For")).thenReturn("198.51.100.1");
+
+        assertThat(LoginRateLimitService.resolveClientKey(request)).isEqualTo("198.51.100.1");
+    }
+
+    @Test
     void allowsUpToMaxAttemptsThenBlocks() {
         HttpServletRequest request = mock(HttpServletRequest.class);
         when(request.getHeader("X-Forwarded-For")).thenReturn("10.0.0.1");
