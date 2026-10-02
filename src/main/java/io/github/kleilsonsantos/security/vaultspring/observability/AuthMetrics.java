@@ -27,6 +27,11 @@ public class AuthMetrics {
     private final Timer loginDurationTimer;
 
     /**
+     * Login attempts rejected by rate limiting.
+     */
+    private final Counter loginRateLimitedCounter;
+
+    /**
      * @param meterRegistry Micrometer registry
      */
     public AuthMetrics(final MeterRegistry meterRegistry) {
@@ -40,6 +45,9 @@ public class AuthMetrics {
                 .register(meterRegistry);
         this.loginDurationTimer = Timer.builder(ObservabilityConstants.METRIC_AUTH_LOGIN_DURATION)
                 .description("Login request duration")
+                .register(meterRegistry);
+        this.loginRateLimitedCounter = Counter.builder(ObservabilityConstants.METRIC_AUTH_LOGIN_RATE_LIMITED)
+                .description("Login attempts rejected by rate limiting")
                 .register(meterRegistry);
     }
 
@@ -62,5 +70,12 @@ public class AuthMetrics {
      */
     public Timer loginDurationTimer() {
         return loginDurationTimer;
+    }
+
+    /**
+     * Records a login attempt blocked by rate limiting.
+     */
+    public void recordLoginRateLimited() {
+        loginRateLimitedCounter.increment();
     }
 }

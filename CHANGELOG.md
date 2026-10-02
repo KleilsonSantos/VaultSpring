@@ -7,6 +7,10 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Login rate limiting (SEC-002): configurable fixed-window limit per client IP on `POST /api/v1/auth/login`, HTTP 429 RFC 7807, Micrometer metric ([#136](https://github.com/KleilsonSantos/VaultSpring/issues/136))
+
 ## [0.1.9] - 2026-09-21
 
 ### Added
