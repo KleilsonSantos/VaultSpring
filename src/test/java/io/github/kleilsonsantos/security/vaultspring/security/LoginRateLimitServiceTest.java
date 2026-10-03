@@ -82,4 +82,19 @@ class LoginRateLimitServiceTest {
             assertThat(service.tryConsume(request)).isTrue();
         }
     }
+
+    @Test
+    void resetsCounterWhenWindowRollsOver() throws InterruptedException {
+        properties.setMaxAttempts(1);
+        properties.setWindowSeconds(1);
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        when(request.getHeader("X-Forwarded-For")).thenReturn("10.0.0.3");
+
+        assertThat(service.tryConsume(request)).isTrue();
+        assertThat(service.tryConsume(request)).isFalse();
+
+        Thread.sleep(1_100L);
+
+        assertThat(service.tryConsume(request)).isTrue();
+    }
 }
