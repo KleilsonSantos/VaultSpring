@@ -31,6 +31,11 @@ public final class ObservabilityConstants {
     public static final String METRIC_AUTH_LOGIN_DURATION = "vaultspring.auth.login.duration";
 
     /**
+     * Login attempts blocked by rate limiting.
+     */
+    public static final String METRIC_AUTH_LOGIN_RATE_LIMITED = "vaultspring.auth.login.rate_limited.total";
+
+    /**
      * Micrometer counter for Vault database credential rotations.
      */
     public static final String METRIC_VAULT_DB_ROTATION_TOTAL = "vaultspring.vault.database.rotation.total";
