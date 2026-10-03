@@ -15,7 +15,8 @@ Style: no emoji in section titles — see [`docs/guides/writing-style.md`](docs/
 - [ ] AuthN/AuthZ audit logging enabled
 - [x] JWT login at `POST /api/v1/auth/login` (HS256 Bearer — [#6](https://github.com/KleilsonSantos/VaultSpring/issues/6))
 - [x] Per-resource authorization / RBAC on `/api/v1/users` (`USER` → `/me`; `ADMIN` → list/create) — [#103](https://github.com/KleilsonSantos/VaultSpring/issues/103)
-- [ ] Rate limiting on login and sensitive endpoints
+- [x] Rate limiting on login (`POST /api/v1/auth/login`, SEC-002 — [#136](https://github.com/KleilsonSantos/VaultSpring/issues/136))
+- [ ] Rate limiting on other sensitive endpoints
 
 ---
 
