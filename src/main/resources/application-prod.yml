@@ -52,3 +52,9 @@ vaultspring:
   jwt:
     secret: ${VAULTSPRING_JWT_SECRET:}
     expiration-seconds: ${VAULTSPRING_JWT_EXPIRATION_SECONDS:3600}
+  security:
+    login-rate-limit:
+      # Render's edge is the sole ingress for this profile and appends the address it
+      # observed as the last X-Forwarded-For hop (see LoginRateLimitService). Revisit if
+      # a CDN or another proxy layer is ever placed in front of Render.
+      trust-forwarded-header: ${VAULTSPRING_LOGIN_RATE_LIMIT_TRUST_FORWARDED_HEADER:true}

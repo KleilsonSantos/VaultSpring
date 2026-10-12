@@ -34,3 +34,7 @@ vaultspring:
   jwt:
     secret: ${VAULTSPRING_JWT_SECRET}
     expiration-seconds: ${VAULTSPRING_JWT_EXPIRATION_SECONDS:3600}
+  # security.login-rate-limit.trust-forwarded-header intentionally left at its safe
+  # default (false) here — this profile's deployment topology (single trusted edge
+  # proxy or not) isn't confirmed. Only set it to true once that's verified; see the
+  # comment in application-prod.yml for the confirmed-topology case (Render).

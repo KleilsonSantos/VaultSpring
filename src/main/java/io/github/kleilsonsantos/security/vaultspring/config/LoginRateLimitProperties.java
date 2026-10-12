@@ -29,6 +29,15 @@ public class LoginRateLimitProperties {
     private int windowSeconds = 60;
 
     /**
+     * Whether {@code X-Forwarded-For} is honored when deriving the rate-limit key.
+     * Must stay {@code false} unless a trusted reverse proxy sits in front of this
+     * service and overwrites/strips any client-supplied value for that header —
+     * otherwise any caller can spoof it to reset their own bucket on every request
+     * (see VS-003 in {@code docs/audit/VAULTSPRING_AUDIT_REPORT.md}).
+     */
+    private boolean trustForwardedHeader;
+
+    /**
      * @return whether login rate limiting is active
      */
     public boolean isEnabled() {
@@ -68,5 +77,19 @@ public class LoginRateLimitProperties {
      */
     public void setWindowSeconds(final int windowSeconds) {
         this.windowSeconds = windowSeconds;
+    }
+
+    /**
+     * @return whether {@code X-Forwarded-For} is trusted for rate-limit keying
+     */
+    public boolean isTrustForwardedHeader() {
+        return trustForwardedHeader;
+    }
+
+    /**
+     * @param trustForwardedHeader whether {@code X-Forwarded-For} is trusted for rate-limit keying
+     */
+    public void setTrustForwardedHeader(final boolean trustForwardedHeader) {
+        this.trustForwardedHeader = trustForwardedHeader;
     }
 }
