@@ -10,6 +10,7 @@ Style: no emoji in section titles — see [`docs/guides/writing-style.md`](docs/
 
 - [x] `SecurityFilterChain` configured (`SecurityConfig` — health public, Prometheus authenticated)
 - [x] CORS on `/api/**`
+- [x] Security headers: `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Content-Security-Policy` (profile-aware — restrictive when Swagger is disabled, Swagger-compatible otherwise), `Referrer-Policy: strict-origin-when-cross-origin` — [#149](https://github.com/KleilsonSantos/VaultSpring/issues/149)
 - [ ] Sensitive headers removed (X-Powered-By, Server)
 - [x] CSRF disabled with documented rationale (stateless API baseline)
 - [ ] AuthN/AuthZ audit logging enabled
@@ -49,9 +50,9 @@ Style: no emoji in section titles — see [`docs/guides/writing-style.md`](docs/
 
 ## Security headers
 
-- [ ] `Strict-Transport-Security` (prod — partial in `SecurityConfig`)
-- [ ] `Content-Security-Policy`
-- [ ] `Referrer-Policy`, `X-Frame-Options`, `X-Content-Type-Options`
+- [x] `Strict-Transport-Security` (prod/prod-vault only — `SecurityConfig`)
+- [x] `Content-Security-Policy` (profile-aware — [#149](https://github.com/KleilsonSantos/VaultSpring/issues/149))
+- [x] `Referrer-Policy`, `X-Frame-Options`, `X-Content-Type-Options`
 
 ---
 

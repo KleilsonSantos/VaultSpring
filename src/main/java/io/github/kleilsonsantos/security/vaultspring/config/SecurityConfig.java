@@ -19,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -82,6 +83,24 @@ public class SecurityConfig {
     };
 
     /**
+     * CSP for profiles where springdoc/Swagger UI is disabled (today: {@code prod} only
+     * — see {@code application-prod.yml}). No inline script/style is ever served.
+     */
+    private static final String STRICT_CONTENT_SECURITY_POLICY =
+            "default-src 'none'; frame-ancestors 'none'";
+
+    /**
+     * CSP for profiles where Swagger UI is reachable ({@code dev}, {@code hom}, default).
+     * springdoc's bundled swagger-ui-dist initializes itself with inline script/style
+     * tags, so {@code 'unsafe-inline'} is required for those two directives; everything
+     * else stays same-origin.
+     */
+    private static final String DOCS_CONTENT_SECURITY_POLICY =
+            "default-src 'self'; script-src 'self' 'unsafe-inline'; "
+                    + "style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
+                    + "font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'";
+
+    /**
      * @param http security builder
      * @param environment active profiles for HSTS
      * @return configured filter chain
@@ -97,6 +116,12 @@ public class SecurityConfig {
                 .headers(headers -> {
                     headers.contentTypeOptions(Customizer.withDefaults());
                     headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::deny);
+                    headers.referrerPolicy(referrer -> referrer
+                            .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN));
+                    headers.contentSecurityPolicy(csp -> csp.policyDirectives(
+                            isProdProfile(environment)
+                                    ? STRICT_CONTENT_SECURITY_POLICY
+                                    : DOCS_CONTENT_SECURITY_POLICY));
                     if (isProdProfile(environment)) {
                         headers.httpStrictTransportSecurity(hsts -> hsts
                                 .includeSubDomains(true)

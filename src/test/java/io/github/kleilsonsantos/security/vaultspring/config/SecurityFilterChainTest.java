@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -186,6 +187,25 @@ class SecurityFilterChainTest {
         mockMvc.perform(get("/api/v1/users")
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk());
+    }
+
+    /**
+     * Security headers are present on every response, with a Swagger-compatible CSP
+     * on the {@code test} profile (Swagger UI is not disabled there, unlike {@code prod}).
+     *
+     * @throws Exception on MockMvc errors
+     */
+    @Test
+    void securityHeadersArePresent() throws Exception {
+        mockMvc.perform(get("/actuator/health"))
+                .andExpect(status().isOk())
+                .andExpect(header().string("X-Content-Type-Options", "nosniff"))
+                .andExpect(header().string("X-Frame-Options", "DENY"))
+                .andExpect(header().string("Referrer-Policy", "strict-origin-when-cross-origin"))
+                .andExpect(header().string("Content-Security-Policy",
+                        "default-src 'self'; script-src 'self' 'unsafe-inline'; "
+                                + "style-src 'self' 'unsafe-inline'; img-src 'self' data:; "
+                                + "font-src 'self' data:; connect-src 'self'; frame-ancestors 'none'"));
     }
 
     /**
