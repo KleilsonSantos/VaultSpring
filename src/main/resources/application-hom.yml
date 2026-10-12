@@ -10,6 +10,14 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    locations: classpath:db/migration
+    # Dev/IT seed fixtures (old V2/V3) are intentionally not on this path (see VS-001).
+    # If this environment ever had them applied previously, don't fail validate on their
+    # absence. Scoped to those two versions only — a genuinely lost future migration
+    # (e.g. V5) must still fail validate, so this is not a blanket "*:missing".
+    ignore-migration-patterns:
+      - "2:missing"
+      - "3:missing"
   jpa:
     open-in-view: false
     hibernate:
@@ -26,3 +34,7 @@ vaultspring:
   jwt:
     secret: ${VAULTSPRING_JWT_SECRET}
     expiration-seconds: ${VAULTSPRING_JWT_EXPIRATION_SECONDS:3600}
+  # security.login-rate-limit.trust-forwarded-header intentionally left at its safe
+  # default (false) here — this profile's deployment topology (single trusted edge
+  # proxy or not) isn't confirmed. Only set it to true once that's verified; see the
+  # comment in application-prod.yml for the confirmed-topology case (Render).
