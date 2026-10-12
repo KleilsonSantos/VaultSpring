@@ -12,8 +12,12 @@ import java.io.OutputStream;
  * {@code %sanitize} converter used by non-JSON profiles (see VS-002 in
  * {@code docs/audit/VAULTSPRING_AUDIT_REPORT.md}), so this wraps each event instead of
  * relying on provider-internal wiring that could change between library versions.
+ *
+ * <p>Deep inheritance chain (Sonar S110) is inherent to {@link LogstashEncoder} itself
+ * (net.logstash.logback -&gt; logback-classic/core); extending it one more level does not
+ * add meaningful coupling beyond what the library already requires.
  */
-public class SanitizingLogstashEncoder extends LogstashEncoder {
+public class SanitizingLogstashEncoder extends LogstashEncoder { // NOSONAR java:S110
 
     @Override
     public byte[] encode(final ILoggingEvent event) {

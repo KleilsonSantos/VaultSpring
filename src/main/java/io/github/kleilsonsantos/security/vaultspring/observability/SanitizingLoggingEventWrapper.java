@@ -24,13 +24,19 @@ final class SanitizingLoggingEventWrapper implements ILoggingEvent {
     private final ILoggingEvent delegate;
 
     /**
-     * Pre-computed, redacted formatted message.
+     * Pre-computed, redacted raw message (template, before argument substitution).
      */
     private final String sanitizedMessage;
 
+    /**
+     * Pre-computed, redacted formatted message (template with arguments substituted).
+     */
+    private final String sanitizedFormattedMessage;
+
     SanitizingLoggingEventWrapper(final ILoggingEvent delegate) {
         this.delegate = delegate;
-        this.sanitizedMessage = LogSanitizer.sanitize(delegate.getFormattedMessage());
+        this.sanitizedMessage = LogSanitizer.sanitize(delegate.getMessage());
+        this.sanitizedFormattedMessage = LogSanitizer.sanitize(delegate.getFormattedMessage());
     }
 
     @Override
@@ -55,12 +61,12 @@ final class SanitizingLoggingEventWrapper implements ILoggingEvent {
         // redaction above entirely. Suppressed rather than passed through so a future log
         // statement can't leak a secret via that path (VS-002); the formatted/sanitized
         // message above already carries the human-readable text of any such call.
-        return null;
+        return new Object[0];
     }
 
     @Override
     public String getFormattedMessage() {
-        return sanitizedMessage;
+        return sanitizedFormattedMessage;
     }
 
     @Override

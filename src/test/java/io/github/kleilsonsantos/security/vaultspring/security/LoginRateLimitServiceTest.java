@@ -4,6 +4,11 @@ import io.github.kleilsonsantos.security.vaultspring.config.LoginRateLimitProper
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -36,25 +41,34 @@ class LoginRateLimitServiceTest {
         assertThat(LoginRateLimitService.resolveClientKey(request, properties)).isEqualTo("10.0.0.1");
     }
 
-    @Test
-    void resolveClientKeyUsesLastForwardedForHopWhenTrusted() {
+    /**
+     * When trusted, only the last (proxy-observed) hop is ever used as the rate-limit
+     * key — an attacker-controlled prefix earlier in the header is always ignored.
+     *
+     * @param forwardedForHeader raw {@code X-Forwarded-For} header value
+     * @param expectedKey        key {@link LoginRateLimitService#resolveClientKey} must return
+     */
+    @ParameterizedTest(name = "[{index}] X-Forwarded-For=\"{0}\" -> key={1}")
+    @MethodSource("trustedLastHopCases")
+    void resolveClientKeyUsesLastForwardedForHopWhenTrusted(
+            final String forwardedForHeader, final String expectedKey) {
         properties.setTrustForwardedHeader(true);
         HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getHeader("X-Forwarded-For")).thenReturn("203.0.113.1, 198.51.100.2");
+        when(request.getHeader("X-Forwarded-For")).thenReturn(forwardedForHeader);
 
-        assertThat(LoginRateLimitService.resolveClientKey(request, properties)).isEqualTo("198.51.100.2");
+        assertThat(LoginRateLimitService.resolveClientKey(request, properties)).isEqualTo(expectedKey);
     }
 
-    @Test
-    void resolveClientKeyIgnoresSpoofedFirstHopEvenWhenTrusted() {
-        properties.setTrustForwardedHeader(true);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        // Attacker-supplied prefix (e.g. a fake "client" IP) stays in the header, but the
-        // trusted proxy appends what it actually observed as the last entry — that's the
-        // only one that should be used as the rate-limit key.
-        when(request.getHeader("X-Forwarded-For")).thenReturn("9.9.9.9, 198.51.100.2");
-
-        assertThat(LoginRateLimitService.resolveClientKey(request, properties)).isEqualTo("198.51.100.2");
+    private static Stream<Arguments> trustedLastHopCases() {
+        return Stream.of(
+                // Multiple hops: the trusted proxy's own appended address (last) wins.
+                Arguments.of("203.0.113.1, 198.51.100.2", "198.51.100.2"),
+                // Attacker-supplied prefix (e.g. a fake "client" IP) stays in the header, but
+                // the trusted proxy appends what it actually observed as the last entry —
+                // that's the only one that should be used as the rate-limit key.
+                Arguments.of("9.9.9.9, 198.51.100.2", "198.51.100.2"),
+                // Single value: last hop and only hop are the same.
+                Arguments.of("198.51.100.1", "198.51.100.1"));
     }
 
     @Test
@@ -75,15 +89,6 @@ class LoginRateLimitServiceTest {
         when(request.getRemoteAddr()).thenReturn("10.0.0.9");
 
         assertThat(LoginRateLimitService.resolveClientKey(request, properties)).isEqualTo("10.0.0.9");
-    }
-
-    @Test
-    void resolveClientKeyUsesSingleForwardedForValueWhenTrusted() {
-        properties.setTrustForwardedHeader(true);
-        HttpServletRequest request = mock(HttpServletRequest.class);
-        when(request.getHeader("X-Forwarded-For")).thenReturn("198.51.100.1");
-
-        assertThat(LoginRateLimitService.resolveClientKey(request, properties)).isEqualTo("198.51.100.1");
     }
 
     @Test
