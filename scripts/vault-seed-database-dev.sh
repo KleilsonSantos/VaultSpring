@@ -38,9 +38,16 @@ run_vault write "database/config/${VAULT_DB_CONFIG}" \
   username="${POSTGRES_USER}" \
   password="${POSTGRES_PASSWORD}"
 
+# Least-privilege grants (VS-008): the app only does JPA CRUD on `users` with
+# `ddl-auto: validate` in every profile, so the dynamic role never needs DDL
+# (DROP/TRUNCATE/ALTER/CREATE) or sequence ownership rights that ALL PRIVILEGES
+# would otherwise grant. USAGE+SELECT on sequences is kept (not just SELECT/INSERT/
+# UPDATE/DELETE on tables) because that's the standard, safe baseline for inserting
+# into auto-populated columns; it carries no meaningful extra risk even if the
+# identity column itself turns out not to require it.
 run_vault write "database/roles/${VAULT_DB_ROLE}" \
   db_name="${VAULT_DB_CONFIG}" \
-  creation_statements="CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \"{{name}}\"; GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO \"{{name}}\";" \
+  creation_statements="CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO \"{{name}}\"; GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO \"{{name}}\";" \
   default_ttl="1h" \
   max_ttl="24h"
 
