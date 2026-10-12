@@ -7,7 +7,7 @@
 
     <springProfile name="prod | prod-vault | hom">
         <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
-            <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <encoder class="io.github.kleilsonsantos.security.vaultspring.observability.SanitizingLogstashEncoder">
                 <customFields>{"service.name":"${appName}","deployment.environment":"${appEnv}"}</customFields>
                 <includeMdcKeyName>correlation_id</includeMdcKeyName>
                 <includeMdcKeyName>traceId</includeMdcKeyName>
