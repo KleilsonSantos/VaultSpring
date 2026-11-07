@@ -42,14 +42,16 @@ flowchart TD
 
 | Git event | Workflows triggered | SemVer gate | Agent / CI next step |
 | --------- | ------------------- | ----------- | -------------------- |
-| **PR** → `sandbox` | `Java CI with Maven` + `issue-link` | No | Merge when required checks green |
-| **PR** → `main` (promote) | Same CI jobs | No | Merge when required checks green; body uses `Closes #N` |
+| **PR** → `sandbox` | `Java CI with Maven` + `issue-link` + `Claude Code Review` (same-repo PRs) | No | Review the advisory Claude comment; merge when required checks green |
+| **PR** → `main` (promote) | Same CI jobs + `Claude Code Review` (same-repo PRs) | No | Review the advisory Claude comment; merge when required checks green; body uses `Closes #N` |
 | **Push** → `sandbox` | `Java CI with Maven` | No | Integrate; open promote PR when ready |
 | **Push** → `main` | Same + **SemVer alignment** step in `quality` | **Yes** | If fail → open release PR ([`releases.md`](./releases.md)) |
 | **Push** tag `v*.*.*` | [`Release`](../../.github/workflows/release.yml) only | N/A | Automatic GitHub Release + JAR artifact |
 | Dependabot PR → `sandbox` | Same as PR → `sandbox` row | No | Review + merge to `sandbox` → promote |
 
 VaultSpring uses **`sandbox` + `main`** ([ADR-0004](../adr/0004-git-branching-strategy-sandbox.md)). Promotion is **two PRs**, not one.
+
+`Claude Code Review` uses the repository secret `CLAUDE_CODE_OAUTH_TOKEN`, follows the repository's [code-reviewer](./github-agents.md) and AppSec checklists, and posts comments only. Fork PRs skip the job because repository secrets are unavailable to them. Automated review is advisory, not a required merge check.
 
 ## SemVer gate (anti-drift)
 
