@@ -23,7 +23,7 @@ Review the current diff or named PR. Actionable comments only; do not rewrite th
 
 ## Checklist
 
-- [ ] Java 17 / Spring Boot 3.5.x — no drive-by Boot 4 migration?
+- [ ] Java 25 LTS / Spring Boot 3.5.x — no drive-by Boot 4 migration?
 - [ ] No secrets, tokens, or `.env` values in the diff?
 - [ ] API does not return password hashes or JPA entities as the public contract?
 - [ ] Flyway migrations stay backward-safe?
