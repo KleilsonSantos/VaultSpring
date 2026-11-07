@@ -30,7 +30,7 @@ Use this file as a short delivery bridge. Details: [`docs/README.md`](../../docs
 
 ## Product
 
-- Spring Boot 3.5.x / Java 17 / Maven Wrapper
+- Spring Boot 3.5.x / Java 25 LTS / Maven Wrapper
 - Secrets never in Git; use env vars and Vault **infrastructure** in Compose
 - `CHANGELOG.md` `[Unreleased]` for notable changes
 - Docs/commits/issues: no gitmoji — [`docs/guides/writing-style.md`](docs/guides/writing-style.md)

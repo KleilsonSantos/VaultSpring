@@ -37,7 +37,7 @@ If a summary conflicts with `pom.xml` or source, the code wins.
 
 ## Hard constraints
 
-- Java 17 + Spring Boot 3.5.x (OSS line ended 2026-06-30; last patch **3.5.16**). Do not jump to Spring Boot 4 in a drive-by change.
+- Java 25 LTS + Spring Boot 3.5.x (OSS line ended 2026-06-30; last patch **3.5.16**). Do not jump to Spring Boot 4 in a drive-by change.
 - Conventional Commits (`feat`, `fix`, `docs`, `ci`, `chore`, `refactor`, `test`). **No gitmoji** — see [`docs/guides/writing-style.md`](docs/guides/writing-style.md).
 - **Traceability**: new implementation work starts with a GitHub issue; PR body includes `Closes #N`.
 - Commit only when the human asks.
