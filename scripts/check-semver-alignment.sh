@@ -60,7 +60,10 @@ if ! git rev-parse --verify "$LAST_TAG" >/dev/null 2>&1; then
   exit 1
 fi
 
-mapfile -t SUBJECTS < <(git log --format='%s' "$RANGE" 2>/dev/null || true)
+SUBJECTS=()
+while IFS= read -r line; do
+  SUBJECTS+=("$line")
+done < <(git log --format='%s' "$RANGE" 2>/dev/null || true)
 if [[ ${#SUBJECTS[@]} -eq 0 ]]; then
   echo "semver-align: no commits after $LAST_TAG — OK"
   exit 0
