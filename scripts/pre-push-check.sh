@@ -21,6 +21,9 @@ bash scripts/check-pr-delivery-gate.sh
 echo "==> secret scan (GitGuardian / ggshield parity)"
 bash scripts/check-secrets.sh
 
+echo "==> SAST — Semgrep via Docker (advisory, fail-soft)"
+bash scripts/check-semgrep-docker.sh || true
+
 echo "==> observability config validation (CI parity)"
 bash scripts/validate-observability-config.sh
 
