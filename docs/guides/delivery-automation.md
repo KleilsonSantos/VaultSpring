@@ -51,7 +51,7 @@ flowchart TD
 
 VaultSpring uses **`sandbox` + `main`** ([ADR-0004](../adr/0004-git-branching-strategy-sandbox.md)). Promotion is **two PRs**, not one.
 
-`Claude Code Review` uses the repository secret `CLAUDE_CODE_OAUTH_TOKEN`, follows the repository's [code-reviewer](./github-agents.md) and AppSec checklists, and posts comments only. Fork PRs skip the job because repository secrets are unavailable to them. Automated review is advisory, not a required merge check.
+`Claude Code Review` uses the repository secret `CLAUDE_CODE_OAUTH_TOKEN`, follows the repository's [code-reviewer](./github-agents.md) and AppSec checklists, and posts comments only. Fork PRs skip the job because repository secrets are unavailable to them. The Claude action also skips until this exact workflow exists on the default branch; therefore, this automation is fully active only after promotion to `main`. Automated review is advisory, not a required merge check.
 
 ## SemVer gate (anti-drift)
 

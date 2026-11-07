@@ -13,7 +13,7 @@
 set -uo pipefail # no -e: a broken review step must never abort the push
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$ROOT"
+cd "$ROOT" || exit
 
 if ! command -v claude >/dev/null 2>&1; then
   echo "check-ai-review: SKIP — claude CLI not found (advisory step, not required)"
