@@ -21,6 +21,9 @@ bash scripts/check-pr-delivery-gate.sh
 echo "==> secret scan (GitGuardian / ggshield parity)"
 bash scripts/check-secrets.sh
 
+echo "==> AI code review (advisory, fail-soft)"
+bash scripts/check-ai-review.sh || true
+
 echo "==> observability config validation (CI parity)"
 bash scripts/validate-observability-config.sh
 

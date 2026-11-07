@@ -1,0 +1,47 @@
+# Actions pinned to full commit SHAs — docs/guides/scripts-governance.md
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main, sandbox]
+
+concurrency:
+  group: claude-review-${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: write
+  id-token: write
+
+jobs:
+  review:
+    # Same-repo PRs only — fork PRs do not receive repository secrets anyway
+    # (scripts-governance.md threat model), this just skips the job cleanly
+    # instead of letting it fail noisy.
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          fetch-depth: 0
+
+      - name: Claude Code review
+        uses: anthropics/claude-code-action@61a9c274fa7110a66dfafc1bbbced03833eb25fe # v1
+        with:
+          # Subscription token (Pro/Max/Team), not a Console API key.
+          # Generate with `claude setup-token` and store as this repo secret.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Follow the checklist in .github/agents/code-reviewer.agent.md for this
+            PR's diff. If it touches authentication, JWT, RBAC, secrets, or Vault
+            configuration, also run the checklist in
+            .github/agents/appsec-reviewer.agent.md as part of the same pass.
+            Post the review as a PR comment using the Response format section of
+            code-reviewer.agent.md (Verdict / Blockers / Non-blocking suggestions /
+            Residual risks). Comment only — never push changes or approve the PR.
+          claude_args: |
+            --max-turns 8
+            --allowedTools "Bash(gh pr comment:*),Bash(gh pr diff:*),Bash(gh pr view:*)"
