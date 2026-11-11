@@ -27,7 +27,7 @@ services:
       - vault-spring-shared-net
 
   pgadmin:
-    image: dpage/pgadmin4:latest
+    image: dpage/pgadmin4:9.18.0
     container_name: vault-spring-pgadmin
     env_file: .env
     restart: always
@@ -45,7 +45,7 @@ services:
       - vault-spring-shared-net
 
   postgres-exporter:
-    image: quay.io/prometheuscommunity/postgres-exporter
+    image: quay.io/prometheuscommunity/postgres-exporter:v0.20.1
     container_name: vault-spring-postgres-exporter
     env_file: .env
     restart: always
@@ -59,8 +59,13 @@ services:
     networks:
       - vault-spring-shared-net
 
+  # Pinned to the version `latest` already resolved to as of 2026-10-11 (confirmed via
+  # the Docker Hub registry API — `latest` and `2.1` share the same push timestamp), so
+  # this captures current real behavior rather than reintroducing an older major. 2.x is
+  # a major bump from the 1.x series Vault docs mostly cover; re-run `vault-init-dev.sh` /
+  # `vault-seed-database-dev.sh` end-to-end under `ok infra` before relying on this (VS-006).
   vault:
-    image: hashicorp/vault:latest
+    image: hashicorp/vault:2.1.2
     container_name: vault-spring-vault
     env_file: .env
     ports:
@@ -78,15 +83,42 @@ services:
     networks:
       - vault-spring-shared-net
 
+  # Scopes Portainer's Docker API access instead of mounting /var/run/docker.sock
+  # directly into it — a raw socket mount gives root-equivalent host control to
+  # anything that reaches the Portainer container (see VS-004 in
+  # docs/audit/VAULTSPRING_AUDIT_REPORT.md). Only the resources Portainer's
+  # dashboard actually needs are enabled; Swarm/secrets/config/plugin endpoints
+  # stay off. See https://github.com/Tecnativa/docker-socket-proxy for variables.
+  docker-socket-proxy:
+    image: tecnativa/docker-socket-proxy:v0.4.2
+    container_name: vault-spring-docker-socket-proxy
+    restart: always
+    environment:
+      CONTAINERS: 1
+      IMAGES: 1
+      NETWORKS: 1
+      VOLUMES: 1
+      EXEC: 1
+      INFO: 1
+      PING: 1
+      VERSION: 1
+      POST: 1
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - vault-spring-shared-net
+
   portainer:
-    image: portainer/portainer-ce
+    image: portainer/portainer-ce:2.45.2
     container_name: vault-spring-portainer
     env_file: .env
     restart: always
     ports:
       - '9001:9000'
+    command: -H tcp://docker-socket-proxy:2375
+    depends_on:
+      - docker-socket-proxy
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
       - vault-spring-portainer_data:/data
     networks:
       - vault-spring-shared-net
