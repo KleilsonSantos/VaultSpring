@@ -74,7 +74,10 @@ fi
 HAYSTACK="${PR_TITLE}"$'\n'"${PR_BODY}"$'\n'"${HEAD_REF}"
 export HAYSTACK
 
-mapfile -t ISSUE_NUMS < <(
+ISSUE_NUMS=()
+while IFS= read -r line; do
+  ISSUE_NUMS+=("$line")
+done < <(
   python3 - <<'PY'
 import os, re
 text = os.environ.get("HAYSTACK", "")
