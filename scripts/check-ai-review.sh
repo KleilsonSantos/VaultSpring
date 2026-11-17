@@ -21,15 +21,21 @@ if ! command -v claude >/dev/null 2>&1; then
 fi
 
 BASE_REF=""
-for CANDIDATE in "origin/sandbox" "origin/main"; do
-  if git rev-parse --verify "$CANDIDATE" >/dev/null 2>&1; then
-    BASE_REF="$CANDIDATE"
-    break
-  fi
-done
+if [[ -n "${PR_BASE:-}" ]] && git rev-parse --verify "origin/${PR_BASE}" >/dev/null 2>&1; then
+  BASE_REF="origin/${PR_BASE}"
+fi
 
 if [[ -z "$BASE_REF" ]]; then
-  echo "check-ai-review: SKIP — no sandbox/main ref to diff against"
+  for CANDIDATE in "origin/sandbox" "origin/main"; do
+    if git rev-parse --verify "$CANDIDATE" >/dev/null 2>&1; then
+      BASE_REF="$CANDIDATE"
+      break
+    fi
+  done
+fi
+
+if [[ -z "$BASE_REF" ]]; then
+  echo "check-ai-review: SKIP — no sandbox/main/\$PR_BASE ref to diff against"
   exit 0
 fi
 
@@ -39,9 +45,9 @@ if [[ -z "$MERGE_BASE" ]]; then
   exit 0
 fi
 
-DIFF="$(git diff "${MERGE_BASE}...HEAD" -- '*.java')"
+DIFF="$(git diff "${MERGE_BASE}...HEAD" -- '*.java' '.github/workflows/*' 'scripts/*.sh' 'application*.yml' 'application*.yaml')"
 if [[ -z "$DIFF" ]]; then
-  echo "check-ai-review: OK — no Java changes to review"
+  echo "check-ai-review: OK — no Java/CI/security-relevant changes to review"
   exit 0
 fi
 
