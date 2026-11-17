@@ -24,6 +24,9 @@ bash scripts/check-secrets.sh
 echo "==> AI code review (advisory, fail-soft)"
 bash scripts/check-ai-review.sh || true
 
+echo "==> SAST — Semgrep via Docker (advisory, fail-soft)"
+bash scripts/check-semgrep-docker.sh || true
+
 echo "==> observability config validation (CI parity)"
 bash scripts/validate-observability-config.sh
 
