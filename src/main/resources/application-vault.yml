@@ -27,5 +27,5 @@ spring:
           enabled: true
           min-renewal: 10s
           expiry-threshold: 1m
-          lease-endpoints: SysLeases
+          lease-endpoints: Leases
           lease-strategy: RetainOnError
