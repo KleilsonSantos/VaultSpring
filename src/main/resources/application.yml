@@ -56,3 +56,4 @@ vaultspring:
       enabled: ${VAULTSPRING_LOGIN_RATE_LIMIT_ENABLED:true}
       max-attempts: ${VAULTSPRING_LOGIN_RATE_LIMIT_MAX_ATTEMPTS:10}
       window-seconds: ${VAULTSPRING_LOGIN_RATE_LIMIT_WINDOW_SECONDS:60}
+      trust-forwarded-header: ${VAULTSPRING_LOGIN_RATE_LIMIT_TRUST_FORWARDED_HEADER:false}

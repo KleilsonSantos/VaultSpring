@@ -32,6 +32,7 @@ flowchart TD
 | [guides/git-workflow.md](./guides/git-workflow.md) | Contributors | Issue → `sandbox` → `main` → release ([ADR-0004](./adr/0004-git-branching-strategy-sandbox.md)) |
 | [guides/task-kickoff.md](./guides/task-kickoff.md) | Contributors | Issue → branch traceability |
 | [guides/local-runtime-authorization.md](./guides/local-runtime-authorization.md) | All | **MacBook gate** — task vs infra owner approval |
+| [guides/testing-execution-policy.md](./guides/testing-execution-policy.md) | Contributors, agents | Test execution policy — environment recon, resource/port planning, test pyramid, failure classification, execution report |
 | [guides/scripts-governance.md](./guides/scripts-governance.md) | All | Script tiers, PPE threat model, CI supply chain |
 | [guides/vault-integration.md](./guides/vault-integration.md) | DevOps, developers | Vault init, Database Engine seed, Compose flow |
 | [guides/releases.md](./guides/releases.md) | Maintainers | SemVer, tags, CHANGELOG |
