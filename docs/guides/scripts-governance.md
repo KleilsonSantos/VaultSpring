@@ -20,7 +20,7 @@ VaultSpring treats scripts like **privileged tools**: classified, reviewed, and 
 | Tier | Runs where | Examples | Owner gate |
 | ---- | ---------- | -------- | ---------- |
 | **A — CI-critical** | GitHub Actions on PR/push | `check-pr-issue-link.sh`, `validate-observability-config.sh`, `check-pr-delivery-gate-selftest.sh`, `check-semver-alignment.sh` | CODEOWNERS + green CI |
-| **B — Security enablers** | Local pre-push (mirrors CI) | `pre-push-check.sh`, `check-secrets.sh`, `check-pr-delivery-gate.sh`, `check-pkb-inventory.sh` | Developer machine; step 4b before push |
+| **B — Security enablers** | Local pre-push (mirrors CI) | `pre-push-check.sh`, `check-secrets.sh`, `check-pr-delivery-gate.sh`, `check-semgrep-docker.sh`, `check-pkb-inventory.sh` | Developer machine; step 4b before push |
 | **C — Delivery / DX** | Local git workflow | `task-kickoff.sh`, `bootstrap-sandbox.sh`, `install-hooks.sh`, `check-version-alignment.sh` | Task gate (`ok` / `prossegue`) |
 | **D — Infra local** | Owner machine + Docker/Vault | `vault-init-dev.sh`, `vault-seed-*.sh`, `run-integration-tests.sh`, `api-live-smoke.sh`, `ensure-colima-docker.sh` | **`ok infra`** only |
 | **E — Ops helpers** | Local optional | `observability-prometheus-token.sh`, `encode-env.sh`, `act-dev.sh` | Documented dev-only; no prod secrets |
@@ -44,7 +44,7 @@ Local before push:
 bash scripts/pre-push-check.sh
 ```
 
-Includes delivery gate, secret scan, observability validation, Maven quality — same intent as `.github/workflows/maven.yml`.
+Includes delivery gate, secret scan, optional fail-soft Semgrep scan, observability validation, and Maven quality — same intent as `.github/workflows/maven.yml`. Semgrep requires a running Docker daemon and does not block the gate.
 
 ## Analog (portfolio)
 

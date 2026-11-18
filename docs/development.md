@@ -149,7 +149,8 @@ Governance (tiers, threat model, change control): [`guides/scripts-governance.md
 | `scripts/check-pr-issue-link.sh` | CI: require `Refs #N` on PRs → `sandbox` |
 | `scripts/check-pr-delivery-gate.sh` | **Local** parity for `issue-link` — run before push |
 | `scripts/check-secrets.sh` | **Local** GitGuardian parity (`ggshield` + `.gitguardian.yml`) |
-| `scripts/pre-push-check.sh` | **Local** full gate: delivery + secret scan + observability + Maven `quality` |
+| `scripts/pre-push-check.sh` | **Local** full gate: delivery + secret scan + optional Semgrep scan + observability + Maven `quality` |
+| `scripts/check-semgrep-docker.sh` | **Local, advisory** Semgrep OWASP Top 10 scan in a pinned, non-root Docker image; skips if Docker is unavailable |
 | `scripts/check-pr-delivery-gate-selftest.sh` | Regression tests for delivery gate |
 | `scripts/install-hooks.sh` | Enable `.githooks/` (Conventional Commits) |
 | `scripts/check-semver-alignment.sh` | Release gate (CI on `main`) |
