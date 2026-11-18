@@ -31,7 +31,7 @@ if [[ -n "${GITHUB_EVENT_PATH:-}" && -f "${GITHUB_EVENT_PATH}" ]]; then
   PR_TITLE="$(python3 -c "import json; print(json.load(open('$GITHUB_EVENT_PATH'))['pull_request'].get('title') or '')")"
   PR_BODY="$(python3 -c "import json; print(json.load(open('$GITHUB_EVENT_PATH'))['pull_request'].get('body') or '')")"
   PR_NUMBER="$(python3 -c "import json; print(json.load(open('$GITHUB_EVENT_PATH'))['pull_request']['number'])")"
-  ACTOR="$(python3 -c "import json; print(json.load(open('$GITHUB_EVENT_PATH')).get('sender',{}).get('login') or '')")"
+  ACTOR="$(python3 -c "import json; print(json.load(open('$GITHUB_EVENT_PATH'))['pull_request'].get('user',{}).get('login') or '')")"
   LABELS="$(python3 -c "import json; print(' '.join(l['name'] for l in json.load(open('$GITHUB_EVENT_PATH'))['pull_request'].get('labels') or []))")"
 else
   : "${PR_NUMBER:?PR_NUMBER required when GITHUB_EVENT_PATH is unset}"
@@ -74,7 +74,10 @@ fi
 HAYSTACK="${PR_TITLE}"$'\n'"${PR_BODY}"$'\n'"${HEAD_REF}"
 export HAYSTACK
 
-mapfile -t ISSUE_NUMS < <(
+ISSUE_NUMS=()
+while IFS= read -r line; do
+  ISSUE_NUMS+=("$line")
+done < <(
   python3 - <<'PY'
 import os, re
 text = os.environ.get("HAYSTACK", "")
