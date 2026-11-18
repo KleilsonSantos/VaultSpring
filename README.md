@@ -11,7 +11,7 @@ Spring Boot · PostgreSQL · Flyway · HashiCorp Vault · DevSecOps CI
 </p>
 
 <p>
-  <img src="https://img.shields.io/badge/Java-17-ED8B00?style=flat-square&logo=openjdk&logoColor=white" alt="Java 17"/>
+  <img src="https://img.shields.io/badge/Java-25-ED8B00?style=flat-square&logo=openjdk&logoColor=white" alt="Java 25"/>
   <img src="https://img.shields.io/badge/Spring%20Boot-3.5.16-6DB33F?style=flat-square&logo=springboot&logoColor=white" alt="Spring Boot"/>
   <img src="https://img.shields.io/badge/PostgreSQL-15-336791?style=flat-square&logo=postgresql&logoColor=white" alt="PostgreSQL"/>
   <img src="https://img.shields.io/badge/Vault-Database%20Engine-175DDD?style=flat-square&logo=vault&logoColor=white" alt="Vault"/>
@@ -57,7 +57,7 @@ Configuration: `src/main/resources/` (`dev`, `prod`, `hom`, `vault`, Flyway migr
 
 ## Stack
 
-Java 17 · Spring Boot 3.5.16 · Spring Cloud 2025.0.x · Docker Compose · Maven Wrapper · OWASP Dependency-Check (Maven profile)
+Java 25 LTS · Spring Boot 3.5.16 · Spring Cloud 2025.0.x · Docker Compose · Maven Wrapper · OWASP Dependency-Check (Maven profile)
 
 ## Documentation
 

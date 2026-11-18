@@ -3,10 +3,18 @@
 # Validate: bash scripts/check-pkb-inventory.sh
 
 version: 1
-updated_at: 2026-09-07
+updated_at: 2026-11-07
 root: docs/prompts
 
 prompts:
+  - id: prompt.observability.actuator-metrics-alert-coverage
+    path: by-domain/observability/actuator-metrics-alert-coverage.v1.md
+    domain: observability
+    version: 1
+    status: active
+    language: pt-BR
+    tags: [observability, actuator, prometheus, grafana, otel, alerting]
+
   - id: prompt.documentation.readme-docs-architecture-audit
     path: by-domain/documentation/readme-docs-architecture-audit.v1.md
     domain: documentation

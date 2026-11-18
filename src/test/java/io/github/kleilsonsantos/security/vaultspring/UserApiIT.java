@@ -82,10 +82,12 @@ class UserApiIT {
     private String adminAccessToken;
 
     /**
-     * Creates a known IT user and obtains JWTs before each test.
+     * Creates a known IT user before each test. JWTs are obtained lazily via
+     * {@link #standardToken()} / {@link #adminToken()} so a test pays for login
+     * only when it actually needs that role.
      */
     @BeforeEach
-    void authenticate() throws Exception {
+    void seedItUser() {
         userRepository.findByEmail(IT_EMAIL).orElseGet(() -> {
             User user = new User();
             user.setName("Integration User");
@@ -94,20 +96,39 @@ class UserApiIT {
             user.setRole(UserRole.USER);
             return userRepository.save(user);
         });
+    }
 
-        accessToken = login(IT_EMAIL, IT_PASSWORD);
-        adminAccessToken = login(ADMIN_EMAIL, ADMIN_PASSWORD);
+    /**
+     * @return JWT for the standard IT user, logging in on first use
+     * @throws Exception when login JSON cannot be parsed
+     */
+    private String standardToken() throws Exception {
+        if (accessToken == null) {
+            accessToken = login(IT_EMAIL, IT_PASSWORD);
+        }
+        return accessToken;
+    }
+
+    /**
+     * @return JWT for the Flyway-seeded admin user, logging in on first use
+     * @throws Exception when login JSON cannot be parsed
+     */
+    private String adminToken() throws Exception {
+        if (adminAccessToken == null) {
+            adminAccessToken = login(ADMIN_EMAIL, ADMIN_PASSWORD);
+        }
+        return adminAccessToken;
     }
 
     /**
      * Flyway seed data is exposed by GET /api/v1/users when authenticated as admin.
      */
     @Test
-    void listUsersReturnsFlywaySeedData() {
+    void listUsersReturnsFlywaySeedData() throws Exception {
         ResponseEntity<String> response = restTemplate.exchange(
                 "/api/v1/users",
                 org.springframework.http.HttpMethod.GET,
-                authenticatedEntity(null, adminAccessToken),
+                authenticatedEntity(null, adminToken()),
                 String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -119,11 +140,11 @@ class UserApiIT {
      * Standard users cannot list all users.
      */
     @Test
-    void listUsersForbiddenForStandardUser() {
+    void listUsersForbiddenForStandardUser() throws Exception {
         ResponseEntity<String> response = restTemplate.exchange(
                 "/api/v1/users",
                 org.springframework.http.HttpMethod.GET,
-                authenticatedEntity(null, accessToken),
+                authenticatedEntity(null, standardToken()),
                 String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
@@ -133,11 +154,11 @@ class UserApiIT {
      * GET /api/v1/users/me returns the caller profile.
      */
     @Test
-    void getCurrentUserReturnsCallerProfile() {
+    void getCurrentUserReturnsCallerProfile() throws Exception {
         ResponseEntity<String> response = restTemplate.exchange(
                 "/api/v1/users/me",
                 org.springframework.http.HttpMethod.GET,
-                authenticatedEntity(null, accessToken),
+                authenticatedEntity(null, standardToken()),
                 String.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -149,10 +170,10 @@ class UserApiIT {
      * POST /api/v1/users persists a user and returns 201 when called by admin.
      */
     @Test
-    void createUserReturnsCreated() {
+    void createUserReturnsCreated() throws Exception {
         HttpEntity<String> request = authenticatedEntity(
                 "{\"name\":\"Integration\",\"email\":\"integration@example.com\",\"password\":\"secret123\"}",
-                adminAccessToken);
+                adminToken());
 
         ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/users", request, String.class);
 
@@ -164,10 +185,10 @@ class UserApiIT {
      * Standard users cannot create users.
      */
     @Test
-    void createUserForbiddenForStandardUser() {
+    void createUserForbiddenForStandardUser() throws Exception {
         HttpEntity<String> request = authenticatedEntity(
                 "{\"name\":\"Integration\",\"email\":\"forbidden@example.com\",\"password\":\"secret123\"}",
-                accessToken);
+                standardToken());
 
         ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/users", request, String.class);
 
@@ -178,10 +199,10 @@ class UserApiIT {
      * Duplicate emails return RFC 7807 problem details with HTTP 409.
      */
     @Test
-    void createUserReturnsConflictForDuplicateEmail() {
+    void createUserReturnsConflictForDuplicateEmail() throws Exception {
         HttpEntity<String> request = authenticatedEntity(
                 "{\"name\":\"John\",\"email\":\"john@example.com\",\"password\":\"secret123\"}",
-                adminAccessToken);
+                adminToken());
 
         ResponseEntity<String> response = restTemplate.postForEntity("/api/v1/users", request, String.class);
 

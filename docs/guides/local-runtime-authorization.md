@@ -27,7 +27,7 @@ Agents and contributors follow this sequence. **Do not skip or reorder steps.**
        ↓
 8. COMMIT      only when owner explicitly asks to commit (never automatic)
        ↓
-9. POST-PUSH   monitor GitHub CI on the PR until required checks finish (gh pr checks --watch)
+9. POST-PUSH   monitor PR until required checks finish (gh pr checks --watch; Codecov comment on feature diffs) — merge when green ([git-workflow.md](./git-workflow.md#branch-protection-solo-maintainer))
 ```
 
 **Rules:**
@@ -109,10 +109,11 @@ Wait for owner to say **commit** — do not commit on "ready to commit" alone.
 
 After `git push` opens or updates a PR:
 
-1. `gh pr checks --watch` until **`quality`**, **`integration-tests`**, and **`issue-link`** complete (when PR → `sandbox`)
-2. On **FAIL**: read logs (`gh run view --log-failed`), fix locally, re-run `bash scripts/pre-push-check.sh`, push again
-3. Do **not** merge or declare the PR green until required checks pass — **never merge on red `issue-link`**
-4. `check-secrets.sh` runs inside `pre-push-check.sh` (GitGuardian parity via `ggshield` + `.gitguardian.yml`); SonarCloud — report status separately; distinguish from Maven `quality` failures
+1. `gh pr checks --watch` until **`quality`**, **`integration-tests`**, and **`issue-link`** complete (when PR → `sandbox`; sync **`main` → `sandbox`** skips `issue-link` on some events — see PR checks for the `pull_request` run)
+2. On feature PRs with Java changes: confirm **Codecov** patch coverage on the PR page (not listed in `gh pr checks`)
+3. On **FAIL**: read logs (`gh run view --log-failed`), fix locally, re-run `bash scripts/pre-push-check.sh`, push again
+4. Do **not** declare the PR green until required checks pass — **never merge on red `issue-link`**. With solo-maintainer branch protection (0 approvals), **`gh pr merge`** when checks pass — no manual review bypass
+5. `check-secrets.sh` runs inside `pre-push-check.sh` (GitGuardian parity via `ggshield` + `.gitguardian.yml`); SonarCloud — report status separately; distinguish from Maven `quality` failures
 
 Agents must not end the turn after push without checking CI status at least once.
 

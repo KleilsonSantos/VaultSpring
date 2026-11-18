@@ -41,7 +41,7 @@ Full checklist: [`task-kickoff.md`](./task-kickoff.md).
 4. `git checkout -b <type>/<slug>` — see [Branch prefixes](#branch-prefixes)
 5. Comment on the issue with the branch name (`scripts/task-kickoff.sh` automates steps 3–5)
 6. Implement → local QA → **PR #1 targeting `sandbox`** (`Refs #N` in body)
-7. Merge when CI green + review → **PR #2 `sandbox` → `main`** (`Closes #N`)
+7. Merge when required CI checks are green → **PR #2 `sandbox` → `main`** (`Closes #N`) — see [Branch protection (solo maintainer)](#branch-protection-solo-maintainer)
 8. **After merge to `main`:** SemVer gate — if releaseable commits accumulated, open **`chore: release vX.Y.Z`** PR then push tag (see [`delivery-automation.md`](./delivery-automation.md), [`releases.md`](./releases.md))
 
 Author and Committer: **`Kleilson Santos <kleilson@icloud.com>`** — same as `pom.xml` ([attribution.md](./attribution.md)).
@@ -60,6 +60,41 @@ GitHub has no native branch-protection rule for “require linked issue”. Vaul
 Bypass (rare): label `ci:no-issue-required`. Dependabot PRs are skipped.
 
 **Owner action:** mark the `issue-link` status check as **required** on `sandbox` branch protection.
+
+## Branch protection (solo maintainer)
+
+VaultSpring is maintained by a **single owner**. Branch protection on **`sandbox`** and **`main`** enforces **CI**, not a second human reviewer.
+
+### Required on both branches
+
+| Setting | Value |
+| ------- | ----- |
+| **Require a pull request before merging** | On (no direct pushes) |
+| **Require status checks** | On — **`issue-link`**, **`quality`**, **`integration-tests`** (strict / up to date when enabled) |
+| **Required approving reviews** | **0** |
+| **Require review from Code Owners** | **Off** |
+
+[`.github/CODEOWNERS`](../../.github/CODEOWNERS) still flags supply-chain paths for review on PRs; it does **not** block merge when the setting above is off.
+
+### Not merge gates
+
+| Signal | Role |
+| ------ | ---- |
+| **`gh pr checks`** | Required Maven CI jobs — merge when these pass |
+| **Codecov** (PR comment) | Patch coverage feedback; fix gaps on feature work, not a GitHub required check |
+| **SonarCloud / GitGuardian** | Quality and secrets signal; follow up separately |
+
+### After promote to `main`
+
+When `main` is ahead of `sandbox` (promote merge commit only on `main`), open an operational sync PR **`main` → `sandbox`** (same pattern as PR #134 / #145). Local gate: `PR_BASE=sandbox PR_HEAD=main bash scripts/check-pr-delivery-gate.sh`.
+
+### Agents
+
+When required checks are green, merge with `gh pr merge` (no manual “bypass rules” for review). Do **not** report “ready to merge” from `gh pr checks` alone on feature PRs — confirm Codecov patch coverage on the PR page when Java changed.
+
+### One-time GitHub setup
+
+**Settings → Branches →** edit rules for `sandbox` and `main`: set approvals to **0**, disable **Code Owners** required review, keep the three status checks listed above.
 
 ## Pull requests
 

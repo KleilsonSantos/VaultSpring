@@ -1,5 +1,6 @@
 package io.github.kleilsonsantos.security.vaultspring;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,20 +66,32 @@ class VaultDatabaseCredentialRotationIT {
 
     @DynamicPropertySource
     static void registerProperties(final DynamicPropertyRegistry registry) {
-        registry.add("spring.cloud.vault.uri",
-                () -> "http://" + VAULT.getHost() + ":" + VAULT.getMappedPort(8200));
-        registry.add("spring.cloud.vault.token", () -> VAULT_ROOT_TOKEN);
         registry.add("spring.datasource.url", POSTGRES::getJdbcUrl);
-        registry.add("VAULT_DB_ROLE", () -> VAULT_DB_ROLE);
         registry.add("spring.cloud.vault.config.lifecycle.min-renewal", () -> "1s");
         registry.add("spring.cloud.vault.config.lifecycle.expiry-threshold", () -> "1s");
     }
 
+    /**
+     * {@code spring.config.import: vault://} resolves during environment preparation,
+     * before {@code @DynamicPropertySource} values are applied to the context — so the
+     * Vault connection and role must be exposed as system properties here, in
+     * {@code @BeforeAll}, which Spring's test lifecycle runs ahead of the first context load.
+     */
     @BeforeAll
     static void configureVaultDatabaseEngine() throws Exception {
+        System.setProperty("spring.cloud.vault.uri", vaultUri());
+        System.setProperty("spring.cloud.vault.token", VAULT_ROOT_TOKEN);
+        System.setProperty("VAULT_DB_ROLE", VAULT_DB_ROLE);
         enableDatabaseEngine();
         configureDatabaseConnection();
         configureDatabaseRoleShortTtl();
+    }
+
+    @AfterAll
+    static void clearVaultSystemProperties() {
+        System.clearProperty("spring.cloud.vault.uri");
+        System.clearProperty("spring.cloud.vault.token");
+        System.clearProperty("VAULT_DB_ROLE");
     }
 
     @Test
@@ -131,7 +144,7 @@ class VaultDatabaseCredentialRotationIT {
         String body = """
                 {
                   "db_name": "vaultspring-postgresql",
-                  "creation_statements": "CREATE ROLE \\"{{name}}\\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \\"{{name}}\\"; GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO \\"{{name}}\\";",
+                  "creation_statements": "CREATE ROLE \\"{{name}}\\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT USAGE, CREATE ON SCHEMA public TO \\"{{name}}\\"; GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO \\"{{name}}\\"; GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO \\"{{name}}\\";",
                   "default_ttl": "2s",
                   "max_ttl": "5s"
                 }
