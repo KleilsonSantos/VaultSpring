@@ -10,11 +10,20 @@ and this project uses [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Login rate limiting (SEC-002): configurable fixed-window limit per client IP on `POST /api/v1/auth/login`, HTTP 429 RFC 7807, Micrometer metric ([#136](https://github.com/KleilsonSantos/VaultSpring/issues/136))
-- Automated advisory Claude code review on same-repository pull requests, with an optional fail-soft local pre-push review ([#159](https://github.com/KleilsonSantos/VaultSpring/issues/159))
+- Automated advisory Claude code review on same-repository pull requests, with an optional fail-soft local pre-push review, plus devops/observability reviewer checklists ([#159](https://github.com/KleilsonSantos/VaultSpring/issues/159))
+- Advisory local Semgrep SAST scan (OWASP Top Ten) in the pre-push gate ([#161](https://github.com/KleilsonSantos/VaultSpring/issues/161))
+- Project-level `CLAUDE.md` pointer and `github` MCP server config (OAuth, no token on disk) for issue/PR traceability ([#167](https://github.com/KleilsonSantos/VaultSpring/issues/167))
 
 ### Changed
 
 - Upgrade the project build, CI, and container runtime to Java 25 LTS ([#157](https://github.com/KleilsonSantos/VaultSpring/issues/157))
+
+### Fixed
+
+- P0/P1 security audit remediation: Flyway dev-only seed migrations, log secret redaction, verified `X-Forwarded-For` for the login rate limiter, Portainer docker-socket-proxy, pinned Compose image versions, least-privilege dynamic Vault role, architecture docs alignment, Apache-2.0 `LICENSE` ([#151](https://github.com/KleilsonSantos/VaultSpring/issues/151))
+- `check-semver-alignment.sh` macOS Bash 3.2 compatibility (`mapfile` → portable loop) ([#162](https://github.com/KleilsonSantos/VaultSpring/issues/162))
+- Login rate limiter tripping `UserApiIT` under the `it` profile; invalid `LeaseEndpoints` value breaking any `vault`-profile deploy; Vault IT `@DynamicPropertySource` timing vs `spring.config.import`; PostgreSQL 15 schema grants for the Vault-issued dynamic test role ([#165](https://github.com/KleilsonSantos/VaultSpring/issues/165))
+- `check-pr-issue-link.sh` Dependabot bypass resolved from the PR author instead of the triggering event's sender, and `mapfile` macOS incompatibility ([#169](https://github.com/KleilsonSantos/VaultSpring/issues/169), [#170](https://github.com/KleilsonSantos/VaultSpring/issues/170))
 
 ## [0.1.9] - 2026-09-21
 
