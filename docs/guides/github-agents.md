@@ -6,6 +6,8 @@ Always-on instructions: [`.github/copilot-instructions.md`](../../.github/copilo
 
 Official reference: [Creating custom agents](https://docs.github.com/en/copilot/how-tos/copilot-on-github/customize-copilot/customize-cloud-agent/create-custom-agents).
 
+Same-repository pull requests targeting `sandbox` or `main` are configured to receive an automated Claude review comment from [`.github/workflows/claude-code-review.yml`](../../.github/workflows/claude-code-review.yml). The Claude action validates the workflow against the repository's default branch and skips execution until the identical workflow exists there; with this repository's `sandbox` → `main` promotion flow, automatic reviews become operational after the workflow is promoted to `main`. The workflow uses `CLAUDE_CODE_OAUTH_TOKEN`, skips fork PRs, and is advisory: it cannot approve PRs or push changes. It invokes the same code-reviewer and, for security-sensitive changes, AppSec checklists described below; it does not replace manually invoking a custom agent.
+
 ## Agent catalog
 
 | Agent | File | Tools | Purpose |
@@ -28,6 +30,8 @@ flowchart LR
 ```
 
 Use **handoffs** (where your client supports them) to move between agents without losing context.
+
+The local `scripts/check-ai-review.sh` is an optional, fail-soft pre-push review. It requires the Claude CLI to be installed and authenticated; without it, the script skips the review.
 
 ## Design rules
 
