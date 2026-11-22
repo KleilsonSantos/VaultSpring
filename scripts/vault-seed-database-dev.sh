@@ -38,16 +38,20 @@ run_vault write "database/config/${VAULT_DB_CONFIG}" \
   username="${POSTGRES_USER}" \
   password="${POSTGRES_PASSWORD}"
 
-# Least-privilege grants (VS-008): the app only does JPA CRUD on `users` with
-# `ddl-auto: validate` in every profile, so the dynamic role never needs DDL
-# (DROP/TRUNCATE/ALTER/CREATE) or sequence ownership rights that ALL PRIVILEGES
-# would otherwise grant. USAGE+SELECT on sequences is kept (not just SELECT/INSERT/
-# UPDATE/DELETE on tables) because that's the standard, safe baseline for inserting
-# into auto-populated columns; it carries no meaningful extra risk even if the
-# identity column itself turns out not to require it.
+# Least-privilege grants (VS-008). Flyway migrates as POSTGRES_USER (see
+# VaultFlywayMigrationCredentials), not as this role. PostgreSQL 15 does not
+# grant schema CREATE to PUBLIC, and the role must not receive it.
+#
+# GRANT ON ALL TABLES only covers tables that already exist when Vault creates
+# the role. The application DataSource is built before Flyway runs, so on an
+# empty database that grant matches nothing. ALTER DEFAULT PRIVILEGES, executed
+# as the same admin Flyway uses, covers tables and identity sequences that admin
+# creates afterwards. Revocation drops those default privileges first; otherwise
+# DROP ROLE fails on the next rotation and the leaked role keeps its grants.
 run_vault write "database/roles/${VAULT_DB_ROLE}" \
   db_name="${VAULT_DB_CONFIG}" \
-  creation_statements="CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO \"{{name}}\"; GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO \"{{name}}\";" \
+  creation_statements="CREATE ROLE \"{{name}}\" WITH LOGIN PASSWORD '{{password}}' VALID UNTIL '{{expiration}}'; GRANT USAGE ON SCHEMA public TO \"{{name}}\"; GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO \"{{name}}\"; GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO \"{{name}}\"; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO \"{{name}}\"; ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT USAGE, SELECT ON SEQUENCES TO \"{{name}}\";" \
+  revocation_statements="ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE SELECT, INSERT, UPDATE, DELETE ON TABLES FROM \"{{name}}\"; ALTER DEFAULT PRIVILEGES IN SCHEMA public REVOKE USAGE, SELECT ON SEQUENCES FROM \"{{name}}\"; REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM \"{{name}}\"; REVOKE ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public FROM \"{{name}}\"; REVOKE USAGE ON SCHEMA public FROM \"{{name}}\"; DROP ROLE IF EXISTS \"{{name}}\";" \
   default_ttl="1h" \
   max_ttl="24h"
 

@@ -73,10 +73,14 @@ export SPRING_PROFILES_ACTIVE=vault
 export VAULT_ADDR=http://127.0.0.1:8200
 export VAULT_TOKEN=<token>
 export POSTGRES_URL=jdbc:postgresql://localhost:5432/users_db
+export POSTGRES_USER=admin
+export POSTGRES_PASSWORD=adminpass
 ./mvnw spring-boot:run
 ```
 
 Spring Cloud Vault populates `spring.datasource.username` and `spring.datasource.password` from `database/creds/vaultspring-app`. JDBC URL comes from env/YAML, not Vault KV.
+
+Flyway does not use that dynamic login. When `POSTGRES_USER` and `POSTGRES_PASSWORD` are set (Compose `.env`, or the exports below), migrations run as that static admin. The dynamic role only receives DML. Re-run `vault-seed-database-dev.sh` after pulling this change so new credentials pick up default privileges for tables the admin creates; an already-issued role keeps the statements it was created with until Vault rotates it.
 
 ## Lease lifecycle
 
@@ -99,7 +103,7 @@ Integration tests (CI): `VaultDatabaseSecretsIT` (create → use → renew), `Va
 | Symptom | Check |
 | ------- | ----- |
 | `fail-fast` on startup | `VAULT_TOKEN` set, Vault unsealed, seed script ran |
-| `permission denied` on DB | Re-run `vault-seed-database-dev.sh`; confirm Postgres admin credentials in `.env` |
+| `permission denied` on DB, or Flyway `permission denied for schema public` | `POSTGRES_USER` / `POSTGRES_PASSWORD` must be the Postgres admin. Re-run `vault-seed-database-dev.sh` and restart so Vault issues a role with default privileges |
 | App uses static admin user | Wrong profile — need `vault` or `prod-vault`, not `dev` alone |
 | Lease expired / auth failures | Check metric `vaultspring.vault.database.rotation.total`; verify `VaultDatabaseCredentialRotation` logs; confirm Vault role TTL |
 
