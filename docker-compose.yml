@@ -3,6 +3,13 @@ networks:
   vault-spring-shared-net:
     name: vault-spring-shared-net
     driver: bridge
+  # The socket proxy has no authentication. POST + CONTAINERS (and EXEC) is
+  # host-root: a client can create a privileged container that bind-mounts /.
+  # Only Portainer may join this network. The app, Postgres, Vault, pgAdmin,
+  # and SonarQube stay on vault-spring-shared-net and cannot reach port 2375.
+  vault-spring-docker-api:
+    name: vault-spring-docker-api
+    driver: bridge
 
 services:
   postgres:
@@ -83,12 +90,14 @@ services:
     networks:
       - vault-spring-shared-net
 
-  # Scopes Portainer's Docker API access instead of mounting /var/run/docker.sock
-  # directly into it — a raw socket mount gives root-equivalent host control to
-  # anything that reaches the Portainer container (see VS-004 in
-  # docs/audit/VAULTSPRING_AUDIT_REPORT.md). Only the resources Portainer's
-  # dashboard actually needs are enabled; Swarm/secrets/config/plugin endpoints
-  # stay off. See https://github.com/Tecnativa/docker-socket-proxy for variables.
+  # Portainer talks to the host Docker socket only through this proxy, and only
+  # on vault-spring-docker-api. The proxy listens on 2375 with no auth or TLS.
+  # POST=1 together with CONTAINERS=1 allows creating privileged containers
+  # (host root); EXEC=1 allows exec into any container. Do not attach this
+  # service to vault-spring-shared-net — Postgres (published 5432), the app,
+  # pgAdmin, Vault, and SonarQube would then be able to call that API.
+  # Swarm/secrets/config/plugin endpoints stay off.
+  # See https://github.com/Tecnativa/docker-socket-proxy (VS-004).
   docker-socket-proxy:
     image: tecnativa/docker-socket-proxy:v0.4.2
     container_name: vault-spring-docker-socket-proxy
@@ -106,7 +115,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     networks:
-      - vault-spring-shared-net
+      - vault-spring-docker-api
 
   portainer:
     image: portainer/portainer-ce:2.45.2
@@ -121,7 +130,7 @@ services:
     volumes:
       - vault-spring-portainer_data:/data
     networks:
-      - vault-spring-shared-net
+      - vault-spring-docker-api
 
   sonarqube:
     image: sonarqube:lts-community

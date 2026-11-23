@@ -30,7 +30,7 @@ The four P0 findings have code-side fixes applied and verified against the same 
 - **VS-001 — code-side fix applied.** Seed migrations moved to a `dev`-only Flyway location; `prod`/`hom` now only apply schema DDL. **The out-of-band step — checking whether the Render deployment already applied the old seed migrations, and rotating the admin credential if so — still requires the repo owner's own access to the Render dashboard and has not been done from this session.**
 - **VS-002 — fixed.** A sanitizing Logstash encoder wrapper now redacts the JSON `message` field in `prod`/`hom`/`prod-vault`, and also suppresses raw structured-argument serialization (a related leak path caught during review) rather than passing it through unfiltered.
 - **VS-003 — fixed, with a correction.** The rate limiter's `X-Forwarded-For` trust is now off by default and configurable per profile. An initial version of this fix still read the first (client-controlled) hop even when trust was enabled; a review pass caught that a reverse proxy appends to the *last* position, not the first, so the fix was corrected to use the last hop. `trust-forwarded-header` is enabled only for `prod` (Render is the confirmed sole ingress there); `hom`/`dev` stay at the safe default pending topology confirmation.
-- **VS-004 — fixed.** Portainer no longer mounts `/var/run/docker.sock` directly; it goes through a scoped `tecnativa/docker-socket-proxy` instance. Validated with `docker compose config` (render-only); not validated with a live `docker compose up` (no infra authorization in this session).
+- **VS-004 — fixed.** Portainer no longer mounts `/var/run/docker.sock`. The socket proxy and Portainer are alone on `vault-spring-docker-api`; the unauthenticated proxy (POST + CONTAINERS is host-root) is not on the network shared with the app, Postgres, Vault, pgAdmin, or SonarQube. Not live-validated with `docker compose up`.
 
 ---
 
@@ -146,7 +146,7 @@ Format per finding: ID · Severity · Confidence · Status · Domain · Evidence
 - **Impacto:** Full local host compromise path — relevant given `AGENTS.md`/`local-runtime-authorization.md` explicitly treat this machine as a **shared MacBook**.
 - **Recomendação:** Replace the direct socket mount with a scoped socket proxy (e.g. `tecnativa/docker-socket-proxy`) limited to the endpoints Portainer actually needs, or make Portainer an opt-in Compose profile rather than default-on.
 - **Esforço:** S.
-- **Status de remediação (2026-10-11):** Fixed — `docker-compose.yml` now routes Portainer through a `tecnativa/docker-socket-proxy:v0.4.2` service instead of mounting the host socket directly; only `CONTAINERS`, `IMAGES`, `NETWORKS`, `VOLUMES`, `EXEC`, `INFO`, `PING`, `VERSION`, `POST` are enabled on the proxy. Validated with `docker compose config` only (render, no `up` — no infra authorization in this session).
+- **Status de remediação (2026-10-11):** Portainer no longer mounts `/var/run/docker.sock` directly; it uses `tecnativa/docker-socket-proxy:v0.4.2`. That first cut still attached the proxy to `vault-spring-shared-net` with `POST`, `CONTAINERS`, and `EXEC` enabled. The proxy has no authentication, and that combination can create a privileged container — so any other service on the shared network (published Postgres included) had host-root Docker access. Follow-up: proxy and Portainer are alone on `vault-spring-docker-api`.
 
 ### P1 — security/reliability essentials
 

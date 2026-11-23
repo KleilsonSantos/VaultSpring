@@ -20,6 +20,7 @@ and this project uses [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- Compose Docker socket proxy is on its own network, so the app, Postgres, Vault, pgAdmin, and SonarQube cannot reach the unauthenticated Docker API (`POST` + `CONTAINERS` is host root) ([#151](https://github.com/KleilsonSantos/VaultSpring/issues/151))
 - P0/P1 security audit remediation: Flyway dev-only seed migrations, log secret redaction, verified `X-Forwarded-For` for the login rate limiter, Portainer docker-socket-proxy, pinned Compose image versions, least-privilege dynamic Vault role, architecture docs alignment, Apache-2.0 `LICENSE` ([#151](https://github.com/KleilsonSantos/VaultSpring/issues/151))
 - `check-semver-alignment.sh` macOS Bash 3.2 compatibility (`mapfile` → portable loop) ([#162](https://github.com/KleilsonSantos/VaultSpring/issues/162))
 - Login rate limiter tripping `UserApiIT` under the `it` profile; invalid `LeaseEndpoints` value breaking any `vault`-profile deploy; Vault IT `@DynamicPropertySource` timing vs `spring.config.import`; PostgreSQL 15 schema grants for the Vault-issued dynamic test role ([#165](https://github.com/KleilsonSantos/VaultSpring/issues/165))
