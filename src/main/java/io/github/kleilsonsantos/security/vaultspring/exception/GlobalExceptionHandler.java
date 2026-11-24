@@ -6,6 +6,7 @@ import org.slf4j.MDC;
 import io.github.kleilsonsantos.security.vaultspring.observability.ObservabilityConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Maps common failures to RFC 7807 {@link ProblemDetail} responses.
@@ -31,7 +33,10 @@ public final class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail handleValidation(final MethodArgumentNotValidException ex) {
-        logSafeError("validation.failed", ex.getMessage());
+        // Spring's getMessage() embeds each FieldError, and FieldError.toString() includes
+        // "rejected value [...]". For login and user-create that value is the plaintext
+        // password. Log field names only.
+        logSafeError("validation.failed", validationFields(ex));
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(
                 HttpStatus.BAD_REQUEST, "Validation failed");
         problem.setTitle("Invalid request");
@@ -56,6 +61,18 @@ public final class GlobalExceptionHandler {
         ProblemDetail problem = ProblemDetail.forStatusAndDetail(status, ex.getReason());
         problem.setTitle(status.getReasonPhrase());
         return problem;
+    }
+
+    /**
+     * @param ex validation failure
+     * @return field names that failed, without rejected values
+     */
+    private static String validationFields(final MethodArgumentNotValidException ex) {
+        String fields = ex.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getField)
+                .distinct()
+                .collect(Collectors.joining(","));
+        return fields.isEmpty() ? "n/a" : "fields=" + fields;
     }
 
     /**
