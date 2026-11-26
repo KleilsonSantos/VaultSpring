@@ -316,6 +316,10 @@
                             <password>${flyway.password}</password>
                             <driver>${flyway.driver}</driver>
                             <cleanDisabled>true</cleanDisabled>
+                            <locations>
+                                <location>filesystem:src/main/resources/db/migration</location>
+                                <location>filesystem:src/main/resources/db/dev-seed</location>
+                            </locations>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -334,6 +338,9 @@
                             <password>${flyway.password}</password>
                             <driver>${flyway.driver}</driver>
                             <cleanDisabled>true</cleanDisabled>
+                            <locations>
+                                <location>filesystem:src/main/resources/db/migration</location>
+                            </locations>
                         </configuration>
                     </plugin>
                 </plugins>

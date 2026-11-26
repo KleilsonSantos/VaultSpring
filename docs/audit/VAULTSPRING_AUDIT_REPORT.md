@@ -115,6 +115,7 @@ Format per finding: ID · Severity · Confidence · Status · Domain · Evidence
 - **Critério de aceite:** No seed/demo data reachable via the `prod`/`hom` Flyway location; the Render verification step above has been completed and documented.
 - **Esforço:** S (migration split) + **immediate out-of-band verification, independent of code effort**.
 - **Status de remediação (2026-10-11):** Code-side fix applied — `V2__insert_users_table.sql`/`V3__align_seed_passwords.sql` moved to [`src/main/resources/db/migration/dev/`](../../src/main/resources/db/migration/dev); `prod`/`hom` `spring.flyway.locations` now `classpath:db/migration` only, with `ignore-migration-patterns: ["2:missing","3:missing"]` added so a deploy that already applied the old seed versions won't fail validate (scoped to those two versions only — a genuinely lost future migration still fails validate). **Out-of-band verification/rotation on the real Render deployment has NOT been done — still owner-only.**
+- **Follow-up (2026-11-26):** Nesting the seeds under `db/migration/dev` did not exclude them. Flyway scans `classpath:db/migration` recursively, so `V2`/`V3` stayed pending on that location and a migrate still inserted the documented admin, after which `V4` grants `ADMIN`. Seeds now live in [`src/main/resources/db/dev-seed/`](../../src/main/resources/db/dev-seed), added only by dev and IT.
 
 **VS-002 — Production log encoder bypasses secret redaction**
 - **Severidade:** HIGH · **Confiança:** Alta · **Domínio:** Observability/AppSec · **Status:** CONFIRMADO

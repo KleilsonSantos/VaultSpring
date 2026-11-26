@@ -10,9 +10,11 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    # Schema only. Dev seeds live in classpath:db/dev-seed, which is not under this
+    # tree. Flyway scans locations recursively, so nesting seeds in db/migration/dev
+    # would still apply them here (see VS-001).
     locations: classpath:db/migration
-    # Dev/IT seed fixtures (old V2/V3) are intentionally not on this path (see VS-001).
-    # If this environment ever had them applied previously, don't fail validate on their
+    # If this environment ever applied the old dev seeds, don't fail validate on their
     # absence. Scoped to those two versions only — a genuinely lost future migration
     # (e.g. V5) must still fail validate, so this is not a blanket "*:missing".
     ignore-migration-patterns:
